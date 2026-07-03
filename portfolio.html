@@ -167,15 +167,27 @@
   #work { margin-top:-2px; }
   #work, .closing, .work-curtain, .work-track { backface-visibility:hidden; -webkit-backface-visibility:hidden; }
   /* 단독 이미지 전환 섹션 (About → Work 브릿지) */
-  /* Transition Image (About → Work 브릿지) — 아래에서 프레임이 올라와 중앙에 머문 뒤 위로 통과 → Work */
-  .single_image { position:relative; background:#1a1a1a; } /* pin 제거: 이미지가 normal flow로 스크롤 따라 흐름 (높이 = si-stage 100vh) */
-  .si-stage { position:relative; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; }
-  .works__inner { position:relative; width:10vw; height:17vh; border-radius:16px; overflow:hidden;
-    will-change:width, height, transform, border-radius; }
-  .works__img { width:100%; height:100%; object-fit:cover; display:block; will-change:transform; transform-origin:center center; }
-  /* 가로 스트립 마스크 — si-stage 전체(고정 크기) 위, Work 직전 마지막 구간에만 이미지를 덮음 (초기 숨김) */
+  /* Transition Image (About → Work 브릿지) — offbeat.kr studio-home-parallax 방식.
+     섹션은 페이지와 함께 정상 스크롤(pin/fixed 없음). 윈도우(overflow hidden) 안에서 이미지만 천천히 translate = 패럴랙스.
+     마지막에 얇은 블라인드가 이미지+텍스트를 함께 덮음 → Work. */
+  .single_image { position:relative; background:#1a1a1a; }                  /* 높이 = 이미지 원본 높이(약 2.35화면) → sticky 범위 충분 · overflow 없음 */
+  .si-stage { position:relative; }                                          /* 높이 고정 없음 — 이미지 원본 높이만큼 */
+  .works__inner { position:relative; width:100%; height:auto; overflow:hidden; }
+  .works__img { display:block; width:100%; height:auto; }                    /* 원본 비율 그대로(긴 이미지), 스크롤 따라 흐름 */
+  /* 가로 스트립 마스크 — works__inner 내부 최상단(z3) (초기 숨김) */
   .stripe-mask { position:absolute; inset:0; z-index:3; opacity:0; pointer-events:none; overflow:hidden; }
   .stripe-mask .stripe { position:absolute; left:0; width:100%; background:#1a1a1a; will-change:transform; transform-origin:top center; }
+  /* 텍스트 전용 레이어 — works__inner 밖, single_image 안. GSAP pin(구간 한정)으로 화면 중앙에 머묾.
+     (ScrollSmoother 환경에선 CSS position:sticky가 동작하지 않아 pin으로 동일 효과 구현 · 전역 fixed 아님) */
+  .single-image-text-wrap { position:absolute; top:0; left:0; width:100%; height:100vh; pointer-events:none; z-index:5;
+    display:flex; align-items:center; justify-content:center; }
+  .single-image-text { overflow:visible;
+    display:flex; flex-direction:column; align-items:center; text-align:center;
+    color:#fff; pointer-events:none; padding:0 6vw;
+    font-size:clamp(1.1rem, 2.2vw, 2.15rem); line-height:1.45; font-weight:400; letter-spacing:-0.01em; }
+  .single-image-text .line-wrapper { display:block; overflow:hidden; }
+  .single-image-text .split-line { display:block; }
+  .single-image-text .split-char { display:inline-block; will-change:transform; }
   /* Work 블라인드(가로 슬랫) 와이프 — 가로 스크롤 30% 지점에서 닫혔다 위로 걷힘 (초기 숨김) */
   .work-stripes { position:absolute; inset:0; z-index:5; pointer-events:none; overflow:hidden; opacity:0; }
   .work-stripes .stripe { position:absolute; left:0; width:100%; background:#1a1a1a; will-change:transform; transform-origin:top center; }
@@ -185,21 +197,30 @@
     padding:50px clamp(24px,7vw,120px) 150px; }  /* top 50px · 좌우 clamp · bottom 150px */
   .work-intro-inner { text-align:left; margin-bottom:clamp(40px,7vh,90px); }
   .work-title { font-family:'Poppins',sans-serif; font-weight:500; font-size:clamp(2.4rem,6vw,5rem); line-height:1.0; letter-spacing:-0.03em; margin:0; }
-  .work-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:clamp(30px,4vw,64px); }
-  @media (max-width:768px){ .work-grid{ grid-template-columns:1fr; } }
-  .work-card { display:flex; flex-direction:column; will-change:transform; }
-  .wc-thumb { display:block; position:relative; width:100%; aspect-ratio:4/3; border-radius:16px; overflow:hidden; background:#1a1a1d; cursor:none; }
-  .wc-media { display:block; width:100%; height:100%; will-change:transform; } /* GSAP parallax(1.1→1) 대상 */
-  .wc-thumb img { width:100%; height:100%; object-fit:cover; will-change:transform; transition:transform .6s cubic-bezier(.2,.8,.2,1); } /* 커서 hover 시 살짝 확대 */
-  .wc-thumb:hover img { transform:scale(1.06); }
-  .wc-meta { flex:none; display:flex; align-items:flex-end; justify-content:space-between; gap:26px; padding:20px 2px 0; }
-  .wc-name { font-family:'Pretendard',sans-serif; font-weight:600; font-size:clamp(1.3rem,1.9vw,1.9rem); letter-spacing:-0.02em; margin:0 0 .35em; }
-  .wc-desc { font-family:'Pretendard',sans-serif; font-size:clamp(.92rem,1.05vw,1.05rem); line-height:1.6; color:rgba(255,255,255,.58); max-width:34ch; }
-  /* 연락 섹션의 hello@example.com 버튼과 동일한 pill 모양 · 퍼플 */
-  .wc-explore { flex:none; margin-top:6px; display:inline-flex; align-items:center; gap:10px; border-radius:9999px; background:#8B3DFF; color:#fff; padding:13px 25px; font-family:'Poppins',sans-serif; font-size:.87rem; font-weight:500; letter-spacing:.01em; text-transform:none; white-space:nowrap; transition:background .2s; }
-  .wc-explore:hover { background:#7325E0; }
-  .wc-explore svg { width:16px; height:16px; }
-  @media (max-width:768px){ .wc-meta{ flex-direction:column; align-items:flex-start; gap:14px; } }
+  /* MYCEL no-pd-140--y 방식 — 핀 없음. 카드들이 처음엔 겹쳐 있다가 섹션 스크롤 진행에 따라 계단식으로 벌어짐 (transform scrub).
+     카드 디자인은 대형 이미지 + 하단 텍스트 오버레이(번호/제목/설명/버튼). */
+  .work-container { display:flex; flex-direction:column; gap:clamp(48px,8vh,120px); }  /* 최종 분리 상태 = 카드 간 간격 (MYCEL처럼) */
+  .work-item { position:relative; width:100%; will-change:transform; }
+  /* 대형 이미지 — height 고정(≈51vh), 가로 100%, object-fit cover, radius 24px · 텍스트 오버레이 컨텍스트 */
+  .work-image { display:block; position:relative; width:100%; height:clamp(36vh,51vh,54vh); overflow:hidden; border-radius:24px; background:#1a1a1d; cursor:none; }
+  .wi-img { position:absolute; left:0; top:-8%; width:100%; height:116%; object-fit:cover; will-change:transform; }
+  /* 가독성용 하단 그라데이션 (이미지 z0 · 그라데이션 z1 · 텍스트 z2) */
+  .work-image::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+    background:linear-gradient(to top, rgba(0,0,0,.6) 0%, rgba(0,0,0,.28) 34%, rgba(0,0,0,0) 66%); }
+  /* 텍스트를 이미지 위에 오버레이 (하단 좌측) */
+  .work-content { position:absolute; z-index:2; left:0; bottom:0; padding:clamp(28px,4vw,64px);
+    display:flex; flex-direction:column; align-items:flex-start; gap:clamp(12px,1.6vh,22px); max-width:min(70ch,90%); }
+  .wi-num { font-family:'Poppins',sans-serif; font-weight:500; font-size:clamp(1rem,1.3vw,1.4rem); line-height:1; color:rgba(255,255,255,.42); letter-spacing:.02em; }
+  .wi-name { font-family:'Poppins',sans-serif; font-weight:500; font-size:clamp(2rem,4.8vw,4.4rem); letter-spacing:-0.03em; line-height:1.0; margin:0; }
+  .wi-desc { font-family:'Pretendard',sans-serif; font-size:clamp(1rem,1.15vw,1.2rem); line-height:1.65; color:rgba(255,255,255,.6); margin:0; max-width:54ch; }
+  /* 연락 섹션 버튼과 동일한 pill · 퍼플 */
+  .wi-link { margin-top:clamp(8px,1vh,16px); display:inline-flex; align-items:center; gap:10px; border-radius:9999px; background:#8B3DFF; color:#fff; padding:13px 25px; font-family:'Poppins',sans-serif; font-size:.87rem; font-weight:500; letter-spacing:.01em; white-space:nowrap; transition:background .2s; }
+  .wi-link:hover { background:#7325E0; }
+  .wi-link svg { width:16px; height:16px; }
+  @media (max-width:768px){
+    .work-container { gap:clamp(28px,5vh,60px); }              /* 모바일: 간격 축소 */
+    .work-image { height:34vh; }
+  }
   /* Contact는 커튼 씬 안, 커튼 뒤(z:1)에 위치 → 씬 pin 동안 정지, 커튼이 좌측으로 걷히면 드러남 */
   #contact { position:relative; z-index:1; margin-top:-100vh; background:#FFFFFF; color:#111114; min-height:100vh; }
 
@@ -378,64 +399,107 @@
 <!-- ============================ 단독 이미지 전환 섹션 (About → Work 브릿지 · Stud.House single_image) ============================ -->
 <section class="single_image">
   <div class="si-stage">
+    <!-- 원본 높이 그대로 스크롤 따라 흐르는 이미지 -->
     <div class="works__inner">
-      <img class="works__img" src="img/single-image.jpg" alt="" loading="lazy">
+      <img class="works__img" src="img/single-image6.jpg" alt="" loading="eager" decoding="async">
+      <!-- 블라인드 마스크 (works__inner 내부 최상단 z3) -->
+      <div class="stripe-mask" aria-hidden="true"></div>
     </div>
-    <div class="stripe-mask" aria-hidden="true"></div>
+  </div>
+  <!-- 텍스트 전용 sticky 레이어 — works__inner 밖, single_image 안. 구간 내에서만 화면 중앙에 머묾 -->
+  <div class="single-image-text-wrap">
+    <div class="single-image-text">
+      <span class="line-wrapper">
+        <span class="split-line">문제를 정의하고, 소통으로 방향을 맞추며,</span>
+      </span>
+      <span class="line-wrapper">
+        <span class="split-line">실행으로 결과를 증명합니다.</span>
+      </span>
+    </div>
   </div>
 </section>
 
 <!-- ============================ SELECTED WORK + Contact (Curtain Reveal 씬) ============================ -->
 <section id="work" class="closing">
-  <!-- (1) 프로젝트: 일반 스크롤 그리드 (가로 스크롤 제거) -->
+  <!-- (1) 프로젝트: MYCEL no-pd-140--y 방식 — 프로젝트당 풀스크린 · 텍스트(번호→제목→설명→버튼) 위, 대형 이미지 아래 · 스토리형 -->
   <div class="work-inner">
     <div class="work-intro-inner">
-      <h2 class="work-title">OUR<br>PROJECT</h2>
+      <h2 class="work-title">SELECTED<br>SYSTEM</h2>
     </div>
-    <div class="work-grid">
-    <article class="work-card reveal">
-      <a href="#" class="wc-thumb"><span class="wc-media"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=1100&auto=format&fit=crop" alt="모바일 뱅킹 앱 리디자인" loading="lazy"></span></a>
-      <div class="wc-meta">
-        <div class="wc-txt"><h3 class="wc-name">모바일 뱅킹 앱 리디자인</h3><p class="wc-desc">송금 전환율 +34%, 고객 문의 −28%. 정보 구조를 3단계로 압축해 접근성 AA를 충족했습니다.</p></div>
-        <a href="project-1.html" class="wc-explore">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-    </article>
-    <article class="work-card reveal">
-      <a href="#" class="wc-thumb"><span class="wc-media"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1100&auto=format&fit=crop" alt="셀러 통합 대시보드" loading="lazy"></span></a>
-      <div class="wc-meta">
-        <div class="wc-txt"><h3 class="wc-name">셀러 통합 대시보드</h3><p class="wc-desc">데이터 밀도가 높은 화면을 재구성해 핵심 지표 도달 시간을 절반으로 줄였습니다.</p></div>
-        <a href="project-2.html" class="wc-explore">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-    </article>
-    <article class="work-card reveal">
-      <a href="#" class="wc-thumb"><span class="wc-media"><img src="https://images.unsplash.com/photo-1481487196290-c152efe083f5?q=80&w=1100&auto=format&fit=crop" alt="스타트업 브랜드 리뉴얼" loading="lazy"></span></a>
-      <div class="wc-meta">
-        <div class="wc-txt"><h3 class="wc-name">스타트업 브랜드 리뉴얼</h3><p class="wc-desc">로고부터 제품 UI까지 일관된 비주얼 언어를 정립했습니다.</p></div>
-        <a href="#" class="wc-explore">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-    </article>
-    <article class="work-card reveal">
-      <a href="#" class="wc-thumb"><span class="wc-media"><img src="https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=1100&auto=format&fit=crop" alt="디자인 시스템 Atlas" loading="lazy"></span></a>
-      <div class="wc-meta">
-        <div class="wc-txt"><h3 class="wc-name">디자인 시스템 “Atlas”</h3><p class="wc-desc">120+ 컴포넌트와 토큰 체계. 디자인–개발 핸드오프 시간을 40% 단축했습니다.</p></div>
-        <a href="#" class="wc-explore">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-    </article>
-    <article class="work-card reveal">
-      <a href="#" class="wc-thumb"><span class="wc-media"><img src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f?q=80&w=1100&auto=format&fit=crop" alt="B2B 워크플로우 SaaS" loading="lazy"></span></a>
-      <div class="wc-meta">
-        <div class="wc-txt"><h3 class="wc-name">B2B 워크플로우 SaaS 런칭</h3><p class="wc-desc">첫 사용자 인터뷰부터 MVP 출시까지 6개월. 온보딩 완료율 71%를 달성했습니다.</p></div>
-        <a href="#" class="wc-explore">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-    </article>
-    <article class="work-card reveal">
-      <a href="#" class="wc-thumb"><span class="wc-media"><img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?q=80&w=1100&auto=format&fit=crop" alt="모바일 커머스 앱 개선" loading="lazy"></span></a>
-      <div class="wc-meta">
-        <div class="wc-txt"><h3 class="wc-name">모바일 커머스 앱 개선</h3><p class="wc-desc">결제 플로우를 단순화해 장바구니 이탈률을 19% 낮췄습니다.</p></div>
-        <a href="#" class="wc-explore">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-      </div>
-    </article>
-    </div><!-- /work-grid -->
+
+    <div class="work-container no-pd-140--y">
+      <article class="work-item">
+        <div class="work-image">
+          <img class="wi-img" src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=1800&auto=format&fit=crop" alt="UX/UI Portfolio" loading="lazy">
+          <div class="work-content">
+            <span class="wi-num">01</span>
+            <h3 class="wi-name">UX/UI Portfolio</h3>
+            <p class="wi-desc">문제를 정의하고 경험을 설계한 프로젝트. 사용자 리서치부터 정보 구조, 화면 설계까지 하나의 흐름으로 구축했습니다.</p>
+            <a href="project-1.html" class="wi-link">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-item">
+        <div class="work-image">
+          <img class="wi-img" src="https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=1800&auto=format&fit=crop" alt="Design System" loading="lazy">
+          <div class="work-content">
+            <span class="wi-num">02</span>
+            <h3 class="wi-name">Design System</h3>
+            <p class="wi-desc">일관된 인터페이스를 위한 토큰과 컴포넌트 구조. 120+ 컴포넌트 체계로 디자인–개발 핸드오프 시간을 40% 단축했습니다.</p>
+            <a href="project-2.html" class="wi-link">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-item">
+        <div class="work-image">
+          <img class="wi-img" src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f?q=80&w=1800&auto=format&fit=crop" alt="Interaction Design" loading="lazy">
+          <div class="work-content">
+            <span class="wi-num">03</span>
+            <h3 class="wi-name">Interaction Design</h3>
+            <p class="wi-desc">스크롤, 모션, 전환을 활용한 인터랙션 설계. 콘텐츠의 리듬에 맞춰 자연스럽게 이어지는 경험을 만듭니다.</p>
+            <a href="#" class="wi-link">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-item">
+        <div class="work-image">
+          <img class="wi-img" src="https://images.unsplash.com/photo-1559028012-481c04fa702d?q=80&w=1800&auto=format&fit=crop" alt="Motion & Prototyping" loading="lazy">
+          <div class="work-content">
+            <span class="wi-num">04</span>
+            <h3 class="wi-name">Motion &amp; Prototyping</h3>
+            <p class="wi-desc">프로토타입과 마이크로 인터랙션으로 아이디어를 빠르게 검증하고, 실제 사용감을 설계에 반영했습니다.</p>
+            <a href="#" class="wi-link">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-item">
+        <div class="work-image">
+          <img class="wi-img" src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f?q=80&w=1800&auto=format&fit=crop" alt="Design Ops" loading="lazy">
+          <div class="work-content">
+            <span class="wi-num">05</span>
+            <h3 class="wi-name">Design Ops</h3>
+            <p class="wi-desc">팀의 디자인 프로세스와 핸드오프를 체계화해, 반복 작업을 줄이고 일관성을 높였습니다.</p>
+            <a href="#" class="wi-link">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="work-item">
+        <div class="work-image">
+          <img class="wi-img" src="https://images.unsplash.com/photo-1481487196290-c152efe083f5?q=80&w=1800&auto=format&fit=crop" alt="Brand & Visual" loading="lazy">
+          <div class="work-content">
+            <span class="wi-num">06</span>
+            <h3 class="wi-name">Brand &amp; Visual</h3>
+            <p class="wi-desc">로고부터 제품 UI까지 일관된 비주얼 언어를 정립해 브랜드 경험을 하나로 이었습니다.</p>
+            <a href="#" class="wi-link">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          </div>
+        </div>
+      </article>
+    </div><!-- /work-container -->
   </div><!-- /work-inner -->
 </section><!-- /#work.closing (Work 자체가 검은 Curtain) -->
 
@@ -443,7 +507,12 @@
 <section id="contact" class="min-h-screen flex flex-col">
   <!-- 좌: 게시글 리스트 50% / 우: CTA 타이틀 50% (좌우 배치 교체) -->
   <div class="flex-1 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full site-pad py-8" style="padding-top:calc(var(--header-h,66px) + 1.25rem);padding-bottom:clamp(70px,11vh,140px)">
-    <!-- 좌측: 게시글 리스트 (제목 + 날짜, 행 단위 · 얇은 구분선) -->
+    <!-- 좌측: CTA 타이틀 + 이메일 버튼 (왼쪽 정렬) -->
+    <div class="reveal text-left flex flex-col items-start" data-delay="1">
+      <h2 class="font-display text-[clamp(2.4rem,6vw,5.5rem)] font-500 leading-[1.04] tracking-[-0.02em] text-ink">다음 프로젝트,<br>함께 <span class="em">만들까요?</span></h2>
+      <a href="mailto:hello@example.com" class="inline-flex items-center gap-3 rounded-full bg-ink px-7 py-4 mt-9 text-base font-600 text-paper hover:bg-fg/80 transition-colors duration-200 cursor-pointer">hello@example.com<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+    <!-- 우측: 게시글 리스트 (제목 + 날짜, 행 단위 · 얇은 구분선) -->
     <div class="post-list reveal">
       <a href="#" class="post-row"><span class="post-title">디자인 시스템을 0에서 구축한 기록</span><span class="post-date">2026.05.12</span></a>
       <a href="#" class="post-row"><span class="post-title">접근성 AA를 충족하는 컬러 설계</span><span class="post-date">2026.03.28</span></a>
@@ -453,11 +522,6 @@
       <a href="#" class="post-row"><span class="post-title">좋은 마이크로카피의 조건</span><span class="post-date">2025.08.22</span></a>
       <a href="#" class="post-row"><span class="post-title">사용자 인터뷰에서 진짜 신호 찾기</span><span class="post-date">2025.06.30</span></a>
       <a href="#" class="post-row"><span class="post-title">디자인 QA 체크리스트 만들기</span><span class="post-date">2025.05.14</span></a>
-    </div>
-    <!-- 우측: CTA 타이틀 + 이메일 버튼 (오른쪽 정렬) -->
-    <div class="reveal text-right flex flex-col items-end" data-delay="1">
-      <h2 class="font-display text-[clamp(2.4rem,6vw,5.5rem)] font-500 leading-[1.04] tracking-[-0.02em] text-ink">다음 프로젝트,<br>함께 <span class="em">만들까요?</span></h2>
-      <a href="mailto:hello@example.com" class="inline-flex items-center gap-3 rounded-full bg-ink px-7 py-4 mt-9 text-base font-600 text-paper hover:bg-fg/80 transition-colors duration-200 cursor-pointer">hello@example.com<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
   </div>
   <!-- 하단: 스킬 마퀴 (Contact 섹션을 마무리하는 띠 요소) -->
@@ -627,8 +691,11 @@
         ScrollTrigger.addEventListener('refresh', centerMarquee);
 
         // About(2단) — 뷰포트 진입 시 아래에서 위로 Fade Up (텍스트 · 3D 순차)
-        if (belowItems.length) gsap.from(belowItems, { autoAlpha:0, y:44, duration:1.05, ease:'power3.out', stagger:0.14,
-          scrollTrigger:{ trigger:'.hero-below', start:'top 85%', once:true } });
+        if (belowItems.length) {
+          gsap.set(belowItems, { autoAlpha:0, y:44 });
+          gsap.to(belowItems, { autoAlpha:1, y:0, duration:1.05, ease:'power3.out', stagger:0.14,
+            scrollTrigger:{ trigger:'.hero-below', start:'top 85%', once:true } });
+        }
       })();
 
       // 소개 (2단) — 3D 오브젝트 Floating + 진입 리빌
@@ -636,7 +703,7 @@
         gsap.utils.toArray('.about-3d').forEach((el) => gsap.to(el, { y:'+=16', duration:3, ease:'sine.inOut', yoyo:true, repeat:-1 }));
       })();
 
-      // Transition — 작은 이미지 등장 → 스크롤 따라 확대되며 위로 흐름(pin 없음, normal flow) → Work 직전에만 가로 스트립 블라인드
+      // Transition — offbeat studio-home-parallax: pin 없음. 섹션이 정상 스크롤되고 윈도우 안 이미지만 패럴랙스 translate. 진입 시 텍스트 등장, 끝에서 얇은 블라인드로 이미지+텍스트 함께 커버 → Work
       (function initTransition(){
         const sec = document.querySelector('.single_image');
         const inner = sec && sec.querySelector('.works__inner');
@@ -644,33 +711,55 @@
         const mask = sec && sec.querySelector('.stripe-mask');
         if (!sec || !inner || !mask) return;
 
-        // 가로 스트립 생성 (초기: 열림 scaleY 0, 마스크 숨김)
-        const N = 9, stripes = [];
+        // 얇은 가로 스트립 생성 (기존 9개 → 18개, 각 슬랫 두께 약 절반). 초기: 열림 scaleY 0, 마스크 숨김.
+        const N = 18, stripes = [];
         for (let i = 0; i < N; i++) {
           const s = document.createElement('div');
           s.className = 'stripe';
           s.style.top = (i * 100 / N) + '%';
-          s.style.height = (100 / N + 0.4) + '%';
+          s.style.height = (100 / N + 0.25) + '%';
           stripes.push(s); mask.appendChild(s);
         }
-        // 초기 상태: 작은 이미지 · 마스크 숨김 · 스트립 열림(scaleY 0)
-        gsap.set(inner,  { width:'10vw', height:'17vh', borderRadius:16, y: () => -(window.innerHeight * 0.085) - 30 });  /* 시작 크기 절반 + 상단 위치 맞춤(8.5vh) + 추가로 30px 위로 */
-        gsap.set(img,    { scale:1.5, xPercent:-10, yPercent:7, transformOrigin:'center center' });  /* Ken Burns: 50% 확대 + 대각선 오프셋에서 시작 */
+        // 초기 상태: 마스크/스트립 숨김 (이미지는 CSS로 이미 full-width 커버)
         gsap.set(mask,   { autoAlpha:0 });
         gsap.set(stripes,{ scaleY:0 });
 
-        // 1) 확대: pin 없이 scrub — 이미지는 normal flow로 스크롤 따라 위로 이동하고, 동시에 width/height/scale이 커진다.
-        //    확대가 끝나도(섹션이 화면을 채우는 시점) 고정되지 않고 계속 위로 흘러간다.
-        gsap.timeline({ defaults:{ ease:'none' },
-          scrollTrigger:{ trigger: sec, start:'top bottom', end:'center center', scrub:true, invalidateOnRefresh:true } })
-          .fromTo(inner, { y: () => -(window.innerHeight * 0.085) - 30 },
-                         { width:'100vw', height:'100vh', borderRadius:0, y:0, ease:'power2.out', duration:1 }, 0)
-          .to(img,   { scale:1, xPercent:0, yPercent:0, ease:'power2.out', duration:1 }, 0);  /* Ken Burns: 줌아웃 + 중앙으로 팬 (같은 ease로 가장자리 노출 방지) */
+        // 1) 이미지: 원본 전체 높이 그대로(고정 높이/크롭 없음) 문서 흐름대로 스크롤 따라 흐름 (별도 transform 없음).
 
-        // 2) 블라인드(가로 스트립): 큰 이미지가 화면을 빠져나가는 구간 전체에 걸쳐 천천히 닫힘 (기존 대비 약 2배 길이)
-        //    single_image 'bottom bottom'(화면 꽉 참) → 'bottom top'(완전히 위로 빠져나감) 동안 스트립이 이미지를 덮으며 Work로 전환.
+        // 2) 텍스트: single_image 구간 안에서만 화면 중앙에 sticky처럼 머묾 (GSAP pin, pinSpacing:false → 이미지 흐름 불변, 전역 fixed 아님).
+        const textLayer = sec.querySelector('.single-image-text-wrap');
+        const textWrap = sec.querySelector('.single-image-text');
+        if (textLayer && textWrap) {
+          const chars = [];
+          textWrap.querySelectorAll('.split-line').forEach((line) => {
+            const txt = line.textContent;
+            line.textContent = '';
+            for (const ch of txt) {
+              const span = document.createElement('span');
+              span.className = 'split-char';
+              span.textContent = (ch === ' ') ? ' ' : ch;
+              line.appendChild(span);
+              chars.push(span);
+            }
+          });
+          gsap.set(chars, { yPercent:120, opacity:0 });
+
+          // 텍스트 레이어를 섹션 구간 동안 뷰포트 중앙에 고정 (이미지만 뒤에서 스크롤) — sticky 대체
+          ScrollTrigger.create({ trigger: sec, start:'top top', end:'bottom bottom',
+            pin: textLayer, pinSpacing:false, anticipatePin:1, invalidateOnRefresh:true });
+
+          // split-char Fade Up — 섹션 진입 직후 1회 재생 (이후 pin으로 중앙에 머무는 동안 유지)
+          gsap.to(chars, { yPercent:0, opacity:1, ease:'power3.out', stagger:0.02, duration:1.0,
+            scrollTrigger:{ trigger: sec, start:'top 40%', once:true } });
+
+          // 블라인드 시작(이미지 끝부분)에서 텍스트도 함께 사라짐 — 텍스트는 stripe-mask 밖(z5)이라 opacity로 연동
+          gsap.to(textLayer, { autoAlpha:0, ease:'none',
+            scrollTrigger:{ trigger: sec, start:'bottom bottom', end:'bottom 80%', scrub:true, invalidateOnRefresh:true } });
+        }
+
+        // 3) 얇은 블라인드: 섹션이 위로 빠져나가는 마지막 구간에서 stripe-mask가 닫히며 이미지를 덮음 → Work.
         gsap.timeline({ defaults:{ ease:'none' },
-          scrollTrigger:{ trigger:'.single_image', start:'bottom bottom', end:'bottom top', scrub:true, invalidateOnRefresh:true } })
+          scrollTrigger:{ trigger: sec, start:'bottom bottom', end:'bottom top', scrub:true, invalidateOnRefresh:true } })
           .set(mask, { autoAlpha:1 })
           .to(stripes, { scaleY:1, ease:'power3.inOut', duration:1 });
       })();
@@ -722,7 +811,31 @@
         // scale 대신 width/height를 키워야 1px 라인이 두꺼워 보이지 않음 (xPercent:-50로 중심 유지)
         const grow   = () => { n++; dot.classList.add('is-grow'); gsap.to(dot, { width:42, height:42, duration:0.45, ease:'expo.out', overwrite:'auto' }); };
         const shrink = () => { n = Math.max(0, n-1); if (!n) { dot.classList.remove('is-grow'); gsap.to(dot, { width:28, height:28, duration:0.4, ease:'power3.out', overwrite:'auto' }); } };
-        document.querySelectorAll('.wc-thumb').forEach((el) => { el.addEventListener('pointerenter', grow); el.addEventListener('pointerleave', shrink); });
+        document.querySelectorAll('.work-image').forEach((el) => { el.addEventListener('pointerenter', grow); el.addEventListener('pointerleave', shrink); });
+      })();
+
+      // Work 카드 스택 (pin 없음) — 섹션 스크롤 진행률에 연동(scrub). 처음엔 모든 카드가 1번 위로 포개져 겹쳐 있고,
+      //   스크롤 구간이 진행될 때마다 카드가 한 장씩 순차로(2번→3번→4번…) 자기 자리로 내려오며 분리됨. 한 번에 전체가 펼쳐지지 않음.
+      (function initWorkStack(){
+        const container = document.querySelector('.work-container');
+        const cards = gsap.utils.toArray('.work-item');
+        if (!container || cards.length < 2) return;
+        const c0 = cards[0];
+        cards.forEach((card, i) => { card.style.zIndex = String(cards.length - i); });  // 1번이 최상단
+        const isMobile = () => window.matchMedia('(max-width:768px)').matches;
+        // 하나의 섹션 스크럽 타임라인 — 체인 방식: 각 카드는 자기 index만큼의 구간에 걸쳐 한 칸씩 내려옴.
+        //   card2는 1구간(0→1), card3은 2구간(0→2), … 즉 card_i는 한 구간마다 바로 이전 카드 위치를 거쳐 내려와 순차적으로 분리됨.
+        const tl = gsap.timeline({ defaults:{ ease:'none' },
+          scrollTrigger:{ trigger: container, start:'top 82%', end:'bottom bottom', scrub:true, invalidateOnRefresh:true } });
+        for (let i = 1; i < cards.length; i++) {
+          const card = cards[i];
+          // 시작: 1번 위치로 포개짐(y=-i칸) → duration i 동안 한 구간마다 한 칸씩 내려와 자기 자리(0)에 도달
+          tl.fromTo(card,
+            { y: () => (c0.offsetTop - card.offsetTop),
+              scale: () => 1 - (isMobile() ? 0.012 : 0.025) * i,
+              opacity: () => 1 - (isMobile() ? 0.03 : 0.06) * i },
+            { y: 0, scale: 1, opacity: 1, duration: i }, 0);   // 체인: 각 카드가 이전 카드 자리를 거쳐 순차 도달
+        }
       })();
 
       // 일반 리빌
