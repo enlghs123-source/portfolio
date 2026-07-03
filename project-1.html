@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>모바일 뱅킹 앱 리디자인 · 홍길동</title>
+<meta name="description" content="복잡한 정보 구조를 단순화한 모바일 뱅킹 앱 전면 리디자인 케이스 스터디." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { paper:'#FFFFFF', cream:'#FAFAF9', ink:'#0E0E10', black:'#000000', fg:'#111114', muted:'#52525B', subtle:'#8A8A93', line:'#E5E5E2', point:'#1C60FF' },
+    fontFamily: { sans:['Pretendard','system-ui','sans-serif'], display:['"Space Grotesk"','Pretendard','sans-serif'], serif:['"Instrument Serif"','Georgia','serif'] },
+  } } };
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { background:#FFFFFF; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  .em { font-family:'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; letter-spacing:.01em; }
+  .site-pad { padding-left:7vw; padding-right:7vw; }
+  @media (max-width:900px){ .site-pad { padding-left:24px; padding-right:24px; } }
+
+  /* 디자인 시스템 — 버튼(#1C60FF·둥근) */
+  .pf-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; border-radius:999px; padding:0.85em 1.7em; font-family:'Pretendard',sans-serif; font-weight:600; font-size:clamp(.9rem,1.05vw,1.05rem); cursor:pointer; transition:background-color .2s ease, color .2s ease, border-color .2s ease; }
+  .pf-btn-primary { background:#1C60FF; color:#fff; }
+  .pf-btn-primary:hover { background:#1750d8; }
+  .pf-btn-ghost { border:1.5px solid #1C60FF; color:#1C60FF; background:transparent; }
+  .pf-btn-ghost:hover { background:#1C60FF; color:#fff; }
+
+  /* 스크롤 리빌 (본 사이트와 동일한 애니메이션 스타일) */
+  .reveal { opacity:0; transform: translateY(28px); }
+  html.gsap .reveal { opacity:0; }
+
+  ::-webkit-scrollbar { width:11px; } ::-webkit-scrollbar-track { background:#F1F1EF; }
+  ::-webkit-scrollbar-thumb { background:#C9C9C4; border-radius:99px; border:3px solid #F1F1EF; } ::-webkit-scrollbar-thumb:hover { background:#A9A9A2; }
+  a:focus-visible, button:focus-visible { outline:2px solid #1C60FF; outline-offset:3px; border-radius:4px; }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1 !important; transform:none !important; } }
+</style>
+</head>
+
+<body class="bg-paper text-fg font-sans antialiased selection:bg-ink selection:text-paper">
+
+<!-- ============================ NAV ============================ -->
+<header class="fixed top-0 inset-x-0 z-50 bg-paper/85 backdrop-blur-md border-b border-line">
+  <div class="site-pad py-5 flex items-center justify-between">
+    <a href="portfolio.html" class="font-display text-base font-700 tracking-tight">홍길동<span class="text-subtle">.</span></a>
+    <a href="portfolio.html#about" class="inline-flex items-center gap-2 text-sm font-600 text-muted hover:text-ink transition-colors">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      프로젝트로 돌아가기
+    </a>
+  </div>
+</header>
+
+<!-- ============================ HERO ============================ -->
+<section class="site-pad pt-36 sm:pt-44 pb-12">
+  <p class="reveal text-xs tracking-[0.22em] uppercase text-point font-600 mb-5">Experience Design · 2025</p>
+  <h1 class="reveal font-display text-[clamp(2.4rem,6vw,5rem)] font-500 leading-[1.05] tracking-[-0.02em] text-ink max-w-[18ch]">
+    모바일 뱅킹 앱 <span class="em">전면 리디자인</span>
+  </h1>
+  <p class="reveal text-lg text-muted leading-relaxed mt-7 max-w-2xl">
+    복잡하게 얽힌 정보 구조와 송금 플로우를 사용자 관점에서 다시 설계해, 핵심 작업을 더 빠르고 명확하게 만든 프로젝트입니다.
+  </p>
+</section>
+
+<!-- 대표 이미지 -->
+<section class="site-pad pb-20 sm:pb-28">
+  <div class="reveal aspect-[16/9] rounded-3xl overflow-hidden bg-cream ring-1 ring-line">
+    <!-- 교체하세요: 대표 이미지 -->
+    <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=1600&auto=format&fit=crop" alt="모바일 뱅킹 앱 대표 이미지" class="w-full h-full object-cover" />
+  </div>
+</section>
+
+<!-- ============================ 개요 + 메타 (Role / 기간 / Tools) ============================ -->
+<section class="site-pad pb-24 sm:pb-32">
+  <div class="grid lg:grid-cols-12 gap-12 lg:gap-16">
+    <div class="lg:col-span-7 reveal">
+      <h2 class="font-display text-2xl sm:text-3xl font-600 text-ink mb-6">프로젝트 개요</h2>
+      <p class="text-muted leading-relaxed text-lg">
+        7년차 사용자들이 가장 자주 쓰는 ‘송금’과 ‘조회’ 경험이 누적된 기능 추가로 복잡해졌습니다.
+        본 프로젝트는 정보 구조(IA)를 처음부터 재정의하고, 핵심 플로우를 3단계로 압축하며,
+        전 화면 접근성(WCAG AA)을 충족하는 것을 목표로 진행했습니다.
+      </p>
+    </div>
+    <div class="lg:col-span-5 reveal">
+      <dl class="divide-y divide-line border-y border-line">
+        <div class="py-4 flex justify-between gap-6"><dt class="text-sm text-subtle">담당 역할 (Role)</dt><dd class="text-sm font-600 text-ink text-right">Lead Product Designer<br>리서치 · IA · 인터랙션 · 디자인 시스템</dd></div>
+        <div class="py-4 flex justify-between gap-6"><dt class="text-sm text-subtle">기간</dt><dd class="text-sm font-600 text-ink text-right">2025.01 – 2025.06 (6개월)</dd></div>
+        <div class="py-4 flex justify-between gap-6"><dt class="text-sm text-subtle">사용 툴</dt><dd class="text-sm font-600 text-ink text-right">Figma · ProtoPie · FigJam · Maze</dd></div>
+        <div class="py-4 flex justify-between gap-6"><dt class="text-sm text-subtle">플랫폼</dt><dd class="text-sm font-600 text-ink text-right">iOS · Android</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 문제 정의 ============================ -->
+<section class="site-pad pb-24 sm:pb-32">
+  <p class="reveal text-xs tracking-[0.22em] uppercase text-subtle mb-5">01 — Problem</p>
+  <h2 class="reveal font-display text-3xl sm:text-4xl font-500 text-ink mb-10 max-w-[20ch]">무엇이 문제였나</h2>
+  <div class="grid sm:grid-cols-3 gap-px bg-line rounded-2xl overflow-hidden border border-line">
+    <div class="reveal bg-paper p-7"><div class="font-display text-3xl font-700 text-point">7단계</div><p class="text-sm text-muted mt-3 leading-relaxed">송금 완료까지 거쳐야 하는 화면 수. 이탈이 집중되는 구간이었습니다.</p></div>
+    <div class="reveal bg-paper p-7"><div class="font-display text-3xl font-700 text-point">+41%</div><p class="text-sm text-muted mt-3 leading-relaxed">‘송금 방법’ 관련 고객 문의 증가율. 직관성 부족이 원인이었습니다.</p></div>
+    <div class="reveal bg-paper p-7"><div class="font-display text-3xl font-700 text-point">미충족</div><p class="text-sm text-muted mt-3 leading-relaxed">대비·터치 타깃 등 접근성 기준 다수 미달 상태였습니다.</p></div>
+  </div>
+</section>
+
+<!-- ============================ 해결 과정 ============================ -->
+<section class="site-pad pb-24 sm:pb-32">
+  <p class="reveal text-xs tracking-[0.22em] uppercase text-subtle mb-5">02 — Process</p>
+  <h2 class="reveal font-display text-3xl sm:text-4xl font-500 text-ink mb-12 max-w-[20ch]">어떻게 해결했나</h2>
+  <ol class="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line rounded-2xl overflow-hidden border border-line">
+    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-sm font-600">01</span><h3 class="font-display text-lg font-600 mt-4 mb-2">리서치</h3><p class="text-sm text-muted leading-relaxed">사용자 인터뷰 12명 + 행동 로그 분석으로 이탈 구간을 정의.</p></li>
+    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-sm font-600">02</span><h3 class="font-display text-lg font-600 mt-4 mb-2">IA 재설계</h3><p class="text-sm text-muted leading-relaxed">기능 중심 구조 → 작업 중심 구조로 정보 구조를 재정의.</p></li>
+    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-sm font-600">03</span><h3 class="font-display text-lg font-600 mt-4 mb-2">프로토타입·테스트</h3><p class="text-sm text-muted leading-relaxed">ProtoPie로 인터랙션 검증, Maze 원격 사용성 테스트 2라운드.</p></li>
+    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-sm font-600">04</span><h3 class="font-display text-lg font-600 mt-4 mb-2">디자인 시스템</h3><p class="text-sm text-muted leading-relaxed">컴포넌트·토큰을 정비해 개발 핸드오프와 일관성을 확보.</p></li>
+  </ol>
+</section>
+
+<!-- ============================ 주요 화면 (UI) ============================ -->
+<section class="site-pad pb-24 sm:pb-32">
+  <p class="reveal text-xs tracking-[0.22em] uppercase text-subtle mb-5">03 — Key Screens</p>
+  <h2 class="reveal font-display text-3xl sm:text-4xl font-500 text-ink mb-12">주요 화면</h2>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    <!-- 교체하세요: 주요 화면 이미지 -->
+    <div class="reveal aspect-[3/4] rounded-2xl overflow-hidden bg-cream ring-1 ring-line"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=900&auto=format&fit=crop" alt="주요 화면 1" class="w-full h-full object-cover"></div>
+    <div class="reveal aspect-[3/4] rounded-2xl overflow-hidden bg-cream ring-1 ring-line"><img src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?q=80&w=900&auto=format&fit=crop" alt="주요 화면 2" class="w-full h-full object-cover"></div>
+    <div class="reveal aspect-[3/4] rounded-2xl overflow-hidden bg-cream ring-1 ring-line"><img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=900&auto=format&fit=crop" alt="주요 화면 3" class="w-full h-full object-cover"></div>
+  </div>
+</section>
+
+<!-- ============================ 결과 및 성과 ============================ -->
+<section class="site-pad pb-24 sm:pb-32">
+  <div class="reveal rounded-3xl bg-ink text-paper p-8 sm:p-14">
+    <p class="text-xs tracking-[0.22em] uppercase text-white/45 mb-8">04 — Results</p>
+    <div class="grid sm:grid-cols-3 gap-10">
+      <div><div class="font-display text-5xl font-700 text-point">+34%</div><p class="text-sm text-white/70 mt-3">송금 전환율 상승</p></div>
+      <div><div class="font-display text-5xl font-700">−28%</div><p class="text-sm text-white/70 mt-3">관련 고객 문의 감소</p></div>
+      <div><div class="font-display text-5xl font-700">AA</div><p class="text-sm text-white/70 mt-3">전 화면 접근성 충족</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ CTA ============================ -->
+<section class="site-pad pb-28">
+  <div class="reveal flex flex-wrap items-center justify-between gap-6 border-t border-line pt-12">
+    <h2 class="font-display text-2xl sm:text-3xl font-600 text-ink">다음 프로젝트도 살펴보세요</h2>
+    <div class="flex gap-3">
+      <a href="portfolio.html#about" class="pf-btn pf-btn-ghost">목록으로</a>
+      <a href="project-2.html" class="pf-btn pf-btn-primary">다음 프로젝트</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-pad py-8 border-t border-line text-sm text-muted flex flex-col sm:flex-row items-center justify-between gap-3">
+  <span class="font-display tracking-tight text-ink">홍길동<span class="text-subtle">.</span></span>
+  <p>© 2026 홍길동. All rights reserved.</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script>
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (typeof gsap !== 'undefined' && !reduceMotion) {
+    gsap.registerPlugin(ScrollTrigger);
+    document.documentElement.classList.add('gsap');
+    gsap.utils.toArray('.reveal').forEach((el) => {
+      gsap.fromTo(el, { opacity:0, y:28 }, { opacity:1, y:0, duration:0.9, ease:'power3.out',
+        scrollTrigger:{ trigger:el, start:'top 88%', once:true } });
+    });
+  } else {
+    document.querySelectorAll('.reveal').forEach((el)=>{ el.style.opacity=1; el.style.transform='none'; });
+  }
+</script>
+</body>
+</html>

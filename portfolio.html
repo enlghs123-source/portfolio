@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- 교체하세요 — 메타 -->
+<title>홍길동 · UX/UI 디자이너 포트폴리오</title>
+<meta name="description" content="7년차 프로덕트 디자이너. 복잡한 문제를 단순하고 명료한 경험으로." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { paper:'#FFFFFF', cream:'#FAFAF9', ink:'#0E0E10', black:'#000000', fg:'#111114', muted:'#52525B', subtle:'#8A8A93', line:'#E5E5E2', point:'#1C60FF' },
+    fontFamily: { sans:['Pretendard','system-ui','sans-serif'], display:['"Poppins"','Pretendard','serif'], serif:['"Poppins"','Georgia','serif'] },
+  } } };
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { background:#1a1a1a; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  /* Hero 배경(bg2.jpeg)에서 추출한 공통 그라데이션 토큰 — 보라·핑크·블루 (Hero · 소개 동일 디자인 언어) */
+  :root { --grad-hero: linear-gradient(135deg, #B24CE8 0%, #6E1CF6 30%, #4A33F0 60%, #2A56F5 100%); }
+  /* 세방고딕 볼드 (워드마크 "홍길동 2026" 전용) */
+  @font-face { font-family:'SebangGothic'; font-weight:700; font-style:normal; font-display:swap;
+    src:url('https://cdn.jsdelivr.net/gh/wefonts/sebangGothic/sebangGothic-Bold.woff2') format('woff2'),
+        url('https://cdn.jsdelivr.net/gh/wefonts/sebangGothic/sebangGothic-Bold.woff') format('woff'); }
+  /* CSS Scroll Snap 제거 — ScrollSmoother(전역 스무스 스크롤)로 전환 */
+  /* 섹션 공통 좌우 패딩 — 프로젝트(pf-slide 0 7vw) 기준으로 통일 */
+  .site-pad { padding-left:7vw; padding-right:7vw; }
+  @media (max-width:900px){ .site-pad { padding-left:24px; padding-right:24px; } }
+  .em { font-family:'Poppins', Georgia, serif; font-style: italic; font-weight: 400; letter-spacing:.01em; }
+
+  /* ===== 다크 헤더 (FineNuts 컨셉) ===== */
+  /* Nav: 경계선/그림자 없이, Nav 자체 background-image(gradient)만으로 아래까지 은은하게 녹아내림
+     · nav 콘텐츠 높이는 그대로(상단), padding-bottom으로 배경 영역만 130px까지 확장 · 그 영역은 클릭 통과 */
+  #nav { color:#FFFFFF; width:100%; box-shadow:none; border:none; pointer-events:none; padding-bottom:70px;
+    background-image:linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,.30) 35%, rgba(0,0,0,.12) 70%, rgba(0,0,0,0) 100%);
+    background-repeat:no-repeat; background-position:top; background-size:100% 130px;
+    transition:color .35s ease; }
+  #nav, #nav * { box-shadow:none; border:none; }
+  #nav > *, #nav a, #nav button, #nav span { pointer-events:auto; }
+  /* Contact(흰 배경) 구간: 글자·버튼 반전 + 흰 배경 위에서도 보이는 옅은 다크 그림자 그라데이션(사라지지 않게) */
+  #nav.nav-invert { color:#111114;
+    background-image:linear-gradient(to bottom, rgba(0,0,0,.2) 0%, rgba(0,0,0,.1) 35%, rgba(0,0,0,.04) 70%, rgba(0,0,0,0) 100%); }
+  #nav.nav-invert .nav-pill { color:#111114; background:rgba(0,0,0,.07); }
+  #nav.nav-invert .nav-pill:hover { color:#fff; background:#111114; }
+  /* wbbr 참고 루트 컬러 — 미니멀 pill (테두리 없이 채움, radius 50vw) : MENU · CLOSE */
+  .nav-pill { --wb-bg:#1a1a1a; --wb-white:#fff; --wb-grey:#bababa; --wb-radius:50vw;
+    display:inline-flex; align-items:center; border:none; outline:none; box-shadow:none; border-radius:var(--wb-radius);
+    padding:10px 22px; font-family:'Poppins',sans-serif; font-size:.78rem; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--wb-white); background:rgba(255,255,255,.1); cursor:pointer; white-space:nowrap;
+    transition:background .25s ease, color .25s ease; }
+  .nav-pill:hover { background:var(--wb-white); color:var(--wb-bg); }
+  /* 전체화면 메뉴 오버레이 */
+  #menu-overlay { position:fixed; inset:0; z-index:60; background:#141414; visibility:hidden;
+    clip-path:inset(0 0 100% 0); display:flex; flex-direction:column; justify-content:center; padding:0 clamp(40px,8vw,150px); }
+  #menu-overlay .menu-close { position:absolute; top:20px; right:clamp(20px,5vw,40px); }
+  .menu-list { display:flex; flex-direction:column; gap:clamp(6px,1.2vh,16px); }
+  .menu-item { display:block; width:fit-content; overflow:hidden; }
+  .menu-item span { display:block; font-family:'Poppins',sans-serif; font-weight:300; font-size:clamp(2.6rem,9vw,7rem);
+    line-height:1.08; letter-spacing:-0.02em; color:#f5f5f4; transition:opacity .2s ease; will-change:transform; }
+  .menu-item span { transition:color .2s ease, opacity .2s ease; }
+  .menu-item:hover span { color:#6E1CF6; }
+  #nav .nav-link { color: currentColor; opacity:.72; transition: opacity .2s ease; }
+  #nav .nav-link:hover { opacity:1; }
+  .plus-grid { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='64'%3E%3Cg fill='none' stroke='%23ffffff' stroke-opacity='0.16' stroke-width='1'%3E%3Cpath d='M32 27v10M27 32h10'/%3E%3C/g%3E%3C/svg%3E"); background-size:64px 64px;
+    -webkit-mask-image: radial-gradient(circle at 50% 42%, #000 50%, transparent 92%); mask-image: radial-gradient(circle at 50% 42%, #000 50%, transparent 92%); }
+  .hero-glow { background: radial-gradient(circle at 50% 42%, rgba(255,255,255,.10), transparent 60%); }
+  /* Hero 배경 이미지 (원 상태의 비율 유지) + 워드마크 가독성용 상·하단 그라데이션 */
+  .hero-bg { background-image:url('img/bg2.jpeg'); background-size:cover; background-position:center; background-repeat:no-repeat; }
+  .hero-shade { background:linear-gradient(to bottom, rgba(0,0,0,.18), transparent 38%, transparent 60%, rgba(0,0,0,.45)); }
+  /* ===== Marquee Typography Hero (다크 · 대형 Serif 무한 흐름) ===== */
+  /* Hero: 높이 강제 없음(height/min-height/100vh 미사용). 콘텐츠 높이로 결정, 검은 배경도 그대로 따라감
+     · Marquee 상단 여백은 JS가 (뷰포트 50% - 마퀴높이/2)로 계산해 화면 세로 중앙에 배치 */
+  /* padding-top:0(마퀴 JS 중앙정렬) · padding-bottom은 About→Work 전환 블랙 여백(넓게) */
+  #top { background:#1a1a1a; box-sizing:border-box; padding:0 0 clamp(70px,10vh,140px); }
+  .hero-marquee { position:relative; left:0; right:0; z-index:2; overflow-x:clip; overflow-y:visible; }
+  .hero-mq-track { display:flex; width:max-content; will-change:transform; animation:hero-mq 34s linear infinite; }
+  /* 세로로 잘리지 않도록 line-height·padding-bottom 확보 (디센더 g/p/y 보호) */
+  .hero-mq-group { display:inline-block; white-space:nowrap; flex:none;
+    font-family:'Poppins', sans-serif; font-weight:300; font-size:clamp(4rem,13vw,15rem);
+    line-height:1.12; padding-bottom:0.22em; letter-spacing:-0.01em; color:#f5f5f4; }
+  .hero-mq-star { height:.6em; width:auto; vertical-align:middle; margin:0 .22em; display:inline-block; }
+  @keyframes hero-mq { from{ transform:translateX(0); } to{ transform:translateX(-50%); } }
+  @media (prefers-reduced-motion:reduce){ .hero-mq-track { animation:none; } }
+  /* 설명: 흐름상 타이틀 아래 큰 여백 뒤, 중앙보다 살짝 오른쪽 배치 (콘텐츠 높이에 기여) */
+  .hero-desc { position:relative; z-index:2; margin:clamp(140px,22vh,320px) 0 0 38%; width:min(44ch,44vw);
+    font-family:'Instrument Serif', Georgia, serif; font-weight:400; font-size:clamp(1.1rem,1.55vw,1.6rem);
+    line-height:1.5; color:rgba(255,255,255,.72); }
+  @media (max-width:820px){
+    .hero-mq-group { font-size:clamp(3rem,18vw,7rem); }
+    .hero-desc { margin:clamp(90px,16vh,180px) 24px 0; width:auto; }
+  }
+  /* 검은 커버 박스 (0,0 → 전체화면 확대) */
+  #cover-box { display:none; position:fixed; left:50%; top:50%; width:42vw; aspect-ratio:1/1; background:#0E0E10; border-radius:50%; transform-origin:center; z-index:40; pointer-events:none; will-change:transform; }
+  .nut { position:relative; width:min(48vw,440px); aspect-ratio:1; transform-origin:50% 50%; }
+  .nut::before { content:""; position:absolute; inset:0; transform: translate(12px,16px) scale(.985); clip-path: polygon(25% 1%,75% 1%,100% 50%,75% 99%,25% 99%,0% 50%); background:#0a0a0a; filter:blur(3px); z-index:-1; }
+  .nut-face { position:absolute; inset:0; clip-path: polygon(25% 1%,75% 1%,100% 50%,75% 99%,25% 99%,0% 50%);
+    background: conic-gradient(from 0deg, #f6f6f6, #6e6e6e, #121212, #8c8c8c, #fbfbfb, #3e3e3e, #d9d9d9, #161616, #c2c2c2, #f6f6f6); filter: contrast(1.18) brightness(1.02); }
+  .nut-face::after { content:""; position:absolute; inset:13%; clip-path: inherit; background: linear-gradient(135deg, rgba(255,255,255,.55), transparent 42%); mix-blend-mode:screen; }
+  .nut-hole { position:absolute; inset:30%; border-radius:50%; background:#050505; box-shadow: inset 0 7px 20px rgba(0,0,0,.95), inset 0 -5px 12px rgba(255,255,255,.14), 0 0 0 2px rgba(255,255,255,.06); }
+  .nut-hole::before { content:""; position:absolute; inset:-7%; border-radius:50%;
+    background: conic-gradient(from 90deg,#e8e8e8,#383838,#c4c4c4,#1e1e1e,#f0f0f0,#4a4a4a,#cccccc,#222,#e8e8e8);
+    -webkit-mask: radial-gradient(circle, transparent 58%, #000 60%); mask: radial-gradient(circle, transparent 58%, #000 60%); }
+
+  /* ===== 소개 + 프로젝트 통합 (하나의 흐름 · konabizcard cause) ===== */
+  .story { background:#FFFFFF; color:#111114; }
+  .story-stage { position:relative; height:100vh; overflow:hidden; }
+  /* 1) 소개 텍스트 레이어 */
+  .about-stage { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; padding:0 24px; z-index:1; }
+  /* 2) 전환 원 (텍스트 완료 후 확대) — 프로젝트 블랙 배경과 동일 */
+  .story-circle { position:absolute; left:50%; top:50%; width:42vw; aspect-ratio:1/1; border-radius:50%; background:#0E0E10;
+    transform:translate(-50%,-50%) scale(0); transform-origin:center; z-index:2; pointer-events:none; will-change:transform; }
+  /* 3) 프로젝트 레이어 (원이 화면을 덮은 뒤 등장) */
+  .pf-stage { position:absolute; inset:0; z-index:3; color:#FFFFFF; overflow:hidden; }
+  .pf-cur { color:#ffffff; }
+  .pf-head { position:absolute; top:24px; left:0; width:100%; padding:0 1.5rem; display:flex; justify-content:space-between; align-items:center; font-size:.75rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(255,255,255,.45); z-index:5; }
+  /* ===== 프로젝트 — 301lab stack-item: 블랙 카드가 스크롤 시 위로 겹쳐 쌓이며 전환 ===== */
+  .pf-deck { position:absolute; inset:0; }
+  .pf-card { position:absolute; inset:0; background:#0E0E10; overflow:hidden; color:#fff; will-change:transform; }
+  .stack-item { display:flex; flex-direction:column; height:100%; padding:clamp(72px,11vh,128px) 0 clamp(18px,3vh,32px); }
+  .si-inner { flex:1; display:grid; grid-template-columns:minmax(0,0.9fr) minmax(0,1.1fr); gap:clamp(28px,5vw,80px); align-items:center; padding:0 7vw; }
+  /* 좌측: 프로젝트 정보 */
+  .si-left { display:flex; flex-direction:column; }
+  .si-cat { font-family:'Poppins',sans-serif; font-size:clamp(.95rem,1.3vw,1.15rem); color:rgba(255,255,255,.55); letter-spacing:-0.01em; margin:0 0 .7em; }
+  .si-title { font-family:'Pretendard',sans-serif; font-weight:700; font-size:clamp(2.2rem,4.6vw,4.4rem); line-height:1.1; letter-spacing:-0.03em; margin:0; }
+  .si-desc { font-family:'Pretendard',sans-serif; font-size:clamp(.98rem,1.25vw,1.18rem); line-height:1.7; color:rgba(255,255,255,.62); margin:1.3em 0 0; max-width:40ch; }
+  .si-meta { list-style:none; display:flex; flex-wrap:wrap; gap:10px 26px; margin:clamp(22px,3.4vh,38px) 0 0; padding:0; font-family:'Poppins',sans-serif; font-size:.82rem; color:rgba(255,255,255,.7); }
+  .si-meta .k { color:rgba(255,255,255,.4); margin-right:.6em; }
+  /* 우측: 대형 이미지 박스 */
+  .si-right { height:100%; display:flex; align-items:center; }
+  .si-imgbox { position:relative; width:100%; aspect-ratio:4/3; max-height:62vh; border-radius:22px; overflow:hidden; background:#1A1A1D; cursor:none; }
+  .si-imgbox img { width:100%; height:100%; object-fit:cover; transition:transform .6s cubic-bezier(.16,1,.3,1); }
+  .si-imgbox:hover img { transform:scale(1.05); } /* hover 시 이미지 살짝 확대 */
+  /* 하단: 다음 프로젝트 제목만 (가로 100% 너비) */
+  .si-nav { display:flex; align-items:center; width:100%; padding:clamp(16px,2.6vh,28px) 7vw 0; border-top:1px solid rgba(255,255,255,.14); }
+  .si-nav .nx-title { font-family:'Pretendard',sans-serif; font-weight:600; font-size:clamp(1.1rem,1.9vw,1.7rem); color:#fff; }
+  @media (max-width:900px){
+    .stack-item{ padding:78px 0 18px; }
+    .si-inner{ grid-template-columns:1fr; gap:20px; align-content:center; padding:0 24px; }
+    .si-nav{ padding:16px 24px 0; }
+    .si-right{ order:-1; height:auto; }
+    .si-imgbox{ aspect-ratio:16/10; max-height:34vh; }
+    .si-desc, .si-meta{ display:none; }
+  }
+  /* 프로젝트 버튼 (pf-text 하단) — #1C60FF, 둥근 버튼 */
+  .pf-btns { display:flex; flex-wrap:wrap; gap:12px; margin-top:2em; }
+  .pf-btn { display:inline-flex; align-items:center; justify-content:center; border-radius:999px; padding:0.85em 1.7em; font-family:'Pretendard',sans-serif; font-weight:600; font-size:clamp(.9rem,1.05vw,1.05rem); cursor:pointer; transition:background-color .2s ease, color .2s ease, border-color .2s ease; }
+  .pf-btn-primary { background:#1C60FF; color:#fff; }
+  .pf-btn-primary:hover { background:#1750d8; }
+  .pf-btn-primary:active { background:#1545b0; transform:translateY(1px); }
+  .pf-btn-ghost { border:1.5px solid #1C60FF; color:#1C60FF; background:transparent; }
+  .pf-btn-ghost:hover { background:#1C60FF; color:#fff; }
+
+  /* ===== SELECTED CASES + Contact — 하나의 Curtain Reveal 씬 (핀 고정 동안 Contact 정지, 앞 검은 커튼만 걷힘) ===== */
+  .closing { position:relative; background:#1a1a1a; }
+  /* About↔Work 경계 라인 제거: border/outline/box-shadow 제거 + 배경 통일(#1a1a1a) */
+  #work, .closing, .work-curtain, .work-track, #about, .story, .story-stage {
+    border:none !important; border-top:none !important; border-bottom:none !important; outline:none !important; box-shadow:none !important; }
+  #work, .closing { background:#1a1a1a; }
+  /* 스크롤(pin/transform) 중 1px 렌더링 seam 방지: 살짝 오버랩 + 오버스캔 + GPU 힌트 */
+  #work { margin-top:-2px; }
+  #work, .closing, .work-curtain, .work-track { backface-visibility:hidden; -webkit-backface-visibility:hidden; }
+  /* 단독 이미지 전환 섹션 (About → Work 브릿지) */
+  /* Transition Image (About → Work 브릿지) — 아래에서 프레임이 올라와 중앙에 머문 뒤 위로 통과 → Work */
+  .single_image { height:300vh; background:#1a1a1a; }
+  .si-stage { position:relative; height:100vh; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .works__inner { position:relative; width:20vw; height:34vh; border-radius:16px; overflow:hidden;
+    will-change:width, height, transform, border-radius; }
+  .works__img { width:100%; height:100%; object-fit:cover; display:block; will-change:transform; }
+  /* 가로 스트립 마스크 — si-stage 전체(고정 크기) 위, Work 직전 마지막 구간에만 이미지를 덮음 (초기 숨김) */
+  .stripe-mask { position:absolute; inset:0; z-index:3; opacity:0; pointer-events:none; overflow:hidden; }
+  .stripe-mask .stripe { position:absolute; left:0; width:100%; background:#1a1a1a; will-change:transform; transform-origin:top center; }
+  /* Work 블라인드(가로 슬랫) 와이프 — 가로 스크롤 30% 지점에서 닫혔다 위로 걷힘 (초기 숨김) */
+  .work-stripes { position:absolute; inset:0; z-index:5; pointer-events:none; overflow:hidden; opacity:0; }
+  .work-stripes .stripe { position:absolute; left:0; width:100%; background:#1a1a1a; will-change:transform; transform-origin:top center; }
+  /* 앞 레이어: 검은 프로젝트 커튼 (첫 화면 100dvh 덮음, 가로 트랙 포함) — 좌측으로 걷힘 */
+  .work-curtain { position:absolute; top:-1px; left:0; width:100%; height:calc(100dvh + 2px); z-index:2; background:#1a1a1a; color:#fff; overflow:hidden; box-sizing:border-box; padding-top:var(--header-h,66px); will-change:transform; }
+  /* 콘텐츠 트랙 = Header를 제외한 영역 · 트랙 끝(Project06 뒤)에 검은 여백을 넉넉히(≈3배) 확보 */
+  .work-track { display:flex; align-items:center; height:calc(100dvh - var(--header-h,66px)); gap:0; padding:0 clamp(70px,14vw,280px) 0 0; box-sizing:border-box; width:max-content; will-change:transform; }
+  .work-intro { flex:none; width:50vw; align-self:center; display:flex; justify-content:center; align-items:center; padding:0 clamp(24px,3vw,56px); box-sizing:border-box; }
+  .work-intro-inner { display:flex; flex-direction:column; align-items:center; text-align:center; } /* 타이틀 그룹 가운데 정렬 */
+  .work-title { font-family:'Poppins',sans-serif; font-weight:500; font-size:clamp(2.4rem,5vw,5rem); line-height:1.0; letter-spacing:-0.03em; margin:0; }
+  /* 카드: 한 줄(가로) 순차 배치, 화면에 2개씩 넓게 보임 */
+  .work-card { flex:none; width:40.5vw; height:min(65vh,616px); display:flex; flex-direction:column; padding:0 clamp(24px,3vw,56px); box-sizing:border-box;
+    will-change:transform; transform:translate3d(0,0,0); }
+  .wc-thumb { flex:1 1 auto; min-height:0; display:block; position:relative; width:100%; border-radius:16px; overflow:hidden; background:#1a1a1d; cursor:none; }
+  .wc-media { display:block; width:100%; height:100%; will-change:transform; } /* GSAP parallax(1.1→1) 대상 */
+  .wc-thumb img { width:100%; height:100%; object-fit:cover; will-change:transform; transition:transform .6s cubic-bezier(.2,.8,.2,1); } /* 커서 hover 시 살짝 확대 */
+  .wc-thumb:hover img { transform:scale(1.06); }
+  .wc-meta { flex:none; display:flex; align-items:flex-end; justify-content:space-between; gap:26px; padding:20px 2px 0; }
+  .wc-name { font-family:'Pretendard',sans-serif; font-weight:600; font-size:clamp(1.3rem,1.9vw,1.9rem); letter-spacing:-0.02em; margin:0 0 .35em; }
+  .wc-desc { font-family:'Pretendard',sans-serif; font-size:clamp(.92rem,1.05vw,1.05rem); line-height:1.6; color:rgba(255,255,255,.58); max-width:34ch; }
+  /* 연락 섹션의 hello@example.com 버튼과 동일한 pill 모양 · 퍼플 */
+  .wc-explore { flex:none; margin-top:6px; display:inline-flex; align-items:center; gap:10px; border-radius:9999px; background:#8B3DFF; color:#fff; padding:13px 25px; font-family:'Poppins',sans-serif; font-size:.87rem; font-weight:500; letter-spacing:.01em; text-transform:none; white-space:nowrap; transition:background .2s; }
+  .wc-explore:hover { background:#7325E0; }
+  .wc-explore svg { width:16px; height:16px; }
+  @media (max-width:768px){ .work-intro{ width:78vw; } .work-card{ width:84vw; height:70vh; } .wc-meta{ flex-direction:column; align-items:flex-start; gap:14px; } }
+  /* Contact는 커튼 씬 안, 커튼 뒤(z:1) 정상 흐름에 위치 → 씬이 핀 고정된 동안 정지, 커튼이 걷히면 그대로 드러남 */
+  #contact { position:relative; z-index:1; background:#FFFFFF; color:#111114; }
+
+  /* ===== Cursor Follower — 전역 2D 도트 (inocoms식 평면 원, mix-blend로 어디서나 보임) ===== */
+  #sphere-cursor { position:fixed; top:0; left:0; width:28px; height:28px; border-radius:50%; pointer-events:none; z-index:90; opacity:0;
+    box-sizing:border-box; border:1px solid transparent; background:#ffffff; mix-blend-mode:difference;
+    transition:background-color .35s ease, box-shadow .35s ease, border-color .35s ease, backdrop-filter .35s ease; }
+  /* 프로젝트 이미지 hover 시: 보라·블루로 빛나는 글로우 유리 구슬 */
+  #sphere-cursor.is-grow { mix-blend-mode:normal;
+    background:radial-gradient(circle at 38% 32%,
+      rgba(255,255,255,.9) 0%, rgba(214,196,255,.55) 15%, rgba(150,92,240,.55) 42%,
+      rgba(96,44,214,.6) 68%, rgba(44,64,222,.62) 100%);                                  /* 밝은 중심 → 보라 → 블루 */
+    -webkit-backdrop-filter:blur(4px) saturate(1.5); backdrop-filter:blur(4px) saturate(1.5);
+    border:1.5px solid rgba(196,168,255,.9);                                              /* 빛나는 얇은 림 */
+    box-shadow:
+      0 0 22px 6px rgba(140,70,240,.55),                                                  /* 외부 보라 글로우 */
+      0 0 44px 14px rgba(60,80,240,.35),                                                  /* 외부 블루 글로우 */
+      inset 0 2px 10px rgba(255,255,255,.75),                                             /* 상단 하이라이트 */
+      inset 0 -8px 16px rgba(90,40,210,.5); }                                             /* 하단 깊이감 */
+  @media (max-width:900px){ #sphere-cursor { display:none; } }
+  @media (max-width:900px){
+    .pf-bigtitle{ top:10%; }
+    .pf-cat2{ left:24px; }
+    .ui-float{ width:clamp(80px,22vw,110px); }
+    .pf-phones{ width:84vw; height:62vh; }
+  }
+  /* Hero 타이틀 아래 2단: 좌 설명(좌측 정렬) / 우 3D 오브젝트(가운데 정렬) — 다크 배경 */
+  /* 30% / 70% : 좌 3D 오브젝트 / 우 소개 텍스트 · Hero↔About 간격은 크게(약 2배) */
+  .hero-below { position:relative; z-index:2; display:grid; grid-template-columns:4fr 6fr; gap:clamp(28px,3.5vw,64px);
+    align-items:center; margin-top:clamp(220px,34vh,480px); }
+  .hero-below-text { display:flex; align-items:center; }
+  .hero-about-desc { margin:0; text-align:left; font-family:'Pretendard',sans-serif; font-weight:300; letter-spacing:-0.01em;
+    font-size:clamp(1rem,1.05vw,1.2rem); line-height:1.85; color:rgba(255,255,255,.8); max-width:760px; }
+  .hero-below-media { display:flex; align-items:center; justify-content:center; }
+  .hero-below-media .about-3d { width:clamp(144px,16vw,240px); }  /* 기존 대비 약 20% 축소(비율 유지) */
+  @media (max-width:820px){
+    .hero-below { grid-template-columns:1fr; gap:clamp(48px,8vh,80px); margin-top:clamp(140px,20vh,220px); }
+    .hero-about-desc { max-width:100%; }
+  }
+  /* 소개 세로 구성(레거시): 3D 오브젝트 → 워드마크 → 메인 문구 */
+  .about-inner { display:flex; flex-direction:column; align-items:center; gap:clamp(60px,12vh,156px); }
+  /* 유리/크롬 3D 오브젝트 (CSS 표현 — img/about-3d.png 로 교체 가능) */
+  .about-3d { width:clamp(92px,13vw,156px); aspect-ratio:1/1; border-radius:50%; position:relative; will-change:transform;
+    background:
+      radial-gradient(120% 120% at 30% 24%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 32%),
+      conic-gradient(from 210deg at 50% 50%, #a8f0e6, #ffd4ea, #c9b8ff, #a6e6ff, #fff0c4, #b6f3df, #a8f0e6);
+    filter:saturate(1.35) contrast(1.08);
+    box-shadow:inset 0 0 22px rgba(255,255,255,.6), inset 0 -14px 30px rgba(80,90,200,.35), inset 0 14px 30px rgba(255,255,255,.45), 0 24px 50px rgba(40,40,90,.24); }
+  .about-3d::after { content:""; position:absolute; inset:13%; border-radius:50%; mix-blend-mode:screen; filter:blur(2px);
+    background:conic-gradient(from 40deg, transparent, rgba(255,255,255,.55), transparent 42%); }
+  .about-copy { margin:0; font-family:'Pretendard',sans-serif; font-weight:500; line-height:1.4; letter-spacing:-0.01em;
+    font-size:clamp(1.13rem,2.93vw,2.5rem); text-align:center; max-width:none; color:#111114; }
+  /* offbeat식 split-char: line-wrapper(가림틀) → split-line → split-char(글자 단위) */
+  .about-copy .line-wrapper { display:block; overflow:hidden; padding-bottom:.12em; }
+  .about-copy .split-line { display:inline-block; white-space:nowrap; }
+  .about-copy .split-char { display:inline-block; will-change:transform; }
+  /* 강조어(정의·방향·증명): Hero 배경과 동일한 그라데이션 유지 (글자 단위) */
+  .about-copy .split-char.emph { font-weight:500; color:#111114; -webkit-text-fill-color:#111114; }
+  @media (max-width:768px){ .about-copy{ font-size:clamp(1rem,5.4vw,1.6rem); } }
+
+  /* ===== 연락 — 게시글 리스트 (우측 50%) ===== */
+  .post-list { display:flex; flex-direction:column; border-top:3px solid #0E0E10; border-bottom:3px solid #0E0E10; } /* 맨 위·맨 아래 라인: 블랙 3px */
+  .post-row { display:flex; align-items:baseline; justify-content:space-between; gap:20px; padding:clamp(9px,1.4vh,15px) 2px; border-bottom:1px solid #E5E5E2; transition:padding-left .25s ease; }
+  .post-row:last-child { border-bottom:none; }
+  .post-title { font-family:'Pretendard',sans-serif; font-weight:500; font-size:clamp(1rem,1.35vw,1.25rem); color:#111114; letter-spacing:-0.01em; transition:color .2s ease; }
+  .post-date { font-family:'Poppins',sans-serif; font-size:.85rem; color:#8A8A93; white-space:nowrap; flex:none; }
+  .post-row:hover { padding-left:14px; }
+  .post-row:hover .post-title { color:#6E1CF6; }
+  /* 반응형(1단)에서는 타이틀(CTA)이 위로, 게시글 리스트가 아래로 */
+  @media (max-width:1023px){
+    #contact .grid > .post-list { order:2; }
+    #contact .grid > div:not(.post-list) { order:1; align-items:center !important; text-align:center !important; }
+  }
+
+  /* ===== 푸터 — 미니멀 (대형 타이틀 + 하단 2단) ===== */
+  /* 푸터: 한 화면(100vh)에 맞추고, 상단 nav 높이를 제외한 영역의 세로 중앙에 콘텐츠 배치 */
+  .site-footer { background:#1a1a1a; color:#ffffff; min-height:100vh; display:flex; align-items:center; box-sizing:border-box; padding-top:var(--header-h,66px); }
+  .ft-inner { width:100%; margin:0; padding:clamp(40px,6vh,72px) 7vw;
+    display:flex; flex-direction:column; gap:clamp(28px,5vh,60px); }
+  @media (max-width:900px){ .site-footer { min-height:auto; padding-top:0; } .ft-inner { padding:80px 24px 40px; } }
+  /* 상단 줄: 헤드라인(좌) + 3D 오브젝트(우측 상단, 기존 푸터-도형 자리) */
+  .ft-top-row { display:flex; align-items:flex-start; justify-content:space-between; gap:clamp(20px,4vw,64px); }
+  .ft-headline { font-family:'Poppins',sans-serif; font-weight:500; font-size:clamp(2.4rem,9vw,9rem); line-height:.98; letter-spacing:-0.035em; margin:0; text-align:left; }
+  /* 소개 섹션 3D 오브젝트 재사용 (푸터 우측 상단 크기로 조정) */
+  .ft-3d { flex:none; width:clamp(96px,12vw,160px); }
+  .ft-grid { display:grid; grid-template-columns:1fr auto; gap:40px; align-items:end; }
+  .ft-info-col { display:flex; flex-direction:column; gap:7px; font-family:'Poppins',sans-serif; font-size:clamp(.85rem,1vw,.98rem); color:rgba(255,255,255,.66); }
+  .ft-info-col .k { display:inline-block; min-width:84px; color:rgba(255,255,255,.4); }
+  .ft-info-col .ft-copy { margin-top:18px; color:rgba(255,255,255,.38); font-size:.8rem; }
+  .ft-menu { display:flex; flex-direction:row; align-items:center; gap:clamp(20px,2.4vw,40px); }
+  .ft-menu a { font-family:'Poppins',sans-serif; font-weight:500; font-size:clamp(1.05rem,1.6vw,1.4rem); color:#fff; transition:color .2s ease; }
+  .ft-menu a:hover { color:#6E1CF6; }
+  @media (max-width:768px){ .ft-grid { grid-template-columns:1fr; gap:32px; align-items:start; } }
+
+  /* ===== 리빌/모션 ===== */
+  .reveal { opacity:0; transform: translateY(24px); transition: opacity .8s cubic-bezier(.16,1,.3,1), transform .8s cubic-bezier(.16,1,.3,1); will-change: transform, opacity; }
+  .reveal.is-visible { opacity:1; transform:none; }
+  html.gsap .reveal, html.gsap .line-rise { transition:none; }
+  .line-mask { overflow:hidden; }
+  .line-rise { display:block; transform: translateY(110%); transition: transform 1s cubic-bezier(.16,1,.3,1); }
+  .loaded .line-rise { transform:none; }
+  .line-rise.d1{transition-delay:.1s} .line-rise.d2{transition-delay:.22s} .line-rise.d3{transition-delay:.34s}
+  .marquee { display:flex; gap:3rem; width:max-content; animation: slide 34s linear infinite; }
+  @keyframes slide { to { transform: translateX(-50%); } }
+  .marquee-wrap:hover .marquee { animation-play-state: paused; }
+  .mq-sep { height:0.8em; width:auto; flex:none; align-self:center; }
+  .watermark { font-family:'Poppins', sans-serif; font-weight:700; letter-spacing:-.04em; line-height:.8; color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.10); }
+
+  ::-webkit-scrollbar { width:11px; } ::-webkit-scrollbar-track { background:#F1F1EF; }
+  ::-webkit-scrollbar-thumb { background:#C9C9C4; border-radius:99px; border:3px solid #F1F1EF; } ::-webkit-scrollbar-thumb:hover { background:#A9A9A2; }
+  a:focus-visible, button:focus-visible { outline:2px solid currentColor; outline-offset:3px; border-radius:4px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior:auto; }
+    *, *::before, *::after { animation:none !important; transition:none !important; }
+    .reveal { opacity:1; transform:none; }
+    .line-rise { transform:none; }
+    .is-pinned .pf-cap .line span { transform:none; }
+  }
+</style>
+</head>
+
+<body class="bg-[#1a1a1a] text-[#f5f5f4] font-sans antialiased selection:bg-white selection:text-ink">
+
+<!-- ============================ NAV ============================ -->
+<header id="nav" class="fixed top-0 inset-x-0 z-50">
+  <div class="w-full grid grid-cols-3 items-center px-5 sm:px-10 py-5 text-[0.95rem]">
+    <a href="#top" class="font-display text-[1.1rem] font-700 tracking-tight whitespace-nowrap justify-self-start">홍길동<span class="opacity-50">.</span></a>
+    <span class="justify-self-center opacity-70 whitespace-nowrap hidden sm:block">© 홍길동</span>
+    <button id="menuBtn" class="nav-pill justify-self-end" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">MENU</button>
+  </div>
+</header>
+
+<!-- 전체화면 메뉴 오버레이 (MENU 클릭 시 확장) · smoother 밖 고정 -->
+<div id="menu-overlay" aria-hidden="true">
+  <button id="menuClose" class="nav-pill menu-close">CLOSE</button>
+  <nav class="menu-list">
+    <a href="#top"     class="menu-item"><span>Home</span></a>
+    <a href="#about"   class="menu-item"><span>About</span></a>
+    <a href="#work"    class="menu-item" data-go-projects><span>Works</span></a>
+    <a href="#contact" class="menu-item" data-go-contact><span>Contact</span></a>
+  </nav>
+</div>
+
+<!-- 검은 커버 박스 (소개→프로젝트 전환: 0,0에서 전체화면으로 확대 → 사라지며 필름스트립 등장) -->
+<div id="cover-box" aria-hidden="true"></div>
+
+<!-- Cursor Follower: 금속/유리 구슬(3D 오브젝트) + view more 알약(프로젝트 이미지) · smoother 밖 고정 -->
+<div id="sphere-cursor" aria-hidden="true"></div>
+
+
+<div id="smooth-wrapper">
+<div id="smooth-content">
+
+<!-- ============================ HERO (Marquee Typography · 다크) ============================ -->
+<section id="top" class="relative overflow-hidden">
+  <!-- 중앙 대형 Serif 마퀴 (좌우 무한 흐름) -->
+  <div class="hero-marquee" aria-label="UI/UX Design">
+    <div class="hero-mq-track">
+      <span class="hero-mq-group">UI/UX&nbsp;Design&nbsp;<img src="img/AI.svg" class="hero-mq-star" alt="">&nbsp;UI/UX&nbsp;Design&nbsp;<img src="img/AI.svg" class="hero-mq-star" alt="">&nbsp;UI/UX&nbsp;Design&nbsp;<img src="img/AI.svg" class="hero-mq-star" alt="">&nbsp;</span>
+      <span class="hero-mq-group" aria-hidden="true">UI/UX&nbsp;Design&nbsp;<img src="img/AI.svg" class="hero-mq-star" alt="">&nbsp;UI/UX&nbsp;Design&nbsp;<img src="img/AI.svg" class="hero-mq-star" alt="">&nbsp;UI/UX&nbsp;Design&nbsp;<img src="img/AI.svg" class="hero-mq-star" alt="">&nbsp;</span>
+    </div>
+  </div>
+  <!-- 타이틀 아래: 2단 그리드 (좌 한국어 설명 / 우 3D 오브젝트) -->
+  <div id="about" class="hero-below site-pad">
+    <div class="hero-below-media" data-hero>
+      <div class="about-3d" aria-hidden="true"></div>
+    </div>
+    <div class="hero-below-text" data-hero>
+      <p class="hero-about-desc">좋은 디자인은 단순히 보기 좋은 화면이 아니라, 문제를 해결하는 과정에서 시작된다고 믿습니다. 사용자의 문제를 정의하고, 팀과의 소통으로 방향을 맞추며, 끝까지 실행해 더 나은 경험을 만들어갑니다. 기획부터 설계, 구현까지 하나의 흐름으로 바라보며, 사용자와 비즈니스 모두에게 의미 있는 결과를 만드는 것을 목표로 합니다. 변화하는 환경 속에서도 끊임없이 배우고 개선하며, 더 나은 경험을 위한 디자인을 이어가고 있습니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 단독 이미지 전환 섹션 (About → Work 브릿지 · Stud.House single_image) ============================ -->
+<section class="single_image">
+  <div class="si-stage">
+    <div class="works__inner">
+      <img class="works__img" src="img/single-image.jpg" alt="" loading="lazy">
+    </div>
+    <div class="stripe-mask" aria-hidden="true"></div>
+  </div>
+</section>
+
+<!-- ============================ SELECTED WORK + Contact (Curtain Reveal 씬) ============================ -->
+<section id="work" class="closing">
+  <div class="work-curtain">
+  <div class="work-stripes" aria-hidden="true"></div>
+  <div class="work-track">
+    <!-- 타이틀 패널 (트랙과 함께 가로 이동) -->
+    <div class="work-intro">
+      <div class="work-intro-inner">
+        <h2 class="work-title">OUR<br>PROJECT</h2>
+      </div>
+    </div>
+    <article class="work-card">
+      <a href="#" class="wc-thumb"><span class="wc-media"><img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=1100&auto=format&fit=crop" alt="모바일 뱅킹 앱 리디자인" loading="lazy"></span></a>
+      <div class="wc-meta">
+        <div class="wc-txt"><h3 class="wc-name">모바일 뱅킹 앱 리디자인</h3><p class="wc-desc">송금 전환율 +34%, 고객 문의 −28%. 정보 구조를 3단계로 압축해 접근성 AA를 충족했습니다.</p></div>
+        <a href="project-1.html" class="wc-explore">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </article>
+    <article class="work-card">
+      <a href="#" class="wc-thumb"><span class="wc-media"><img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1100&auto=format&fit=crop" alt="셀러 통합 대시보드" loading="lazy"></span></a>
+      <div class="wc-meta">
+        <div class="wc-txt"><h3 class="wc-name">셀러 통합 대시보드</h3><p class="wc-desc">데이터 밀도가 높은 화면을 재구성해 핵심 지표 도달 시간을 절반으로 줄였습니다.</p></div>
+        <a href="project-2.html" class="wc-explore">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </article>
+    <article class="work-card">
+      <a href="#" class="wc-thumb"><span class="wc-media"><img src="https://images.unsplash.com/photo-1481487196290-c152efe083f5?q=80&w=1100&auto=format&fit=crop" alt="스타트업 브랜드 리뉴얼" loading="lazy"></span></a>
+      <div class="wc-meta">
+        <div class="wc-txt"><h3 class="wc-name">스타트업 브랜드 리뉴얼</h3><p class="wc-desc">로고부터 제품 UI까지 일관된 비주얼 언어를 정립했습니다.</p></div>
+        <a href="#" class="wc-explore">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </article>
+    <article class="work-card">
+      <a href="#" class="wc-thumb"><span class="wc-media"><img src="https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=1100&auto=format&fit=crop" alt="디자인 시스템 Atlas" loading="lazy"></span></a>
+      <div class="wc-meta">
+        <div class="wc-txt"><h3 class="wc-name">디자인 시스템 “Atlas”</h3><p class="wc-desc">120+ 컴포넌트와 토큰 체계. 디자인–개발 핸드오프 시간을 40% 단축했습니다.</p></div>
+        <a href="#" class="wc-explore">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </article>
+    <article class="work-card">
+      <a href="#" class="wc-thumb"><span class="wc-media"><img src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f?q=80&w=1100&auto=format&fit=crop" alt="B2B 워크플로우 SaaS" loading="lazy"></span></a>
+      <div class="wc-meta">
+        <div class="wc-txt"><h3 class="wc-name">B2B 워크플로우 SaaS 런칭</h3><p class="wc-desc">첫 사용자 인터뷰부터 MVP 출시까지 6개월. 온보딩 완료율 71%를 달성했습니다.</p></div>
+        <a href="#" class="wc-explore">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </article>
+    <article class="work-card">
+      <a href="#" class="wc-thumb"><span class="wc-media"><img src="https://images.unsplash.com/photo-1559028012-481c04fa702d?q=80&w=1100&auto=format&fit=crop" alt="모바일 커머스 앱 개선" loading="lazy"></span></a>
+      <div class="wc-meta">
+        <div class="wc-txt"><h3 class="wc-name">모바일 커머스 앱 개선</h3><p class="wc-desc">결제 플로우를 단순화해 장바구니 이탈률을 19% 낮췄습니다.</p></div>
+        <a href="#" class="wc-explore">VIEW MORE<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </article>
+  </div><!-- /work-track -->
+  </div><!-- /work-curtain -->
+
+  <!-- 뒤 레이어: 기존 Contact (커튼 뒤에 정상 흐름 · 씬 핀 동안 정지) -->
+  <section id="contact" class="min-h-screen flex flex-col">
+  <!-- 좌: 게시글 리스트 50% / 우: CTA 타이틀 50% (좌우 배치 교체) -->
+  <div class="flex-1 grid lg:grid-cols-2 gap-12 lg:gap-16 items-center w-full site-pad py-8" style="padding-top:calc(var(--header-h,66px) + 1.25rem);padding-bottom:clamp(70px,11vh,140px)">
+    <!-- 좌측: 게시글 리스트 (제목 + 날짜, 행 단위 · 얇은 구분선) -->
+    <div class="post-list reveal">
+      <a href="#" class="post-row"><span class="post-title">디자인 시스템을 0에서 구축한 기록</span><span class="post-date">2026.05.12</span></a>
+      <a href="#" class="post-row"><span class="post-title">접근성 AA를 충족하는 컬러 설계</span><span class="post-date">2026.03.28</span></a>
+      <a href="#" class="post-row"><span class="post-title">스크롤 인터랙션, 과하지 않게 다루기</span><span class="post-date">2026.02.10</span></a>
+      <a href="#" class="post-row"><span class="post-title">프로덕트 디자이너의 리서치 루틴</span><span class="post-date">2025.12.01</span></a>
+      <a href="#" class="post-row"><span class="post-title">핸드오프 시간을 절반으로 줄인 방법</span><span class="post-date">2025.10.18</span></a>
+      <a href="#" class="post-row"><span class="post-title">좋은 마이크로카피의 조건</span><span class="post-date">2025.08.22</span></a>
+      <a href="#" class="post-row"><span class="post-title">사용자 인터뷰에서 진짜 신호 찾기</span><span class="post-date">2025.06.30</span></a>
+      <a href="#" class="post-row"><span class="post-title">디자인 QA 체크리스트 만들기</span><span class="post-date">2025.05.14</span></a>
+    </div>
+    <!-- 우측: CTA 타이틀 + 이메일 버튼 (오른쪽 정렬) -->
+    <div class="reveal text-right flex flex-col items-end" data-delay="1">
+      <h2 class="font-display text-[clamp(2.4rem,6vw,5.5rem)] font-500 leading-[1.04] tracking-[-0.02em] text-ink">다음 프로젝트,<br>함께 <span class="em">만들까요?</span></h2>
+      <a href="mailto:hello@example.com" class="inline-flex items-center gap-3 rounded-full bg-ink px-7 py-4 mt-9 text-base font-600 text-paper hover:bg-fg/80 transition-colors duration-200 cursor-pointer">hello@example.com<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </div>
+  <!-- 하단: 스킬 마퀴 (Contact 섹션을 마무리하는 띠 요소) -->
+  <div class="marquee-wrap border-t border-line overflow-hidden py-4 sm:py-5">
+    <div class="marquee text-ink">
+      <span class="font-display text-2xl sm:text-3xl font-500 flex gap-12 whitespace-nowrap"><span>Figma</span><img src="img/AI.svg" class="mq-sep" alt=""><span>Design Systems</span><img src="img/AI.svg" class="mq-sep" alt=""><span>Prototyping</span><img src="img/AI.svg" class="mq-sep" alt=""><span>User Research</span><img src="img/AI.svg" class="mq-sep" alt=""><span>Interaction Design</span><img src="img/AI.svg" class="mq-sep" alt=""><span>Accessibility</span><img src="img/AI.svg" class="mq-sep" alt=""></span>
+      <span class="font-display text-2xl sm:text-3xl font-500 flex gap-12 whitespace-nowrap" aria-hidden="true"><span>Figma</span><img src="img/AI.svg" class="mq-sep" alt=""><span>Design Systems</span><img src="img/AI.svg" class="mq-sep" alt=""><span>Prototyping</span><img src="img/AI.svg" class="mq-sep" alt=""><span>User Research</span><img src="img/AI.svg" class="mq-sep" alt=""><span>Interaction Design</span><img src="img/AI.svg" class="mq-sep" alt=""><span>Accessibility</span><img src="img/AI.svg" class="mq-sep" alt=""></span>
+    </div>
+  </div>
+  </section><!-- /#contact -->
+</section><!-- /#work.closing (SELECTED WORK + Contact 커튼 씬) -->
+
+<!-- ============================ 푸터 (미니멀) ============================ -->
+<footer class="site-footer">
+  <div class="ft-inner">
+    <!-- 상단: 헤드라인(좌) + 3D 오브젝트(우측 상단, 기존 푸터-도형 자리) -->
+    <div class="ft-top-row">
+      <h2 class="ft-headline">DESIGN WITH<br>PURPOSE</h2>
+      <div class="about-3d ft-3d" aria-hidden="true"></div>
+    </div>
+    <!-- 하단: 좌(정보) / 우(메뉴) 2단 -->
+    <div class="ft-grid">
+      <div class="ft-info-col">
+        <span><span class="k">이름</span>홍길동</span>
+        <span><span class="k">주소</span>서울특별시</span>
+        <span><span class="k">분야</span>UX/UI Design</span>
+        <span><span class="k">이메일</span>hello@example.com</span>
+        <span><span class="k">경력</span>7년 (2019 — 2026)</span>
+        <span><span class="k">TEL</span>+82 10 0000 0000</span>
+        <span class="ft-copy">Copyright © <span id="year">2026</span> HONG GILDONG. All Rights Reserved.</span>
+      </div>
+      <nav class="ft-menu">
+        <a href="#about">About</a>
+        <a href="#work" data-go-projects>Projects</a>
+        <a href="#contact" data-go-contact>Contact</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+</div><!-- /smooth-content -->
+</div><!-- /smooth-wrapper -->
+
+<!-- GSAP -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollSmoother.min.js"></script>
+
+<script>
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasGSAP = typeof window.gsap !== 'undefined';
+  const nav = document.getElementById('nav');
+  const setSolid = (on) => nav.classList.toggle('nav-solid', on);
+  // 핀(scrub) 구간에서는 CSS mandatory 스냅을 잠시 끄고 GSAP 스냅에 위임 — 충돌 방지
+  const setPageSnap = () => {}; // ScrollSmoother 사용 시 CSS Scroll Snap 자체 불필요 (no-op)
+
+  if (hasGSAP) {
+    gsap.registerPlugin(ScrollTrigger);
+    const hasSmoother = typeof ScrollSmoother !== 'undefined';
+    if (hasSmoother) gsap.registerPlugin(ScrollSmoother);
+
+    // 전역 ScrollSmoother — 부드러운 스무스 스크롤 (CSS Scroll Snap 대신)
+    let smoother = null;
+    if (hasSmoother && !reduceMotion && matchMedia('(min-width: 768px)').matches) {
+      smoother = ScrollSmoother.create({ wrapper:'#smooth-wrapper', content:'#smooth-content', smooth:1.6, effects:true, normalizeScroll:true });
+    }
+
+    // #contact는 #work 커튼 씬 안에 있으므로 별도 처리 → 일반 앵커 핸들러에서 제외
+    const workPinST = () => ScrollTrigger.getAll().find(s => s.pin && s.trigger && s.trigger.id === 'work' && s.animation);
+    document.querySelectorAll('a[href^="#"]:not([data-go-projects]):not([data-go-contact])').forEach((a) => {
+      const id = a.getAttribute('href');
+      if (id.length > 1) a.addEventListener('click', (e) => {
+        const t = document.querySelector(id); if (!t) return; e.preventDefault();
+        if (smoother) smoother.scrollTo(t, true, 'top top'); else t.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+      });
+    });
+
+    // 프로젝트(Projects) → Selected Work 섹션(커튼 씬 시작)으로 스크롤
+    document.querySelectorAll('[data-go-projects]').forEach((goProj) => goProj.addEventListener('click', (e) => {
+      e.preventDefault();
+      const work = document.getElementById('work'); if (!work) return;
+      if (smoother) smoother.scrollTo(work, true, 'top top'); else work.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+    }));
+
+    // Contact → 커튼이 걷혀 흰 Contact가 드러나는 지점(work 핀 끝)으로 스크롤
+    document.querySelectorAll('[data-go-contact]').forEach((a) => a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const wp = workPinST();
+      if (smoother) smoother.scrollTo(wp ? wp.end : document.getElementById('contact'), true);
+      else window.scrollTo(0, wp ? wp.end : 0);
+    }));
+
+    ScrollTrigger.create({ trigger:'#top', start:'bottom 72px', onEnter:()=>setSolid(true), onLeaveBack:()=>setSolid(false) });
+
+    // Nav 반전: 커튼이 걷혀 흰 Contact가 드러나는 구간(work 핀 끝 근처) ~ 푸터(다크) 진입 전까지만 어둡게
+    (function(){
+      const footer = document.querySelector('.site-footer');
+      const addInv = () => nav.classList.add('nav-invert');
+      const remInv = () => nav.classList.remove('nav-invert');
+      // ON: 커튼 걷힘(≈ 핀 끝 − 0.45vh) 통과 시
+      ScrollTrigger.create({ invalidateOnRefresh:true,
+        start: () => { const wp = workPinST(); return wp ? Math.round(wp.end - window.innerHeight*0.45) : 1e9; },
+        end:   () => '+=' + Math.round(window.innerHeight*3),
+        onEnter: addInv, onLeaveBack: remInv });
+      // OFF: 푸터(다크)가 상단에 닿으면 해제
+      if (footer) ScrollTrigger.create({ trigger: footer, start:'top 72px', end:'bottom top', invalidateOnRefresh:true,
+        onEnter: remInv, onLeaveBack: addInv });
+    })();
+
+    // 전체화면 메뉴 오버레이 — MENU 클릭 시 배경 확장 + 메뉴 텍스트 아래→위 Fade Up, CLOSE 시 역방향
+    (function initMenuOverlay(){
+      const btn = document.getElementById('menuBtn');
+      const closeBtn = document.getElementById('menuClose');
+      const overlay = document.getElementById('menu-overlay');
+      if (!btn || !overlay) return;
+      const items = overlay.querySelectorAll('.menu-item span');
+      let open = false, tl;
+      const openMenu = () => {
+        if (open) return; open = true;
+        btn.setAttribute('aria-expanded','true'); overlay.setAttribute('aria-hidden','false');
+        if (tl) tl.kill();
+        gsap.set(overlay, { visibility:'visible' });
+        tl = gsap.timeline();
+        tl.fromTo(overlay, { clipPath:'inset(0% 0% 100% 0%)' }, { clipPath:'inset(0% 0% 0% 0%)', duration:0.7, ease:'power3.inOut' })
+          .fromTo(items, { yPercent:110, autoAlpha:0 }, { yPercent:0, autoAlpha:1, duration:0.6, ease:'power3.out', stagger:0.08 }, 0.28);
+      };
+      const closeMenu = () => {
+        if (!open) return; open = false;
+        btn.setAttribute('aria-expanded','false'); overlay.setAttribute('aria-hidden','true');
+        if (tl) tl.kill();
+        tl = gsap.timeline();
+        tl.to(items, { yPercent:110, autoAlpha:0, duration:0.4, ease:'power2.in', stagger:0.05 })
+          .to(overlay, { clipPath:'inset(0% 0% 100% 0%)', duration:0.6, ease:'power3.inOut' }, 0.15)
+          .set(overlay, { visibility:'hidden' });
+      };
+      btn.addEventListener('click', openMenu);
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+      overlay.querySelectorAll('.menu-item').forEach((a) => a.addEventListener('click', () => setTimeout(closeMenu, 10)));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    })();
+
+    if (!reduceMotion) {
+      document.documentElement.classList.add('gsap');
+      document.body.classList.add('loaded');
+
+      // 너트 회전
+      gsap.to('.nut', { rotation:360, duration:26, ease:'none', repeat:-1 });
+      gsap.to('.nut', { scale:1.045, duration:4.5, ease:'sine.inOut', repeat:-1, yoyo:true });
+
+      // Hero — 대형 Serif 마퀴는 CSS로 처음부터 흐르고, 설명 문단만 진입 시 Fade Up
+      (function initHero(){
+        const hero = document.getElementById('top');
+        if (!hero) return;
+        const mq   = hero.querySelector('.hero-marquee');
+        const belowItems = hero.querySelectorAll('.hero-below [data-hero]');
+
+        // Hero 높이는 콘텐츠 기반이지만, Marquee는 nav(고정 헤더) 영역을 제외한 화면의 세로 중앙에 오도록 상단 여백 계산
+        const headerEl = document.querySelector('header');
+        const centerMarquee = () => {
+          if (!mq) return;
+          const headerH = headerEl ? Math.round(headerEl.getBoundingClientRect().height) : 0;
+          const target = headerH + (window.innerHeight - headerH) / 2;   // nav 제외 영역의 중앙
+          mq.style.marginTop = Math.max(0, Math.round(target - mq.offsetHeight/2)) + 'px';
+        };
+        centerMarquee();
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { centerMarquee(); ScrollTrigger.refresh(); });
+        window.addEventListener('resize', () => { centerMarquee(); ScrollTrigger.refresh(); });
+        ScrollTrigger.addEventListener('refresh', centerMarquee);
+
+        // About(2단) — 뷰포트 진입 시 아래에서 위로 Fade Up (텍스트 · 3D 순차)
+        if (belowItems.length) gsap.from(belowItems, { autoAlpha:0, y:44, duration:1.05, ease:'power3.out', stagger:0.14,
+          scrollTrigger:{ trigger:'.hero-below', start:'top 85%', once:true } });
+      })();
+
+      // 소개 (2단) — 3D 오브젝트 Floating + 진입 리빌
+      (function initAbout(){
+        gsap.utils.toArray('.about-3d').forEach((el) => gsap.to(el, { y:'+=16', duration:3, ease:'sine.inOut', yoyo:true, repeat:-1 }));
+      })();
+
+      // Transition — 작은 카드 → 가로 100% 확장 → 유지 → Work 직전에만 가로 스트립이 이미지를 덮음 (pin + scrub)
+      (function initTransition(){
+        const sec = document.querySelector('.single_image');
+        const stage = sec && sec.querySelector('.si-stage');
+        const inner = sec && sec.querySelector('.works__inner');
+        const img = sec && sec.querySelector('.works__img');
+        const mask = sec && sec.querySelector('.stripe-mask');
+        if (!sec || !inner || !mask) return;
+
+        // 가로 스트립 생성 (초기: 왼쪽 화면 밖, 마스크 자체도 숨김)
+        const N = 9, stripes = [];
+        for (let i = 0; i < N; i++) {
+          const s = document.createElement('div');
+          s.className = 'stripe';
+          s.style.top = (i * 100 / N) + '%';
+          s.style.height = (100 / N + 0.4) + '%';
+          stripes.push(s); mask.appendChild(s);
+        }
+        // STEP1. 초기 상태: 작은 이미지 프레임이 화면 아래쪽에서 대기 · 블라인드 슬랫 열림(scaleY 0) · 마스크 숨김
+        gsap.set(inner,  { width:'20vw', height:'34vh', yPercent:60, borderRadius:16 });
+        gsap.set(img,    { scale:1.1 });
+        gsap.set(mask,   { autoAlpha:0 });
+        gsap.set(stripes,{ scaleY:0 });
+
+        // 하나의 스크럽 타임라인 (섹션 pin) — 아래→중앙 상승 · 가로 100% 확장 · 유지 · 스트립 전환
+        gsap.timeline({ defaults:{ ease:'none' },
+          scrollTrigger:{ trigger: sec, start:'top top', end:'+=300%', pin: stage, scrub:true,
+            anticipatePin:1, invalidateOnRefresh:true } })
+          // STEP2. 아래에서 위로 올라오며 등장 → 중앙에서 가로 100% 확장
+          .to(inner, { yPercent:0, width:'100vw', height:'100vh', borderRadius:0, ease:'power2.inOut', duration:1 }, 0)
+          .to(img,   { scale:1, ease:'power2.out', duration:1 }, 0)
+          // STEP3. 확장된 이미지 중앙에서 잠깐 유지
+          .to({}, { duration:0.35 })
+          // STEP4. 블라인드 슬랫이 아래로 펼쳐지며 이미지를 덮음 (닫힘, 모든 슬랫 동시) → 검게 덮인 채 pin 해제되어 Work로 연결
+          .to(mask, { autoAlpha:1, duration:0.01 })
+          .to(stripes, { scaleY:1, ease:'power3.inOut', duration:0.5 })
+          .to({}, { duration:0.2 });
+      })();
+
+      // SELECTED CASES — 세로 스크롤 → 가로 이동 (pin + containerAnimation), 타이틀+카드 하나의 트랙, 카드 독립 Fade Up
+      (function initWorkH(){
+        const sec = document.querySelector('#work');
+        const track = sec && sec.querySelector('.work-track');
+        if (!track) return;
+        const cards = gsap.utils.toArray('#work .work-card');
+        const dist = () => Math.max(0, track.scrollWidth - window.innerWidth);
+
+        // Header(고정) 실제 높이 → --header-h (100dvh - Header = 콘텐츠 영역)
+        const header = document.querySelector('header');
+        const syncHeaderH = () => {
+          const h = header ? Math.round(header.getBoundingClientRect().height) : 66;
+          document.documentElement.style.setProperty('--header-h', h + 'px');
+        };
+        syncHeaderH();
+        window.addEventListener('resize', () => { syncHeaderH(); ScrollTrigger.refresh(); });
+
+        const curtain = sec.querySelector('.work-curtain');
+        const CURTAIN = 0.6; // 가로 이동(1) 대비 커튼 걷힘 구간 비율
+
+        // 1) 하나의 타임라인: 가로 스크롤(트랙 끝 검은 여백 포함) → 검은 커튼이 좌측으로 걷히며 뒤의 기존 #contact가 그대로 드러남
+        const horizontal = gsap.timeline({
+          defaults:{ ease:'none' },
+          scrollTrigger:{
+            trigger: sec, start:'top top',
+            end:() => '+=' + Math.round(dist() * (1 + CURTAIN)),
+            pin: true, scrub: true,
+            anticipatePin: 1, invalidateOnRefresh: true, fastScrollEnd: true
+          }
+        });
+        horizontal.to(track,   { x: () => -dist(), duration: 1 });            // Project06 + 검은 여백까지 가로 스크롤
+        horizontal.to(curtain, { xPercent: -100, duration: CURTAIN }, '>');   // 검은 커튼 좌측으로 걷힘 → 뒤 #contact 노출
+
+        // 가로 스크롤 30% 지점을 지날 때 가로 스트립 와이프 (덮었다 걷힘) — 총 길이(1+CURTAIN) 기준 30%
+        const wrap = sec.querySelector('.work-stripes');
+        if (wrap) {
+          const N = 9, wstripes = [];
+          for (let i = 0; i < N; i++) {
+            const s = document.createElement('div');
+            s.className = 'stripe';
+            s.style.top = (i * 100 / N) + '%';
+            s.style.height = (100 / N + 0.4) + '%';
+            wstripes.push(s); wrap.appendChild(s);
+          }
+          gsap.set(wrap, { autoAlpha: 0 });
+          gsap.set(wstripes, { scaleY: 0 });
+          const total = 1 + CURTAIN, at = total * 0.30; // 30% 지점
+          horizontal
+            .set(wrap, { autoAlpha: 1 }, at - total * 0.12)
+            // 블라인드 슬랫이 아래로 펼쳐지며 닫힘 (모든 슬랫 동시)
+            .to(wstripes, { scaleY: 1, ease:'power3.inOut', duration: total * 0.11 }, at - total * 0.12)
+            // 블라인드가 위로 걷히며 뒤의 콘텐츠가 드러남
+            .to(wstripes, { scaleY: 0, ease:'power3.inOut', duration: total * 0.11 }, at + total * 0.01)
+            .set(wrap, { autoAlpha: 0 }, at + total * 0.14);
+        }
+
+        // 2) 각 카드가 가로로 지나가며 독립 실행 (containerAnimation = 위 가로 타임라인)
+        cards.forEach((card) => {
+          const imgEl = card.querySelector('.wc-media');
+          const texts = card.querySelectorAll('.wc-name, .wc-desc, .wc-explore');
+          // 초기: translateY(100px) · opacity 0 · scale 0.96 / 이미지 1.1 확대 / 텍스트 아래·투명
+          gsap.set(card,  { y:100, autoAlpha:0, scale:0.96, force3D:true });
+          gsap.set(imgEl, { scale:1.1, force3D:true });
+          gsap.set(texts, { y:30, autoAlpha:0 });
+          // 진입: 카드 y100→0 · opacity0→1 · scale0.96→1 / 이미지 1.1→1.0 parallax / 텍스트 stagger fade up
+          gsap.timeline({ defaults:{ ease:'none' },
+            scrollTrigger:{ trigger:card, containerAnimation:horizontal, start:'left 80%', end:'left 45%', scrub:true } })
+            .to(card,  { y:0, autoAlpha:1, scale:1 }, 0)
+            .to(imgEl, { scale:1.0 }, 0)
+            .to(texts, { y:0, autoAlpha:1, stagger:0.08 }, 0.12);
+          // 이탈 시 페이드/축소 없음 — 카드는 선명하게 유지된 채 왼쪽으로 흘러나감
+        });
+
+      })();
+
+      // Cursor Follower — 전역 2D 도트 (프로젝트 이미지 hover 시 약 3배 + 그라데이션)
+      (function initCursors(){
+        if (!matchMedia('(pointer:fine)').matches) return;
+        const dot = document.getElementById('sphere-cursor');
+        if (!dot) return;
+
+        gsap.set(dot, { xPercent:-50, yPercent:-50, scale:1, opacity:0 });
+        const xTo = gsap.quickTo(dot, 'x', { duration:0.4, ease:'power3' });
+        const yTo = gsap.quickTo(dot, 'y', { duration:0.4, ease:'power3' });
+
+        // 전역: document mousemove 기준으로 항상 위치 업데이트
+        let revealed = false;
+        window.addEventListener('mousemove', (e) => {
+          xTo(e.clientX); yTo(e.clientY);
+          if (!revealed) { revealed = true; gsap.to(dot, { opacity:1, duration:0.3, ease:'power2.out' }); } // 첫 이동 시 등장
+        }, { passive:true });
+        document.addEventListener('mouseleave', () => gsap.to(dot, { opacity:0, duration:0.25 }));
+        document.addEventListener('mouseenter', () => gsap.to(dot, { opacity:1, duration:0.25 }));
+
+        // 프로젝트 이미지 hover 시: 도트가 약 3배 + 보라·핑크·블루 그라데이션(.is-grow), leave 시 기본 복귀
+        let n = 0;
+        // scale 대신 width/height를 키워야 1px 라인이 두꺼워 보이지 않음 (xPercent:-50로 중심 유지)
+        const grow   = () => { n++; dot.classList.add('is-grow'); gsap.to(dot, { width:42, height:42, duration:0.45, ease:'expo.out', overwrite:'auto' }); };
+        const shrink = () => { n = Math.max(0, n-1); if (!n) { dot.classList.remove('is-grow'); gsap.to(dot, { width:28, height:28, duration:0.4, ease:'power3.out', overwrite:'auto' }); } };
+        document.querySelectorAll('.wc-thumb').forEach((el) => { el.addEventListener('pointerenter', grow); el.addEventListener('pointerleave', shrink); });
+      })();
+
+      // 일반 리빌
+      gsap.utils.toArray('.reveal').forEach((el) => {
+        const delay = (parseInt(el.dataset.delay, 10) || 0) * 0.08;
+        gsap.fromTo(el, { opacity:0, y:28 }, { opacity:1, y:0, duration:0.9, ease:'power3.out', delay, scrollTrigger:{ trigger:el, start:'top 88%', once:true } });
+      });
+
+    } else { document.body.classList.add('loaded'); }
+
+  } else {
+    // 폴백 (GSAP 미로드): 포트폴리오는 일반 그리드, 리빌은 IO
+    window.addEventListener('load', () => document.body.classList.add('loaded'));
+    requestAnimationFrame(() => document.body.classList.add('loaded'));
+    const io = new IntersectionObserver((entries) => { entries.forEach((e)=>{ if(e.isIntersecting){ e.target.classList.add('is-visible'); io.unobserve(e.target);} }); }, { threshold:0.12, rootMargin:'0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal').forEach((el) => io.observe(el));
+    addEventListener('scroll', () => setSolid(window.scrollY > innerHeight * 0.82), { passive:true });
+  }
+
+  // 모바일 메뉴
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
