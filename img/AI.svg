@@ -1,26 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg id="_레이어_1" data-name="레이어_1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 193.84 210.04">
-  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <!-- ShaderGradient 스타일: feTurbulence + feDisplacementMap 로 그라데이션을 유기적으로 왜곡·흐르게 하고, 색 단계(밴딩/라인)를 없앰 -->
   <defs>
-    <linearGradient id="aiGrad" gradientUnits="userSpaceOnUse" x1="0" y1="0" x2="193.84" y2="210.04">
+    <!-- 중심에서 퍼지는 radial · 색상 순환 + 위치 흐름 (1.5배 빠른 4.67s) -->
+    <radialGradient id="aiGrad" gradientUnits="userSpaceOnUse" cx="96.92" cy="105.02" r="150">
       <stop offset="0" stop-color="#B24CE8">
-        <animate attributeName="stop-color" values="#B24CE8;#6E1CF6;#4A33F0;#2A56F5;#B24CE8" dur="7s" repeatCount="indefinite"/>
+        <animate attributeName="stop-color" values="#B24CE8;#6E1CF6;#4A33F0;#2A56F5;#B24CE8" dur="4.67s" repeatCount="indefinite"/>
       </stop>
       <stop offset="0.35" stop-color="#6E1CF6">
-        <animate attributeName="stop-color" values="#6E1CF6;#4A33F0;#2A56F5;#B24CE8;#6E1CF6" dur="7s" repeatCount="indefinite"/>
+        <animate attributeName="stop-color" values="#6E1CF6;#4A33F0;#2A56F5;#B24CE8;#6E1CF6" dur="4.67s" repeatCount="indefinite"/>
       </stop>
       <stop offset="0.7" stop-color="#4A33F0">
-        <animate attributeName="stop-color" values="#4A33F0;#2A56F5;#B24CE8;#6E1CF6;#4A33F0" dur="7s" repeatCount="indefinite"/>
+        <animate attributeName="stop-color" values="#4A33F0;#2A56F5;#B24CE8;#6E1CF6;#4A33F0" dur="4.67s" repeatCount="indefinite"/>
       </stop>
       <stop offset="1" stop-color="#2A56F5">
-        <animate attributeName="stop-color" values="#2A56F5;#B24CE8;#6E1CF6;#4A33F0;#2A56F5" dur="7s" repeatCount="indefinite"/>
+        <animate attributeName="stop-color" values="#2A56F5;#B24CE8;#6E1CF6;#4A33F0;#2A56F5" dur="4.67s" repeatCount="indefinite"/>
       </stop>
-      <!-- 방향/위치가 왕복(yoyo)하며 흐르는 느낌 · ease-in-out · 이동 범위 확대(±약 20%) -->
+      <!-- 반경/위치가 왕복하며 퍼졌다 모이는 흐름 -->
       <animateTransform attributeName="gradientTransform" type="translate"
-        values="-42 -46; 42 46; -42 -46" dur="7s" calcMode="spline"
+        values="-34 -30; 34 30; -34 -30" dur="4.67s" calcMode="spline"
         keyTimes="0;0.5;1" keySplines="0.37 0 0.63 1;0.37 0 0.63 1" repeatCount="indefinite"/>
-    </linearGradient>
+    </radialGradient>
+
+    <!-- 유기적 왜곡(흐르는 셰이더 느낌) + 밴딩 제거. baseFrequency 를 미세하게 흔들어 물결처럼 흐름 -->
+    <filter id="aiFlow" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.011 0.014" numOctaves="2" seed="7" stitchTiles="stitch" result="n">
+        <animate attributeName="baseFrequency" values="0.011 0.014;0.016 0.010;0.011 0.014"
+          dur="9.34s" calcMode="spline" keyTimes="0;0.5;1"
+          keySplines="0.37 0 0.63 1;0.37 0 0.63 1" repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="52" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+
+    <!-- 별 모양 clip: 그라데이션만 왜곡되고 별 외곽선은 또렷하게 유지 -->
+    <clipPath id="aiClip">
+      <path d="M92.59,5.58l9.62,32c4.56,15.15,16.41,27.01,31.57,31.57l32,9.62c7.01,2.11,7.01,12.03,0,14.14l-32,9.62c-15.15,4.56-27.01,16.41-31.57,31.57l-9.62,32c-2.11,7.01-12.03,7.01-14.14,0l-9.62-32c-4.56-15.15-16.41-27.01-31.57-31.57l-32-9.62c-7.01-2.11-7.01-12.03,0-14.14l32-9.62c15.15-4.56,27.01-16.41,31.57-31.57l9.62-32c2.11-7.01,12.03-7.01,14.14,0Z"/>
+      <path d="M160.74,139.47l3.96,13.18c1.96,6.52,7.06,11.61,13.57,13.57l13.18,3.96c3.19.96,3.19,5.47,0,6.43l-13.18,3.96c-6.52,1.96-11.61,7.06-13.57,13.57l-3.96,13.18c-.96,3.19-5.47,3.19-6.43,0l-3.96-13.18c-1.96-6.52-7.06-11.61-13.57-13.57l-13.18-3.96c-3.19-.96-3.19-5.47,0-6.43l13.18-3.96c6.52-1.96,11.61-7.06,13.57-13.57l3.96-13.18c.96-3.19,5.47-3.19,6.43,0Z"/>
+    </clipPath>
   </defs>
-  <path fill="url(#aiGrad)" d="M92.59,5.58l9.62,32c4.56,15.15,16.41,27.01,31.57,31.57l32,9.62c7.01,2.11,7.01,12.03,0,14.14l-32,9.62c-15.15,4.56-27.01,16.41-31.57,31.57l-9.62,32c-2.11,7.01-12.03,7.01-14.14,0l-9.62-32c-4.56-15.15-16.41-27.01-31.57-31.57l-32-9.62c-7.01-2.11-7.01-12.03,0-14.14l32-9.62c15.15-4.56,27.01-16.41,31.57-31.57l9.62-32c2.11-7.01,12.03-7.01,14.14,0Z"/>
-  <path fill="url(#aiGrad)" d="M160.74,139.47l3.96,13.18c1.96,6.52,7.06,11.61,13.57,13.57l13.18,3.96c3.19.96,3.19,5.47,0,6.43l-13.18,3.96c-6.52,1.96-11.61,7.06-13.57,13.57l-3.96,13.18c-.96,3.19-5.47,3.19-6.43,0l-3.96-13.18c-1.96-6.52-7.06-11.61-13.57-13.57l-13.18-3.96c-3.19-.96-3.19-5.47,0-6.43l13.18-3.96c6.52-1.96,11.61-7.06,13.57-13.57l3.96-13.18c.96-3.19,5.47-3.19,6.43,0Z"/>
+
+  <!-- 별 안쪽만: 흐르는(왜곡) 그라데이션. rect 를 viewBox보다 크게 두어 왜곡 시 빈틈 방지 -->
+  <g clip-path="url(#aiClip)">
+    <rect x="-50" y="-50" width="293" height="310" fill="url(#aiGrad)" filter="url(#aiFlow)"/>
+  </g>
 </svg>

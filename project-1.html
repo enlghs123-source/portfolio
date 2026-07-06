@@ -3,162 +3,284 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>모바일 뱅킹 앱 리디자인 · 홍길동</title>
-<meta name="description" content="복잡한 정보 구조를 단순화한 모바일 뱅킹 앱 전면 리디자인 케이스 스터디." />
+<title>Moodle Diary · 홍길동</title>
+<meta name="description" content="감정과 그림으로 하루를 가볍게 남기는 다이어리 앱, Moodle Diary 케이스 스터디." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Poppins:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   tailwind.config = { theme: { extend: {
-    colors: { paper:'#FFFFFF', cream:'#FAFAF9', ink:'#0E0E10', black:'#000000', fg:'#111114', muted:'#52525B', subtle:'#8A8A93', line:'#E5E5E2', point:'#1C60FF' },
+    colors: { paper:'#1a1a1a', cream:'#202024', ink:'#FFFFFF', black:'#000000', fg:'#EDEDED', muted:'#9C9CA5', subtle:'#6E6E78', line:'#2C2C31', point:'#7C5CFF' },
     fontFamily: { sans:['Pretendard','system-ui','sans-serif'], display:['"Space Grotesk"','Pretendard','sans-serif'], serif:['"Instrument Serif"','Georgia','serif'] },
   } } };
 </script>
 
 <style>
   html { scroll-behavior: smooth; }
-  body { background:#FFFFFF; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  body { background:#1a1a1a; color:#EDEDED; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
   .em { font-family:'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; letter-spacing:.01em; }
   .site-pad { padding-left:7vw; padding-right:7vw; }
   @media (max-width:900px){ .site-pad { padding-left:24px; padding-right:24px; } }
 
   /* 디자인 시스템 — 버튼(#1C60FF·둥근) */
   .pf-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; border-radius:999px; padding:0.85em 1.7em; font-family:'Pretendard',sans-serif; font-weight:600; font-size:clamp(.9rem,1.05vw,1.05rem); cursor:pointer; transition:background-color .2s ease, color .2s ease, border-color .2s ease; }
-  .pf-btn-primary { background:#1C60FF; color:#fff; }
-  .pf-btn-primary:hover { background:#1750d8; }
-  .pf-btn-ghost { border:1.5px solid #1C60FF; color:#1C60FF; background:transparent; }
-  .pf-btn-ghost:hover { background:#1C60FF; color:#fff; }
+  .pf-btn-primary { background:#7C5CFF; color:#fff; }
+  .pf-btn-primary:hover { background:#6A46F0; }
+  .pf-btn-ghost { border:1.5px solid rgba(255,255,255,.25); color:#EDEDED; background:transparent; }
+  .pf-btn-ghost:hover { background:#7C5CFF; border-color:#7C5CFF; color:#fff; }
+
+  /* Next Project — Pick Time 링크: 호버 시 퍼플 pill 배경이 좌→우로 채워짐(clip-path), 텍스트 위치 고정 */
+  .pick-time { position:relative; z-index:0; display:inline-flex; align-items:center; gap:9px;
+    padding:0.85em 1.7em; border-radius:999px; color:#fff; cursor:pointer;
+    font-family:'Space Grotesk','Poppins',sans-serif; font-weight:600; letter-spacing:.01em;
+    font-size:18px; line-height:1; white-space:nowrap; -webkit-tap-highlight-color:transparent; }
+  .pick-time svg { width:17px; height:17px; }
+  .pick-time::before { content:""; position:absolute; inset:0; z-index:-1; border-radius:inherit;
+    background:#7C5CFF; clip-path:inset(0 100% 0 0);
+    transition:clip-path .6s cubic-bezier(0.16,1,0.3,1); }
+  .pick-time:hover::before, .pick-time:focus-visible::before { clip-path:inset(0 0 0 0); }
 
   /* 스크롤 리빌 (본 사이트와 동일한 애니메이션 스타일) */
   .reveal { opacity:0; transform: translateY(28px); }
   html.gsap .reveal { opacity:0; }
 
-  ::-webkit-scrollbar { width:11px; } ::-webkit-scrollbar-track { background:#F1F1EF; }
-  ::-webkit-scrollbar-thumb { background:#C9C9C4; border-radius:99px; border:3px solid #F1F1EF; } ::-webkit-scrollbar-thumb:hover { background:#A9A9A2; }
-  a:focus-visible, button:focus-visible { outline:2px solid #1C60FF; outline-offset:3px; border-radius:4px; }
+  ::-webkit-scrollbar { width:11px; } ::-webkit-scrollbar-track { background:#1a1a1a; }
+  ::-webkit-scrollbar-thumb { background:#3A3A40; border-radius:99px; border:3px solid #1a1a1a; } ::-webkit-scrollbar-thumb:hover { background:#4A4A52; }
+  a:focus-visible, button:focus-visible { outline:2px solid #7C5CFF; outline-offset:3px; border-radius:4px; }
   @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1 !important; transform:none !important; } }
+
+  /* ===== WBBR 에디토리얼 상세 — 라인 리빌 / 이미지 클립 리빌 / 약한 패럴랙스 ===== */
+  .hero-title, .hero-title .em { color:#fff; }
+  .hero-title .tl-wrap { display:block; overflow:hidden; padding-bottom:.06em; }
+  .hero-title .tl-line { display:inline-block; will-change:transform; color:#fff; }
+  html.gsap .img-reveal { clip-path: inset(0 0 100% 0); }
+  @media (prefers-reduced-motion: reduce){
+    .hero-title .tl-line{ transform:none !important; }
+    .img-reveal{ clip-path:none !important; }
+  }
+
+  /* ===== 포트폴리오 메인 NAV (동일) ===== */
+  #nav { color:#FFFFFF; width:100%; box-shadow:none; border:none; pointer-events:none; padding-bottom:70px;
+    background-image:linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,.30) 35%, rgba(0,0,0,.12) 70%, rgba(0,0,0,0) 100%);
+    background-repeat:no-repeat; background-position:top; background-size:100% 130px; transition:color .35s ease; }
+  #nav, #nav * { box-shadow:none; border:none; }
+  #nav > *, #nav a, #nav button, #nav span { pointer-events:auto; }
+  .nav-pill { --wb-bg:#1a1a1a; --wb-white:#fff; --wb-radius:50vw;
+    display:inline-flex; align-items:center; border:none; outline:none; box-shadow:none; border-radius:var(--wb-radius);
+    padding:10px 22px; font-family:'Poppins',sans-serif; font-size:.78rem; font-weight:600; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--wb-white); background:rgba(255,255,255,.1); cursor:pointer; white-space:nowrap;
+    transition:background .25s ease, color .25s ease; }
+  .nav-pill:hover { background:var(--wb-white); color:var(--wb-bg); }
+  #menu-overlay { position:fixed; inset:0; z-index:60; background:#141414; visibility:hidden;
+    clip-path:inset(0 0 100% 0); display:flex; flex-direction:column; justify-content:center; padding:0 clamp(40px,8vw,150px); }
+  #menu-overlay .menu-close { position:absolute; top:20px; right:clamp(20px,5vw,40px); }
+  .menu-list { display:flex; flex-direction:column; gap:clamp(6px,1.2vh,16px); }
+  .menu-item { display:block; width:fit-content; overflow:hidden; }
+  .menu-item span { display:block; font-family:'Poppins',sans-serif; font-weight:300; font-size:clamp(2.6rem,9vw,7rem);
+    line-height:1.08; letter-spacing:-0.02em; color:#f5f5f4; transition:color .2s ease, opacity .2s ease; will-change:transform; }
+  .menu-item:hover span { color:#6E1CF6; }
+
+  /* ===== 포트폴리오 메인 푸터 (동일) ===== */
+  .about-3d { width:clamp(92px,13vw,156px); aspect-ratio:1/1; border-radius:50%; position:relative; will-change:transform;
+    background:
+      radial-gradient(120% 120% at 30% 24%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 32%),
+      conic-gradient(from 210deg at 50% 50%, #a8f0e6, #ffd4ea, #c9b8ff, #a6e6ff, #fff0c4, #b6f3df, #a8f0e6);
+    filter:saturate(1.35) contrast(1.08);
+    box-shadow:inset 0 0 22px rgba(255,255,255,.6), inset 0 -14px 30px rgba(80,90,200,.35), inset 0 14px 30px rgba(255,255,255,.45), 0 24px 50px rgba(40,40,90,.24); }
+  .about-3d::after { content:""; position:absolute; inset:13%; border-radius:50%; mix-blend-mode:screen; filter:blur(2px);
+    background:conic-gradient(from 40deg, transparent, rgba(255,255,255,.55), transparent 42%); }
+  .site-footer { background:#1a1a1a; color:#ffffff; min-height:100vh; display:flex; align-items:center; box-sizing:border-box; padding-top:66px; }
+  .ft-inner { width:100%; margin:0; padding:clamp(40px,6vh,72px) 7vw; display:flex; flex-direction:column; gap:clamp(28px,5vh,60px); }
+  @media (max-width:900px){ .site-footer { min-height:auto; padding-top:0; } .ft-inner { padding:80px 24px 40px; } }
+  .ft-top-row { display:flex; align-items:flex-start; justify-content:space-between; gap:clamp(20px,4vw,64px); }
+  .ft-headline { font-family:'Poppins',sans-serif; font-weight:500; font-size:clamp(2.4rem,9vw,9rem); line-height:.98; letter-spacing:-0.035em; margin:0; text-align:left; }
+  .ft-3d { flex:none; width:clamp(96px,12vw,160px); }
+  .ft-grid { display:grid; grid-template-columns:1fr auto; gap:40px; align-items:end; }
+  .ft-info-col { display:flex; flex-direction:column; gap:7px; font-family:'Poppins',sans-serif; font-size:clamp(.85rem,1vw,.98rem); color:rgba(255,255,255,.66); }
+  .ft-info-col .k { display:inline-block; min-width:84px; color:rgba(255,255,255,.4); }
+  .ft-info-col .ft-copy { margin-top:18px; color:rgba(255,255,255,.38); font-size:.8rem; }
+  .ft-menu { display:flex; flex-direction:row; align-items:center; gap:clamp(20px,2.4vw,40px); }
+  .ft-menu a { font-family:'Poppins',sans-serif; font-weight:500; font-size:clamp(1.05rem,1.6vw,1.4rem); color:#fff; transition:color .2s ease; }
+  .ft-menu a:hover { color:#6E1CF6; }
+  @media (max-width:768px){ .ft-grid { grid-template-columns:1fr; gap:32px; align-items:start; } }
 </style>
 </head>
 
 <body class="bg-paper text-fg font-sans antialiased selection:bg-ink selection:text-paper">
 
 <!-- ============================ NAV ============================ -->
-<header class="fixed top-0 inset-x-0 z-50 bg-paper/85 backdrop-blur-md border-b border-line">
-  <div class="site-pad py-5 flex items-center justify-between">
-    <a href="portfolio.html" class="font-display text-base font-700 tracking-tight">홍길동<span class="text-subtle">.</span></a>
-    <a href="portfolio.html#about" class="inline-flex items-center gap-2 text-sm font-600 text-muted hover:text-ink transition-colors">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      프로젝트로 돌아가기
-    </a>
+<header id="nav" class="fixed top-0 inset-x-0 z-50">
+  <div class="w-full flex items-center justify-between px-5 sm:px-10 py-5 text-[0.95rem]">
+    <a href="portfolio.html" class="font-display text-[1.1rem] font-700 tracking-tight whitespace-nowrap">홍길동<span class="opacity-50">.</span></a>
+    <button id="menuBtn" class="nav-pill justify-self-end" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">MENU</button>
   </div>
 </header>
 
-<!-- ============================ HERO ============================ -->
-<section class="site-pad pt-36 sm:pt-44 pb-12">
-  <p class="reveal text-xs tracking-[0.22em] uppercase text-point font-600 mb-5">Experience Design · 2025</p>
-  <h1 class="reveal font-display text-[clamp(2.4rem,6vw,5rem)] font-500 leading-[1.05] tracking-[-0.02em] text-ink max-w-[18ch]">
-    모바일 뱅킹 앱 <span class="em">전면 리디자인</span>
-  </h1>
-  <p class="reveal text-lg text-muted leading-relaxed mt-7 max-w-2xl">
-    복잡하게 얽힌 정보 구조와 송금 플로우를 사용자 관점에서 다시 설계해, 핵심 작업을 더 빠르고 명확하게 만든 프로젝트입니다.
-  </p>
-</section>
+<!-- 전체화면 메뉴 오버레이 (MENU 클릭 시 확장) -->
+<div id="menu-overlay" aria-hidden="true">
+  <button id="menuClose" class="nav-pill menu-close">CLOSE</button>
+  <nav class="menu-list">
+    <a href="portfolio.html#top"     class="menu-item"><span>Home</span></a>
+    <a href="portfolio.html#about"   class="menu-item"><span>About</span></a>
+    <a href="portfolio.html#work"    class="menu-item"><span>Works</span></a>
+    <a href="portfolio.html#contact" class="menu-item"><span>Contact</span></a>
+  </nav>
+</div>
 
-<!-- 대표 이미지 -->
-<section class="site-pad pb-20 sm:pb-28">
-  <div class="reveal aspect-[16/9] rounded-3xl overflow-hidden bg-cream ring-1 ring-line">
-    <!-- 교체하세요: 대표 이미지 -->
-    <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=1600&auto=format&fit=crop" alt="모바일 뱅킹 앱 대표 이미지" class="w-full h-full object-cover" />
-  </div>
-</section>
-
-<!-- ============================ 개요 + 메타 (Role / 기간 / Tools) ============================ -->
-<section class="site-pad pb-24 sm:pb-32">
-  <div class="grid lg:grid-cols-12 gap-12 lg:gap-16">
-    <div class="lg:col-span-7 reveal">
-      <h2 class="font-display text-2xl sm:text-3xl font-600 text-ink mb-6">프로젝트 개요</h2>
-      <p class="text-muted leading-relaxed text-lg">
-        7년차 사용자들이 가장 자주 쓰는 ‘송금’과 ‘조회’ 경험이 누적된 기능 추가로 복잡해졌습니다.
-        본 프로젝트는 정보 구조(IA)를 처음부터 재정의하고, 핵심 플로우를 3단계로 압축하며,
-        전 화면 접근성(WCAG AA)을 충족하는 것을 목표로 진행했습니다.
+<main>
+<!-- ============================ 1. HERO (타이포 중심 · 라인 리빌) ============================ -->
+<section class="site-pad pt-32 sm:pt-44 pb-16 sm:pb-24">
+  <div class="grid lg:grid-cols-12 gap-10 lg:gap-16 items-stretch">
+    <!-- 좌: 문구 -->
+    <div class="lg:col-span-7">
+      <h1 class="hero-title reveal font-display font-500 text-[clamp(2.6rem,8.4vw,7rem)] leading-[1.02] tracking-[-0.03em] text-ink">
+        <span class="tl-wrap"><span class="tl-line">Moodle</span></span>
+        <span class="tl-wrap"><span class="tl-line"><span class="em">Diary</span></span></span>
+      </h1>
+      <p class="reveal text-lg sm:text-2xl text-muted leading-relaxed mt-10 sm:mt-12 max-w-3xl" data-delay="1">
+        일기를 쓰다 실패한 적이 몇 번인가요? 잘 써야 한다는 부담을 덜고, 감정과 그림으로 하루를 가볍게 남기는 다이어리 앱입니다.
       </p>
     </div>
-    <div class="lg:col-span-5 reveal">
-      <dl class="divide-y divide-line border-y border-line">
-        <div class="py-4 flex justify-between gap-6"><dt class="text-sm text-subtle">담당 역할 (Role)</dt><dd class="text-sm font-600 text-ink text-right">Lead Product Designer<br>리서치 · IA · 인터랙션 · 디자인 시스템</dd></div>
-        <div class="py-4 flex justify-between gap-6"><dt class="text-sm text-subtle">기간</dt><dd class="text-sm font-600 text-ink text-right">2025.01 – 2025.06 (6개월)</dd></div>
-        <div class="py-4 flex justify-between gap-6"><dt class="text-sm text-subtle">사용 툴</dt><dd class="text-sm font-600 text-ink text-right">Figma · ProtoPie · FigJam · Maze</dd></div>
-        <div class="py-4 flex justify-between gap-6"><dt class="text-sm text-subtle">플랫폼</dt><dd class="text-sm font-600 text-ink text-right">iOS · Android</dd></div>
+    <!-- 우: 이미지 자리 (하나만 · 임시 이미지 교체) -->
+    <div class="lg:col-span-5">
+      <div class="img-reveal aspect-[4/5] lg:aspect-auto lg:h-full rounded-2xl overflow-hidden bg-cream ring-1 ring-line">
+        <img class="parallax w-full h-[112%] object-cover" src="https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1000&auto=format&fit=crop" alt="Moodle Diary 이미지 (임시 · 교체)">
+      </div>
+    </div>
+  </div>
+  <hr class="border-t border-line mt-14 sm:mt-20">
+</section>
+
+<!-- ============================ 2. PROJECT OVERVIEW (2컬럼 · 개요/역할/기간/툴) ============================ -->
+<section class="site-pad pb-24 sm:pb-40">
+  <div class="grid lg:grid-cols-12 gap-y-12 gap-x-16">
+    <div class="lg:col-span-3 reveal">
+      <p class="text-xs tracking-[0.26em] uppercase text-subtle">프로젝트 개요<br><span class="text-subtle/70">Overview</span></p>
+    </div>
+    <div class="lg:col-span-9">
+      <p class="reveal font-display font-400 text-2xl sm:text-[2.4rem] text-ink leading-[1.4] max-w-[26ch] mb-14 sm:mb-20">
+        완벽하게 쓰려는 부담 때문에 일기를 포기하는 사람이 많습니다. Moodle Diary는 글쓰기 대신 감정과 그림으로 하루를 기록하게 해, 꾸준히 이어갈 수 있는 가벼운 기록·회고 경험을 목표로 설계했습니다.
+      </p>
+      <dl class="reveal grid sm:grid-cols-2 gap-x-16 border-t border-line">
+        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-sm text-subtle">담당 역할 (Role)</dt><dd class="text-sm font-600 text-ink text-right">Product Designer<br>UX 리서치 · UI · 디자인 시스템</dd></div>
+        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-sm text-subtle">기간</dt><dd class="text-sm font-600 text-ink text-right">2025 (개인 프로젝트)</dd></div>
+        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-sm text-subtle">사용 툴</dt><dd class="text-sm font-600 text-ink text-right">Figma · Illustrator · Pretendard</dd></div>
+        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-sm text-subtle">플랫폼</dt><dd class="text-sm font-600 text-ink text-right">iOS · Android</dd></div>
       </dl>
     </div>
   </div>
 </section>
 
-<!-- ============================ 문제 정의 ============================ -->
-<section class="site-pad pb-24 sm:pb-32">
-  <p class="reveal text-xs tracking-[0.22em] uppercase text-subtle mb-5">01 — Problem</p>
-  <h2 class="reveal font-display text-3xl sm:text-4xl font-500 text-ink mb-10 max-w-[20ch]">무엇이 문제였나</h2>
-  <div class="grid sm:grid-cols-3 gap-px bg-line rounded-2xl overflow-hidden border border-line">
-    <div class="reveal bg-paper p-7"><div class="font-display text-3xl font-700 text-point">7단계</div><p class="text-sm text-muted mt-3 leading-relaxed">송금 완료까지 거쳐야 하는 화면 수. 이탈이 집중되는 구간이었습니다.</p></div>
-    <div class="reveal bg-paper p-7"><div class="font-display text-3xl font-700 text-point">+41%</div><p class="text-sm text-muted mt-3 leading-relaxed">‘송금 방법’ 관련 고객 문의 증가율. 직관성 부족이 원인이었습니다.</p></div>
-    <div class="reveal bg-paper p-7"><div class="font-display text-3xl font-700 text-point">미충족</div><p class="text-sm text-muted mt-3 leading-relaxed">대비·터치 타깃 등 접근성 기준 다수 미달 상태였습니다.</p></div>
+<!-- ============================ 3. FULL IMAGE (대표 이미지 · 가로 100% · 클립 리빌 + 패럴랙스) ============================ -->
+<section class="pb-24 sm:pb-40">
+  <div class="img-reveal w-full h-[58vh] sm:h-[88vh] overflow-hidden bg-cream">
+    <img class="parallax w-full h-[120%] object-cover" src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=2000&auto=format&fit=crop" alt="Moodle Diary 대표 화면 (임시 이미지 · 실제 앱 화면으로 교체)">
   </div>
 </section>
 
-<!-- ============================ 해결 과정 ============================ -->
-<section class="site-pad pb-24 sm:pb-32">
-  <p class="reveal text-xs tracking-[0.22em] uppercase text-subtle mb-5">02 — Process</p>
-  <h2 class="reveal font-display text-3xl sm:text-4xl font-500 text-ink mb-12 max-w-[20ch]">어떻게 해결했나</h2>
-  <ol class="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line rounded-2xl overflow-hidden border border-line">
-    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-sm font-600">01</span><h3 class="font-display text-lg font-600 mt-4 mb-2">리서치</h3><p class="text-sm text-muted leading-relaxed">사용자 인터뷰 12명 + 행동 로그 분석으로 이탈 구간을 정의.</p></li>
-    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-sm font-600">02</span><h3 class="font-display text-lg font-600 mt-4 mb-2">IA 재설계</h3><p class="text-sm text-muted leading-relaxed">기능 중심 구조 → 작업 중심 구조로 정보 구조를 재정의.</p></li>
-    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-sm font-600">03</span><h3 class="font-display text-lg font-600 mt-4 mb-2">프로토타입·테스트</h3><p class="text-sm text-muted leading-relaxed">ProtoPie로 인터랙션 검증, Maze 원격 사용성 테스트 2라운드.</p></li>
-    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-sm font-600">04</span><h3 class="font-display text-lg font-600 mt-4 mb-2">디자인 시스템</h3><p class="text-sm text-muted leading-relaxed">컴포넌트·토큰을 정비해 개발 핸드오프와 일관성을 확보.</p></li>
+<!-- ============================ 4. PROBLEM (일기를 포기하는 진짜 이유) ============================ -->
+<section class="site-pad pb-24 sm:pb-40">
+  <div class="grid lg:grid-cols-12 gap-y-14 gap-x-16 items-start">
+    <div class="lg:col-span-4 reveal">
+      <p class="text-xs tracking-[0.26em] uppercase text-subtle mb-6">01 — Problem</p>
+      <h2 class="font-display text-3xl sm:text-5xl font-500 text-ink leading-[1.05]">그 진짜 이유는<br>사람마다 다릅니다</h2>
+    </div>
+    <div class="lg:col-span-8 grid sm:grid-cols-3 gap-x-10 gap-y-12 border-t border-line pt-12">
+      <div class="reveal"><div class="font-display text-2xl sm:text-3xl font-600 text-point leading-tight">쓸 말이 없어서</div><p class="text-muted mt-5 leading-relaxed">하루를 요약할 문장을 떠올리는 것 자체가 부담이 됩니다.</p></div>
+      <div class="reveal"><div class="font-display text-2xl sm:text-3xl font-600 text-point leading-tight">완벽하게 쓰려다가</div><p class="text-muted mt-5 leading-relaxed">잘 써야 한다는 마음이 시작 자체를 막습니다.</p></div>
+      <div class="reveal"><div class="font-display text-2xl sm:text-3xl font-600 text-point leading-tight">매일이 번거로워서</div><p class="text-muted mt-5 leading-relaxed">긴 텍스트를 입력하는 과정이 습관을 끊어놓습니다.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 5. PROCESS (질문 → 분석 → 컨셉 → 시스템) ============================ -->
+<section class="site-pad pb-24 sm:pb-40">
+  <p class="reveal text-xs tracking-[0.26em] uppercase text-subtle mb-6">02 — Process</p>
+  <h2 class="reveal font-display text-3xl sm:text-5xl font-500 text-ink mb-14 sm:mb-20 max-w-[16ch]">질문에서<br>해답까지</h2>
+  <ol class="flex flex-col border-b border-line">
+    <li class="reveal grid sm:grid-cols-12 gap-4 sm:gap-6 py-9 sm:py-11 border-t border-line items-baseline">
+      <span class="sm:col-span-2 font-display text-point text-lg font-600">01</span>
+      <h3 class="sm:col-span-3 font-display text-2xl sm:text-3xl font-500 text-ink">두 사람의 질문</h3>
+      <p class="sm:col-span-7 text-muted text-lg leading-relaxed max-w-[54ch]">기록을 어려워하는 서로 다른 두 사용자 유형(페르소나)을 정의하고, 각자가 던지는 질문에서 문제를 좁혀갔습니다.</p>
+    </li>
+    <li class="reveal grid sm:grid-cols-12 gap-4 sm:gap-6 py-9 sm:py-11 border-t border-line items-baseline">
+      <span class="sm:col-span-2 font-display text-point text-lg font-600">02</span>
+      <h3 class="sm:col-span-3 font-display text-2xl sm:text-3xl font-500 text-ink">기존 앱 분석</h3>
+      <p class="sm:col-span-7 text-muted text-lg leading-relaxed max-w-[54ch]">기존 다이어리 앱의 구조와 한계를 비교해, 무엇이 사용자를 지치게 하는지 개선 지점을 찾았습니다.</p>
+    </li>
+    <li class="reveal grid sm:grid-cols-12 gap-4 sm:gap-6 py-9 sm:py-11 border-t border-line items-baseline">
+      <span class="sm:col-span-2 font-display text-point text-lg font-600">03</span>
+      <h3 class="sm:col-span-3 font-display text-2xl sm:text-3xl font-500 text-ink">감정을 담은 추천</h3>
+      <p class="sm:col-span-7 text-muted text-lg leading-relaxed max-w-[54ch]">사람의 감정을 담아, 오늘의 기분에 맞는 그림·문구를 제안하는 가벼운 기록 흐름을 설계했습니다.</p>
+    </li>
+    <li class="reveal grid sm:grid-cols-12 gap-4 sm:gap-6 py-9 sm:py-11 border-t border-line items-baseline">
+      <span class="sm:col-span-2 font-display text-point text-lg font-600">04</span>
+      <h3 class="sm:col-span-3 font-display text-2xl sm:text-3xl font-500 text-ink">디자인 시스템</h3>
+      <p class="sm:col-span-7 text-muted text-lg leading-relaxed max-w-[54ch]">Pretendard 타이포와 감정 컬러 팔레트, 컴포넌트를 정리해 일관된 화면 경험을 만들었습니다.</p>
+    </li>
   </ol>
 </section>
 
-<!-- ============================ 주요 화면 (UI) ============================ -->
-<section class="site-pad pb-24 sm:pb-32">
-  <p class="reveal text-xs tracking-[0.22em] uppercase text-subtle mb-5">03 — Key Screens</p>
-  <h2 class="reveal font-display text-3xl sm:text-4xl font-500 text-ink mb-12">주요 화면</h2>
-  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-    <!-- 교체하세요: 주요 화면 이미지 -->
-    <div class="reveal aspect-[3/4] rounded-2xl overflow-hidden bg-cream ring-1 ring-line"><img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=900&auto=format&fit=crop" alt="주요 화면 1" class="w-full h-full object-cover"></div>
-    <div class="reveal aspect-[3/4] rounded-2xl overflow-hidden bg-cream ring-1 ring-line"><img src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?q=80&w=900&auto=format&fit=crop" alt="주요 화면 2" class="w-full h-full object-cover"></div>
-    <div class="reveal aspect-[3/4] rounded-2xl overflow-hidden bg-cream ring-1 ring-line"><img src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=900&auto=format&fit=crop" alt="주요 화면 3" class="w-full h-full object-cover"></div>
+<!-- ============================ 6. KEY SCREENS (따뜻하게 그림으로 남기다) ============================ -->
+<section class="site-pad pb-24 sm:pb-40">
+  <p class="reveal text-xs tracking-[0.26em] uppercase text-subtle mb-6">03 — Key Screens</p>
+  <h2 class="reveal font-display text-3xl sm:text-5xl font-500 text-ink mb-14 sm:mb-16">따뜻하게<br>그림으로 남기다</h2>
+  <div class="grid sm:grid-cols-3 gap-4 sm:gap-6">
+    <div class="img-reveal aspect-[3/4] rounded-2xl overflow-hidden bg-cream ring-1 ring-line"><img class="parallax w-full h-[112%] object-cover" src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=1000&auto=format&fit=crop" alt="Moodle Diary 화면 1 (임시 이미지)"></div>
+    <div class="img-reveal aspect-[3/4] rounded-2xl overflow-hidden bg-cream ring-1 ring-line"><img class="parallax w-full h-[112%] object-cover" src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?q=80&w=1000&auto=format&fit=crop" alt="Moodle Diary 화면 2 (임시 이미지)"></div>
+    <div class="img-reveal aspect-[3/4] rounded-2xl overflow-hidden bg-cream ring-1 ring-line"><img class="parallax w-full h-[112%] object-cover" src="https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?q=80&w=1000&auto=format&fit=crop" alt="Moodle Diary 화면 3 (임시 이미지)"></div>
   </div>
 </section>
 
-<!-- ============================ 결과 및 성과 ============================ -->
-<section class="site-pad pb-24 sm:pb-32">
-  <div class="reveal rounded-3xl bg-ink text-paper p-8 sm:p-14">
-    <p class="text-xs tracking-[0.22em] uppercase text-white/45 mb-8">04 — Results</p>
-    <div class="grid sm:grid-cols-3 gap-10">
-      <div><div class="font-display text-5xl font-700 text-point">+34%</div><p class="text-sm text-white/70 mt-3">송금 전환율 상승</p></div>
-      <div><div class="font-display text-5xl font-700">−28%</div><p class="text-sm text-white/70 mt-3">관련 고객 문의 감소</p></div>
-      <div><div class="font-display text-5xl font-700">AA</div><p class="text-sm text-white/70 mt-3">전 화면 접근성 충족</p></div>
+<!-- ============================ 7. RESULT / RETROSPECTIVE ============================ -->
+<section class="site-pad pb-24 sm:pb-40">
+  <div class="reveal rounded-3xl bg-cream ring-1 ring-line p-8 sm:p-16">
+    <p class="text-xs tracking-[0.26em] uppercase text-white/45 mb-8 sm:mb-10">04 — Retrospective</p>
+    <p class="font-display text-2xl sm:text-4xl font-500 text-ink leading-snug mb-12 sm:mb-16 max-w-[22ch]">남기지 않아도, 지나가도 남아있어요.</p>
+    <div class="grid sm:grid-cols-3 gap-12">
+      <div><div class="font-display text-4xl sm:text-6xl font-700 text-point leading-none">그림</div><p class="text-white/70 mt-4 sm:mt-6">글쓰기 부담 없이 하루를 남기는 방식</p></div>
+      <div><div class="font-display text-4xl sm:text-6xl font-700 text-ink leading-none">감정</div><p class="text-white/70 mt-4 sm:mt-6">기분에 맞춰 제안하는 기록과 회고</p></div>
+      <div><div class="font-display text-4xl sm:text-6xl font-700 text-ink leading-none">꾸준함</div><p class="text-white/70 mt-4 sm:mt-6">최소 입력으로 이어지는 기록 습관</p></div>
     </div>
   </div>
 </section>
 
-<!-- ============================ CTA ============================ -->
-<section class="site-pad pb-28">
-  <div class="reveal flex flex-wrap items-center justify-between gap-6 border-t border-line pt-12">
-    <h2 class="font-display text-2xl sm:text-3xl font-600 text-ink">다음 프로젝트도 살펴보세요</h2>
-    <div class="flex gap-3">
-      <a href="portfolio.html#about" class="pf-btn pf-btn-ghost">목록으로</a>
-      <a href="project-2.html" class="pf-btn pf-btn-primary">다음 프로젝트</a>
-    </div>
+<!-- ============================ 8. NEXT PROJECT ============================ -->
+<section class="site-pad pb-28 sm:pb-40">
+  <div class="reveal flex flex-wrap items-center justify-between gap-6 border-t border-line pt-14">
+    <h2 class="font-display text-[1.2rem] sm:text-[1.8rem] font-500 text-ink">다음 프로젝트도 살펴보세요</h2>
+    <a href="project-2.html" class="pick-time">Pick Time<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
   </div>
 </section>
+</main>
 
-<footer class="site-pad py-8 border-t border-line text-sm text-muted flex flex-col sm:flex-row items-center justify-between gap-3">
-  <span class="font-display tracking-tight text-ink">홍길동<span class="text-subtle">.</span></span>
-  <p>© 2026 홍길동. All rights reserved.</p>
+<footer class="site-footer">
+  <div class="ft-inner">
+    <div class="ft-top-row">
+      <h2 class="ft-headline">DESIGN WITH<br>PURPOSE</h2>
+      <div class="about-3d ft-3d" aria-hidden="true"></div>
+    </div>
+    <div class="ft-grid">
+      <div class="ft-info-col">
+        <span><span class="k">이름</span>홍길동</span>
+        <span><span class="k">주소</span>서울특별시</span>
+        <span><span class="k">분야</span>UX/UI Design</span>
+        <span><span class="k">이메일</span>hello@example.com</span>
+        <span><span class="k">경력</span>7년 (2019 — 2026)</span>
+        <span><span class="k">TEL</span>+82 10 0000 0000</span>
+        <span class="ft-copy">Copyright © <span id="year">2026</span> HONG GILDONG. All Rights Reserved.</span>
+      </div>
+      <nav class="ft-menu">
+        <a href="portfolio.html#about">About</a>
+        <a href="portfolio.html#work">Projects</a>
+        <a href="portfolio.html#contact">Contact</a>
+      </nav>
+    </div>
+  </div>
 </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
@@ -172,9 +294,57 @@
       gsap.fromTo(el, { opacity:0, y:28 }, { opacity:1, y:0, duration:0.9, ease:'power3.out',
         scrollTrigger:{ trigger:el, start:'top 88%', once:true } });
     });
+    // 이미지 — clip-path 리빌 (아래→위 열림)
+    gsap.utils.toArray('.img-reveal').forEach((el) => {
+      gsap.fromTo(el, { clipPath:'inset(0% 0% 100% 0%)' }, { clipPath:'inset(0% 0% 0% 0%)', duration:1.1, ease:'power3.inOut',
+        scrollTrigger:{ trigger:el, start:'top 82%', once:true } });
+    });
+    // 약한 parallax — 이미지가 컨테이너 안에서 천천히 이동
+    gsap.utils.toArray('.parallax').forEach((im) => {
+      gsap.fromTo(im, { yPercent:-8 }, { yPercent:8, ease:'none',
+        scrollTrigger:{ trigger: im.closest('.img-reveal') || im, start:'top bottom', end:'bottom top', scrub:true } });
+    });
+    // 푸터 3D 오브젝트 Floating (포트폴리오 메인과 동일)
+    gsap.utils.toArray('.about-3d').forEach((el) => gsap.to(el, { y:'+=16', duration:3, ease:'sine.inOut', yoyo:true, repeat:-1 }));
   } else {
     document.querySelectorAll('.reveal').forEach((el)=>{ el.style.opacity=1; el.style.transform='none'; });
   }
+
+  // 전체화면 메뉴 오버레이 — MENU 클릭 시 배경 확장 + 텍스트 아래→위 Fade Up, CLOSE 시 역방향 (포트폴리오 메인과 동일)
+  if (typeof gsap !== 'undefined') {
+    (function initMenuOverlay(){
+      const btn = document.getElementById('menuBtn');
+      const closeBtn = document.getElementById('menuClose');
+      const overlay = document.getElementById('menu-overlay');
+      if (!btn || !overlay) return;
+      const items = overlay.querySelectorAll('.menu-item span');
+      let open = false, tl;
+      const openMenu = () => {
+        if (open) return; open = true;
+        btn.setAttribute('aria-expanded','true'); overlay.setAttribute('aria-hidden','false');
+        if (tl) tl.kill();
+        gsap.set(overlay, { visibility:'visible' });
+        tl = gsap.timeline();
+        tl.fromTo(overlay, { clipPath:'inset(0% 0% 100% 0%)' }, { clipPath:'inset(0% 0% 0% 0%)', duration:0.7, ease:'power3.inOut' })
+          .fromTo(items, { yPercent:110, autoAlpha:0 }, { yPercent:0, autoAlpha:1, duration:0.6, ease:'power3.out', stagger:0.08 }, 0.28);
+      };
+      const closeMenu = () => {
+        if (!open) return; open = false;
+        btn.setAttribute('aria-expanded','false'); overlay.setAttribute('aria-hidden','true');
+        if (tl) tl.kill();
+        tl = gsap.timeline();
+        tl.to(items, { yPercent:110, autoAlpha:0, duration:0.4, ease:'power2.in', stagger:0.05 })
+          .to(overlay, { clipPath:'inset(0% 0% 100% 0%)', duration:0.6, ease:'power3.inOut' }, 0.15)
+          .set(overlay, { visibility:'hidden' });
+      };
+      btn.addEventListener('click', openMenu);
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+      overlay.querySelectorAll('.menu-item').forEach((a) => a.addEventListener('click', () => setTimeout(closeMenu, 10)));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    })();
+  }
+
+  document.getElementById('year').textContent = new Date().getFullYear();
 </script>
 </body>
 </html>

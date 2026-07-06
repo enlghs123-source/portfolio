@@ -78,7 +78,7 @@
   /* Hero: 높이 강제 없음(height/min-height/100vh 미사용). 콘텐츠 높이로 결정, 검은 배경도 그대로 따라감
      · Marquee 상단 여백은 JS가 (뷰포트 50% - 마퀴높이/2)로 계산해 화면 세로 중앙에 배치 */
   /* padding-top:0(마퀴 JS 중앙정렬) · padding-bottom은 About→Work 전환 블랙 여백(넓게) */
-  #top { background:#1a1a1a; box-sizing:border-box; padding:0 0 clamp(198px,30.6vh,432px); } /* About→single_image 여백: Hero→About의 90% (10% 축소) */
+  #top { background:#1a1a1a; box-sizing:border-box; padding:0 0 clamp(150px,22vh,300px); } /* 섹션 간 공통 여백 (About→single_image) */
   .hero-marquee { position:relative; left:0; right:0; z-index:2; overflow-x:clip; overflow-y:visible; }
   .hero-mq-track { display:flex; width:max-content; will-change:transform; animation:hero-mq 34s linear infinite; }
   /* 세로로 잘리지 않도록 line-height·padding-bottom 확보 (디센더 g/p/y 보호) */
@@ -194,12 +194,12 @@
   /* Work 자체가 검은 Curtain: #work(z2)가 뒤의 #contact(z1)를 덮고 있다가 마지막에 위로 걷히며 노출 (별도 커튼 요소 없음) */
   /* Work 콘텐츠: 일반 세로 스크롤 · 2단 그리드 */
   .work-inner { position:relative; z-index:1; background:#1a1a1a; color:#fff; box-sizing:border-box;
-    padding:50px clamp(24px,7vw,120px) 150px; }  /* top 50px · 좌우 clamp · bottom 150px */
+    padding:clamp(150px,22vh,300px) clamp(24px,7vw,120px) clamp(150px,22vh,300px); }  /* 섹션 간 공통 여백 (상·하 동일) */
   .work-intro-inner { text-align:left; margin-bottom:clamp(40px,7vh,90px); }
   .work-title { font-family:'Poppins',sans-serif; font-weight:500; font-size:clamp(2.4rem,6vw,5rem); line-height:1.0; letter-spacing:-0.03em; margin:0; }
   /* MYCEL no-pd-140--y 방식 — 핀 없음. 카드들이 처음엔 겹쳐 있다가 섹션 스크롤 진행에 따라 계단식으로 벌어짐 (transform scrub).
      카드 디자인은 대형 이미지 + 하단 텍스트 오버레이(번호/제목/설명/버튼). */
-  .work-container { display:flex; flex-direction:column; gap:clamp(48px,8vh,120px); }  /* 최종 분리 상태 = 카드 간 간격 (MYCEL처럼) */
+  .work-container { display:flex; flex-direction:column; gap:clamp(24px,4vh,60px); }  /* 최종 분리 상태 = 카드 간 간격 (MYCEL처럼) · 50% 축소 */
   .work-item { position:relative; width:100%; will-change:transform; }
   /* 대형 이미지 — height 고정(≈51vh), 가로 100%, object-fit cover, radius 24px · 텍스트 오버레이 컨텍스트 */
   .work-image { display:block; position:relative; width:100%; height:clamp(36vh,51vh,54vh); overflow:hidden; border-radius:24px; background:#1a1a1d; cursor:none; }
@@ -218,7 +218,7 @@
   .wi-link:hover { background:#7325E0; }
   .wi-link svg { width:16px; height:16px; }
   @media (max-width:768px){
-    .work-container { gap:clamp(28px,5vh,60px); }              /* 모바일: 간격 축소 */
+    .work-container { gap:clamp(14px,2.5vh,30px); }            /* 모바일: 간격 축소 (50%) */
     .work-image { height:34vh; }
   }
   /* Contact는 커튼 씬 안, 커튼 뒤(z:1)에 위치 → 씬 pin 동안 정지, 커튼이 좌측으로 걷히면 드러남 */
@@ -250,7 +250,7 @@
   /* Hero 타이틀 아래 2단: 좌 설명(좌측 정렬) / 우 3D 오브젝트(가운데 정렬) — 다크 배경 */
   /* 30% / 70% : 좌 3D 오브젝트 / 우 소개 텍스트 · Hero↔About 간격은 크게(약 2배) */
   .hero-below { position:relative; z-index:2; display:grid; grid-template-columns:4fr 6fr; gap:clamp(28px,3.5vw,64px);
-    align-items:center; margin-top:clamp(220px,34vh,480px); }
+    align-items:center; margin-top:clamp(220px,34vh,480px); margin-bottom:70px; }  /* Hero 마퀴↔About 간격 · About 하단 +70px */
   .hero-below-text { display:flex; align-items:center; }
   .hero-about-desc { margin:0; text-align:left; font-family:'Pretendard',sans-serif; font-weight:300; letter-spacing:-0.01em;
     font-size:clamp(1rem,1.05vw,1.2rem); line-height:1.85; color:rgba(255,255,255,.8); max-width:760px; }
@@ -258,7 +258,8 @@
   .hero-below-media .about-3d { width:clamp(144px,16vw,240px); }  /* 기존 대비 약 20% 축소(비율 유지) */
   @media (max-width:820px){
     .hero-below { grid-template-columns:1fr; gap:clamp(48px,8vh,80px); margin-top:clamp(140px,20vh,220px); }
-    #top { padding:0 0 clamp(126px,18vh,198px); }  /* About→single_image 여백: 모바일도 10% 축소 */
+    #top { padding:0 0 clamp(100px,15vh,180px); }  /* 섹션 간 공통 여백 (모바일) */
+    .work-inner { padding-top:clamp(100px,15vh,180px); padding-bottom:clamp(100px,15vh,180px); }
     .hero-about-desc { max-width:100%; }
   }
   /* 소개 세로 구성(레거시): 3D 오브젝트 → 워드마크 → 메인 문구 */
@@ -348,9 +349,8 @@
 
 <!-- ============================ NAV ============================ -->
 <header id="nav" class="fixed top-0 inset-x-0 z-50">
-  <div class="w-full grid grid-cols-3 items-center px-5 sm:px-10 py-5 text-[0.95rem]">
-    <a href="#top" class="font-display text-[1.1rem] font-700 tracking-tight whitespace-nowrap justify-self-start">홍길동<span class="opacity-50">.</span></a>
-    <span class="justify-self-center opacity-70 whitespace-nowrap hidden sm:block">© 홍길동</span>
+  <div class="w-full flex items-center justify-between px-5 sm:px-10 py-5 text-[0.95rem]">
+    <a href="#top" class="font-display text-[1.1rem] font-700 tracking-tight whitespace-nowrap">홍길동<span class="opacity-50">.</span></a>
     <button id="menuBtn" class="nav-pill justify-self-end" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">MENU</button>
   </div>
 </header>
@@ -589,7 +589,8 @@
     }
 
     // #contact는 #work 커튼 씬 안에 있으므로 별도 처리 → 일반 앵커 핸들러에서 제외
-    const workPinST = () => ScrollTrigger.getAll().find(s => s.pin && s.trigger && s.trigger.id === 'work' && s.animation);
+    // 커튼 리빌은 #contact 를 pin 함 → 그 ScrollTrigger 를 기준으로 nav 반전/스크롤 타겟 계산
+    const workPinST = () => ScrollTrigger.getAll().find(s => s.pin && s.trigger && s.trigger.id === 'contact' && s.animation);
     document.querySelectorAll('a[href^="#"]:not([data-go-projects]):not([data-go-contact])').forEach((a) => {
       const id = a.getAttribute('href');
       if (id.length > 1) a.addEventListener('click', (e) => {
@@ -692,9 +693,10 @@
 
         // About(2단) — 뷰포트 진입 시 아래에서 위로 Fade Up (텍스트 · 3D 순차)
         if (belowItems.length) {
-          gsap.set(belowItems, { autoAlpha:0, y:44 });
-          gsap.to(belowItems, { autoAlpha:1, y:0, duration:1.05, ease:'power3.out', stagger:0.14,
-            scrollTrigger:{ trigger:'.hero-below', start:'top 85%', once:true } });
+          // 뷰포트에 들어올 때마다 Fade Up 재생 (위/아래 양방향), 벗어나면 리셋 → 다시 올라와도 재생됨
+          gsap.fromTo(belowItems, { autoAlpha:0, y:44 },
+            { autoAlpha:1, y:0, duration:1.05, ease:'power3.out', stagger:0.14,
+              scrollTrigger:{ trigger:'.hero-below', start:'top 85%', toggleActions:'restart none restart reverse' } });
         }
       })();
 
@@ -825,8 +827,9 @@
         const isMobile = () => window.matchMedia('(max-width:768px)').matches;
         // 하나의 섹션 스크럽 타임라인 — 체인 방식: 각 카드는 자기 index만큼의 구간에 걸쳐 한 칸씩 내려옴.
         //   card2는 1구간(0→1), card3은 2구간(0→2), … 즉 card_i는 한 구간마다 바로 이전 카드 위치를 거쳐 내려와 순차적으로 분리됨.
+        // 일반 문서 흐름 유지(핀 아님) — 첫 카드가 상단에서 여유 있게 떨어진 위치(top 35%)에서 시작해, 분리되는 카드가 화면 안에 온전히 보임
         const tl = gsap.timeline({ defaults:{ ease:'none' },
-          scrollTrigger:{ trigger: container, start:'top 82%', end:'bottom bottom', scrub:true, invalidateOnRefresh:true } });
+          scrollTrigger:{ trigger: container, start:'top 35%', end:'bottom bottom', scrub:true, invalidateOnRefresh:true } });
         for (let i = 1; i < cards.length; i++) {
           const card = cards[i];
           // 시작: 1번 위치로 포개짐(y=-i칸) → duration i 동안 한 구간마다 한 칸씩 내려와 자기 자리(0)에 도달
