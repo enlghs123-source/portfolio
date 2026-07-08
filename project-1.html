@@ -8,7 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Poppins:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Poppins:wght@200;300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 
 <script src="https://cdn.tailwindcss.com"></script>
@@ -31,20 +31,21 @@
 
   /* ===== 타입 스케일 (Header/Body 체계) ===== */
   :root{
-    --fs-display-1:clamp(4.5rem,12vw,10.5rem); /* NEW · Hero 전용 · Display 2 ×1.5 · 72 → 168 */
-    --fs-display-2:clamp(3rem,8vw,7rem);       /* 기존 Display · 48 → 112 */
-    --fs-h1:clamp(3rem,5.6vw,4.5rem);    /* 48 → 72 */
-    --fs-h2:clamp(1.5rem,3vw,2.5rem);    /* 24 → 40 */
-    --fs-h3:clamp(1.25rem,1.9vw,1.75rem);/* 20 → 28 */
-    --fs-body-1:1.5rem;                  /* 24 · Body 1 */
-    --fs-body-2:1.25rem;                 /* 20 · Body 2 */
-    --fs-body-3:1rem;                    /* 16 · Body 3 (신규) */
-    --fs-caption:.75rem;                 /* 12 */
+    /* 반응형 타입 스케일 — PC 최대값은 기존 유지, 태블릿·모바일에서 clamp로 자연 축소 */
+    --fs-display-1:clamp(48px,12vw,168px); /* Hero 전용 · 데스크톱 168 유지 */
+    --fs-display-2:clamp(32px,8vw,112px);  /* 기존 Display · 112 유지 */
+    --fs-h1:clamp(40px,5.6vw,72px);        /* 72 유지 · 모바일 위계 확보 */
+    --fs-h2:clamp(30px,3.8vw,48px);        /* 44 → 48 (4배수 1단계↑) */
+    --fs-h3:clamp(22px,2.4vw,28px);        /* 28 유지 */
+    --fs-body-1:clamp(17px,1.8vw,24px);    /* 24 유지 · 모바일 한 단계↓ */
+    --fs-body-2:clamp(16px,1.5vw,20px);    /* 20 유지 · 모바일 한 단계↓ */
+    --fs-body-3:clamp(14px,1.2vw,16px);    /* 16 유지 · 모바일 한 단계↓ */
+    --fs-caption:clamp(11px,0.9vw,12px);   /* 12 유지 */
   }
   .t-display-1{ font-size:var(--fs-display-1); font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; line-height:1.0; letter-spacing:-0.03em; }
   .t-display-2{ font-size:var(--fs-display-2); font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; line-height:1.02; letter-spacing:-0.03em; }
   .t-h1{ font-size:var(--fs-h1); font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; line-height:1.05; letter-spacing:-0.02em; }
-  .t-h2{ font-size:var(--fs-h2); font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; line-height:1.3; letter-spacing:-0.015em; }
+  .t-h2{ font-size:var(--fs-h2); font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:700; line-height:1.3; letter-spacing:-0.015em; }
   .t-h3{ font-size:var(--fs-h3); font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; line-height:1.25; letter-spacing:-0.01em; }
   .t-body-1{ font-size:var(--fs-body-1); font-family:'Poppins','Pretendard',sans-serif; font-weight:400; line-height:1.5; }   /* 24 · lh 150% */
   .t-body-2{ font-size:var(--fs-body-2); font-family:'Poppins','Pretendard',sans-serif; font-weight:400; line-height:1.5; }   /* 20 · lh 150% */
@@ -54,8 +55,21 @@
   #desk-research, #desk-research *:not(img):not(svg):not(path){ color:#ffffff; }
   /* Desk Research: h3 계열 제외한 텍스트 weight 한 단계씩 다운(600→500 / 500→400 / 400→300) */
   #desk-research p:not(.t-h3){ font-weight:300; }
-  #desk-research .t-h2{ font-weight:500; }
+  #desk-research .t-h2{ font-weight:700; }
   #desk-research b, #desk-research .font-600{ font-weight:500; }
+  /* 리서치 카드(desk-1,2,3) 텍스트만 한 단계 더 다운 · body-1(헤드라인) 제외 */
+  #desk-research article p:not(.t-body-1){ font-weight:200; }   /* 라벨·본문 300→200 */
+  #desk-research article b, #desk-research article .font-600{ font-weight:400; }  /* 강조 500→400 */
+  #desk-research article h3.t-body-1{ font-weight:600; }  /* 카드 헤드라인 600 */
+  #desk-research article .t-caption, #desk-research article p.t-body-3{ color:#c1c1c1; }  /* 라벨·본문 색 (강조 b 제외) */
+  /* 결론 박스: 15% 투명 fill(뒤 다크 비침) + 반대방향(315°) 그라데이션 border 링 */
+  #desk-research .concl-box p.font-700{ font-weight:700; }  /* 결론 첫 줄 bold */
+  .concl-box{ position:relative; border-radius:16px;
+    background:linear-gradient(315deg, rgba(224,199,164,0.05) 0%, rgba(248,224,192,0.15) 100%); }
+  .concl-box::before{ content:''; position:absolute; inset:0; border-radius:inherit; padding:1px;
+    background:linear-gradient(135deg, rgba(228,196,156,0.6) 0%, rgba(251,222,184,0.6) 100%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
   .em { font-family:'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; letter-spacing:.01em; }
   .site-pad { padding-left:7vw; padding-right:7vw; }
   @media (max-width:900px){ .site-pad { padding-left:24px; padding-right:24px; } }
@@ -179,8 +193,8 @@
   </div>
 </section>
 
-<!-- ============================ 2. PROJECT OVERVIEW (2컬럼 · 개요/역할/기간/툴) ============================ -->
-<section class="site-pad pt-24 sm:pt-40 pb-24 sm:pb-40">
+<!-- ============================ 2. PROJECT OVERVIEW (+ Full Image 한 그룹) ============================ -->
+<section class="site-pad pt-24 sm:pt-40 pb-14 sm:pb-24">
   <div class="grid lg:grid-cols-[3fr_7fr] gap-y-12 gap-x-16 items-start">
     <div class="reveal">
       <p class="t-caption text-subtle mb-6">Overview</p>
@@ -201,14 +215,14 @@
 </section>
 
 <!-- ============================ 3. FULL IMAGE (대표 이미지 · 가로 100% · 클립 리빌 + 패럴랙스) ============================ -->
-<section class="pb-24 sm:pb-40">
+<section class="pb-[207px] sm:pb-[369px]">
   <div class="img-reveal w-full h-[58vh] sm:h-[88vh] overflow-hidden bg-cream">
     <img class="parallax w-full h-[120%] object-cover" src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=2000&auto=format&fit=crop" alt="Moodle Diary 대표 화면 (임시 이미지 · 실제 앱 화면으로 교체)">
   </div>
 </section>
 
 <!-- ============================ 4. DESK RESEARCH ============================ -->
-<section id="desk-research" class="site-pad pb-24 sm:pb-40">
+<section id="desk-research" class="site-pad pb-[207px] sm:pb-[369px]">
   <div class="grid lg:grid-cols-[3fr_7fr] gap-y-14 gap-x-16 items-start">
     <div class="reveal">
       <p class="t-caption text-subtle mb-6" style="color:#86868b">Desk Research</p>
@@ -218,52 +232,288 @@
     <div>
     <!-- 리서치 카드 3장 (상단 GIF · 아이콘 · 라벨 · 헤드라인 · 본문) -->
     <div class="grid sm:grid-cols-3 gap-4 sm:gap-6">
-      <article class="reveal flex flex-col text-center bg-[#2A2A30] ring-1 ring-line rounded-2xl p-6">
-        <div class="aspect-[4/3] rounded-xl overflow-hidden bg-paper mb-6">
-          <img class="w-full h-full object-cover" src="img/Moodle Diary/desk-1.gif" alt="일기 앱 사용 패턴" loading="lazy">
+      <article class="reveal flex flex-col text-center rounded-2xl p-8 sm:p-9" style="background:linear-gradient(135deg, #3d3d47 0%, #232328 100%)">
+        <div class="aspect-[4/3] rounded-xl overflow-hidden mb-6 flex items-center justify-center">
+          <img class="max-w-[90%] max-h-[90%] object-contain" src="img/Moodle Diary/desk-1.png" alt="일기 앱 사용 패턴" loading="lazy">
         </div>
-        <span class="w-2.5 h-2.5 rounded-[3px] bg-subtle/60 mx-auto mb-4"></span>
+        <img src="img/Moodle%20Diary/desk_object.svg" alt="" class="block mx-auto mb-4" style="width:11.2px;height:11.2px;" />
         <p class="t-caption text-subtle mb-3">일기 앱 사용 패턴</p>
         <h3 class="t-body-1 text-ink leading-snug mb-4">시작은 쉽지만<br>지속이 어렵다.</h3>
-        <p class="text-sm text-muted leading-relaxed">다운로드 후 <b class="font-600 text-fg">이탈률은 급증</b>하고 기록 지속률은 하락해요. 진입 장벽을 낮추지 않으면 습관 형성이 어려워요.</p>
+        <p class="t-body-3 text-muted leading-relaxed">다운로드 후 <b class="font-600 text-fg">이탈률은 급증</b>하고 기록 지속률은 하락해요. 진입 장벽을 낮추지 않으면 습관 형성이 어려워요.</p>
       </article>
 
-      <article class="reveal flex flex-col text-center bg-[#2A2A30] ring-1 ring-line rounded-2xl p-6">
-        <div class="aspect-[4/3] rounded-xl overflow-hidden bg-paper mb-6">
-          <img class="w-full h-full object-cover" src="img/Moodle Diary/desk-2.gif" alt="글쓰기의 심리적 부담" loading="lazy">
+      <article class="reveal flex flex-col text-center rounded-2xl p-8 sm:p-9" style="background:linear-gradient(135deg, #3d3d47 0%, #232328 100%)">
+        <div class="aspect-[4/3] rounded-xl overflow-hidden mb-6 flex items-center justify-center">
+          <img class="max-w-[90%] max-h-[90%] object-contain" src="img/Moodle Diary/desk-2.png" alt="글쓰기의 심리적 부담" loading="lazy">
         </div>
-        <span class="w-2.5 h-2.5 rounded-[3px] bg-subtle/60 mx-auto mb-4"></span>
+        <img src="img/Moodle%20Diary/desk_object.svg" alt="" class="block mx-auto mb-4" style="width:11.2px;height:11.2px;" />
         <p class="t-caption text-subtle mb-3">글쓰기의 심리적 부담</p>
         <h3 class="t-body-1 text-ink leading-snug mb-4">감정은 있는데<br>말로 못 쓰겠다.</h3>
-        <p class="text-sm text-muted leading-relaxed"><b class="font-600 text-fg">응답자 60% 이상</b>이 감정을 글로 표현하는 데 어려움을 느낀다고 답했어요.</p>
+        <p class="t-body-3 text-muted leading-relaxed"><b class="font-600 text-fg">응답자 60% 이상</b>이 감정을 글로 표현하는 데 어려움을 느낀다고 답했어요.</p>
       </article>
 
-      <article class="reveal flex flex-col text-center bg-[#2A2A30] ring-1 ring-line rounded-2xl p-6">
-        <div class="aspect-[4/3] rounded-xl overflow-hidden bg-paper mb-6">
-          <img class="w-full h-full object-cover" src="img/Moodle Diary/desk-3.gif" alt="그림일기에 대한 인식" loading="lazy">
+      <article class="reveal flex flex-col text-center rounded-2xl p-8 sm:p-9" style="background:linear-gradient(135deg, #3d3d47 0%, #232328 100%)">
+        <div class="aspect-[4/3] rounded-xl overflow-hidden mb-6 flex items-center justify-center">
+          <img class="max-w-[90%] max-h-[90%] object-contain" src="img/Moodle Diary/desk-3.png" alt="그림일기에 대한 인식" loading="lazy">
         </div>
-        <span class="w-2.5 h-2.5 rounded-[3px] bg-subtle/60 mx-auto mb-4"></span>
+        <img src="img/Moodle%20Diary/desk_object.svg" alt="" class="block mx-auto mb-4" style="width:11.2px;height:11.2px;" />
         <p class="t-caption text-subtle mb-3">그림일기에 대한 인식</p>
         <h3 class="t-body-1 text-ink leading-snug mb-4">그림일기 로망,<br>하지만 못 그린다.</h3>
-        <p class="text-sm text-muted leading-relaxed">그림일기에 <b class="font-600 text-fg">감성적 로망</b>을 갖고 있지만, 그림 실력 부족으로 시작조차 못해요.</p>
+        <p class="t-body-3 text-muted leading-relaxed">그림일기에 <b class="font-600 text-fg">감성적 로망</b>을 갖고 있지만, 그림 실력 부족으로 시작조차 못해요.</p>
       </article>
     </div>
 
     <!-- 결론: 리서치 → 아이디어 도출 (카드 영역과 같은 컬럼 안) -->
     <div class="reveal flex flex-col items-center text-center mt-16 sm:mt-24">
-      <span class="block w-px h-16 sm:h-20 bg-line mb-9 sm:mb-11"></span>
-      <p class="t-h3 text-ink mb-8 sm:mb-10">그래서 떠올렸어요.</p>
-      <div class="bg-cream ring-1 ring-line rounded-2xl px-8 py-8 sm:px-14 sm:py-11 w-full">
-        <p class="t-body-1 text-ink font-600 leading-snug mb-2">AI 기술을 활용하면, 사용자가 글을 쓰지 않아도</p>
-        <p class="t-body-2 text-muted leading-relaxed">누구나 감정을 그림으로 기록할 수 있겠다는 아이디어에서 출발했어요.</p>
+      <svg class="block mx-auto mb-16 sm:mb-24" width="16" height="72" viewBox="0 0 16 72" fill="none" stroke="#ffffff" stroke-width="1.4" aria-hidden="true">
+        <path d="M8 0 V67 M2.5 60 L8 67 L13.5 60" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h3 class="t-h3 mb-8 sm:mb-10" style="color:#D9CBB6;font-weight:700">그래서 떠올렸어요.</h3>
+      <div class="concl-box px-8 py-8 sm:px-14 sm:py-11 w-full">
+        <p class="t-body-1 text-ink font-700 leading-snug mb-2">AI 기술을 활용하면, 사용자가 글을 쓰지 않아도</p>
+        <p class="t-body-1 text-muted leading-snug">누구나 감정을 그림으로 기록할 수 있겠다는 아이디어에서 출발했어요.</p>
       </div>
     </div>
     </div>
   </div>
 </section>
 
+<!-- ============================ 4-2. WHO (문제를 겪던 두 사람 · 페르소나) ============================ -->
+<section class="site-pad pb-[207px] sm:pb-[369px]">
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
+    <div class="reveal">
+      <p class="t-caption text-subtle mb-6">WHO</p>
+      <h2 class="t-h2 text-ink">이 문제를 겪고 있던<br>두 사람이 있었어요.</h2>
+      <p class="t-body-2 text-muted mt-4">시작은 달랐지만, <b class="text-ink font-600">포기한 순간</b>은 닮아 있었어요.</p>
+    </div>
+    <div>
+  <div class="grid md:grid-cols-2 gap-4 sm:gap-6">
+    <!-- 페르소나 1 -->
+    <article class="reveal rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center" style="background:linear-gradient(135deg,#34343b 0%,#232328 100%)">
+      <div class="w-[222px] h-[222px] rounded-full overflow-hidden bg-[#2b2932] mb-6 p-[6.3px] flex items-center justify-center">
+        <img src="img/Moodle%20Diary/persona-1.gif" alt="이수아" class="w-full h-full object-contain" loading="lazy">
+      </div>
+      <p class="mb-1"><span class="text-ink t-body-1" style="font-weight:700">이수아</span> <span class="text-subtle text-sm">29세 / 대학원생</span></p>
+      <p class="font-600 text-ink mb-5">글로도, 그림으로도 표현하기 어려웠어요.</p>
+      <div class="flex flex-wrap justify-center gap-2 mb-6">
+        <span class="rounded-full border px-3 py-1 text-xs text-muted" style="border-color:rgba(255,255,255,0.25)">기록 의지 있음</span>
+        <span class="rounded-full border px-3 py-1 text-xs text-muted" style="border-color:rgba(255,255,255,0.25)">빈 페이지 압박</span>
+        <span class="rounded-full border px-3 py-1 text-xs text-muted" style="border-color:rgba(255,255,255,0.25)">그림 표현 한계</span>
+      </div>
+      <img src="img/Moodle%20Diary/desk_object.svg" alt="" class="mb-3" style="width:11.2px;height:11.2px">
+      <p class="t-body-3 text-white leading-relaxed mb-6">쓰고 싶어도 빈 페이지 앞에서 막막하고,<br>그리고 싶어도 손재주가 없어 결국 포기했어요.</p>
+      <div class="w-full rounded-xl px-5 py-4 mt-auto text-sm text-muted leading-relaxed" style="background:rgba(255,255,255,0.04)">그림일기를 꿈꿨지만 실력이 없어 시작조차 못 했고,<br>빈 페이지 압박에 글도 결국 못 썼어요.</div>
+      <svg class="my-3" width="14" height="26" viewBox="0 0 14 26" fill="none" stroke="#6E6E78" stroke-width="1.3" aria-hidden="true"><path d="M7 0 V22 M2.5 17 L7 22 L11.5 17" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="w-full rounded-xl px-5 py-4 min-h-[100px] flex flex-col justify-center" style="background:rgba(18,128,128,0.22);border:1px solid rgba(52,216,216,0.5)">
+        <p class="text-sm" style="color:#5fe3e3">AI가 감정을 그림으로 대신 그려준다면?</p>
+        <p class="text-sm font-700 mt-1" style="color:#a6f5f5">그냥 오늘 기분만 고르면 돼요.</p>
+      </div>
+    </article>
+
+    <!-- 페르소나 2 -->
+    <article class="reveal rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center" style="background:linear-gradient(135deg,#34343b 0%,#232328 100%)">
+      <div class="w-[222px] h-[222px] rounded-full overflow-hidden bg-[#2b2932] mb-6 p-[6.3px] flex items-center justify-center">
+        <img src="img/Moodle%20Diary/persona-2.gif" alt="박민준" class="w-full h-full object-contain" loading="lazy">
+      </div>
+      <p class="mb-1"><span class="text-ink t-body-1" style="font-weight:700">박민준</span> <span class="text-subtle text-sm">29세 / 스타트업 개발자</span></p>
+      <p class="font-600 text-ink mb-5">기록 습관 유지의 어려워요.</p>
+      <div class="flex flex-wrap justify-center gap-2 mb-6">
+        <span class="rounded-full border px-3 py-1 text-xs text-muted" style="border-color:rgba(255,255,255,0.25)">빠른 일상</span>
+        <span class="rounded-full border px-3 py-1 text-xs text-muted" style="border-color:rgba(255,255,255,0.25)">습관 형성 실패</span>
+        <span class="rounded-full border px-3 py-1 text-xs text-muted" style="border-color:rgba(255,255,255,0.25)">반복 이탈</span>
+      </div>
+      <img src="img/Moodle%20Diary/desk_object.svg" alt="" class="mb-3" style="width:11.2px;height:11.2px">
+      <p class="t-body-3 text-white leading-relaxed mb-6">처음엔 잘 쓰다가 며칠 빠지면<br>밀린 날을 채워야 할 것 같은 압박이 생기고,<br>결국 앱이 부담이 돼서 지워버렸어요.</p>
+      <div class="w-full rounded-xl px-5 py-4 mt-auto text-sm text-muted leading-relaxed" style="background:rgba(255,255,255,0.04)">며칠 빠지면 죄책감이 생기고, 그게 부담이 되다 보니<br>결국 앱을 지워버리는 패턴이 반복됐어요.</div>
+      <svg class="my-3" width="14" height="26" viewBox="0 0 14 26" fill="none" stroke="#6E6E78" stroke-width="1.3" aria-hidden="true"><path d="M7 0 V22 M2.5 17 L7 22 L11.5 17" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="w-full rounded-xl px-5 py-4 min-h-[100px] flex flex-col justify-center" style="background:rgba(18,128,128,0.22);border:1px solid rgba(52,216,216,0.5)">
+        <p class="text-sm" style="color:#5fe3e3">키워드 하나만 골라도 기록이 완성된다면?</p>
+        <p class="text-sm font-700 mt-1" style="color:#a6f5f5">오늘 하루를 30초면 남길 수 있어요.</p>
+      </div>
+    </article>
+  </div>
+
+  <!-- 결론 화살표 + Solution 통합 문장 -->
+  <div class="reveal flex flex-col items-center mt-16 sm:mt-24">
+    <svg class="block mx-auto mb-16 sm:mb-24" width="16" height="72" viewBox="0 0 16 72" fill="none" stroke="#ffffff" stroke-width="1.4" aria-hidden="true"><path d="M8 0 V67 M2.5 60 L8 67 L13.5 60" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="concl-box w-full px-8 py-8 sm:px-12 sm:py-10 flex flex-col items-center text-center gap-4 sm:gap-5">
+      <span class="t-caption text-subtle" style="text-decoration:underline;text-underline-offset:4px">Solution</span>
+      <p class="t-body-1 text-ink font-600 leading-snug">두 사람 모두에게 필요한 건 더 쉬운 시작이었어요. 글 대신 그림으로,<br class="hidden sm:block">긴 문장 대신 <span class="rounded-md px-2 py-0.5 mx-0.5" style="background:rgba(255,255,255,0.09)">키워드</span> 하나로. 나머지는 <span class="rounded-md px-2 py-0.5 mx-0.5" style="background:rgba(255,255,255,0.09)">AI가</span> 채워주는 일기예요.</p>
+    </div>
+  </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 4-3. DECISION (세 가지 결정 · Problem/Solution) ============================ -->
+<section class="site-pad pb-[207px] sm:pb-[369px]">
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
+    <div class="reveal">
+      <p class="t-caption text-subtle mb-6">DECISION</p>
+      <h2 class="t-h2 text-ink">디자인하면서 가장 고민했던 게 뭔가요?</h2>
+      <p class="t-body-2 text-muted mt-4"><b class="text-ink font-600">세 가지</b> 결정이 특히 어려웠어요.</p>
+    </div>
+    <div>
+  <div class="flex flex-col gap-4 sm:gap-6">
+    <!-- 01 -->
+    <div class="grid lg:grid-cols-[1fr_auto_1fr] gap-4 lg:gap-6 items-stretch">
+      <article class="reveal rounded-2xl p-7 sm:p-9 text-center flex flex-col" style="background:linear-gradient(135deg,#34343b 0%,#232328 100%)">
+        <span class="text-sm text-subtle mb-4 pb-2 border-b self-center" style="border-color:rgba(255,255,255,0.3)">Problem 01</span>
+        <h3 class="t-body-1 text-ink font-700 leading-snug mb-4">감정 입력을<br>얼마나 단순하게 만들까?</h3>
+        <p class="t-body-3 text-muted leading-relaxed">무슨 감정인지 알면서도,<br>막상 글로 쓰려니 손이 멈췄어요.</p>
+      </article>
+      <div class="hidden lg:flex items-center justify-center text-2xl tracking-tighter" style="color:#6fbcbc">›››</div>
+      <article class="reveal rounded-2xl p-7 sm:p-9 text-center flex flex-col" style="background:linear-gradient(135deg,rgba(35,95,95,0.30) 0%,rgba(18,45,50,0.30) 100%);border:1px solid rgba(52,216,216,0.5)">
+        <span class="text-sm mb-4 pb-2 border-b self-center" style="color:#7fd0d0;border-color:rgba(120,200,200,0.3)">Solution 01</span>
+        <h3 class="t-body-1 font-700 leading-snug mb-4" style="color:#aee7e7">컬러 카드 → 세부 감정 → 키워드<br>3단계 구조</h3>
+        <p class="t-body-3 leading-relaxed" style="color:#9fd4d4">색으로 감정을 고르고, 그 감정을 가장 잘 나타내는 표현 하나만 고르면 돼요. 글 없이도 오늘 하루를 남길 수 있어요.</p>
+      </article>
+    </div>
+    <!-- 02 -->
+    <div class="grid lg:grid-cols-[1fr_auto_1fr] gap-4 lg:gap-6 items-stretch">
+      <article class="reveal rounded-2xl p-7 sm:p-9 text-center flex flex-col" style="background:linear-gradient(135deg,#34343b 0%,#232328 100%)">
+        <span class="text-sm text-subtle mb-4 pb-2 border-b self-center" style="border-color:rgba(255,255,255,0.3)">Problem 02</span>
+        <h3 class="t-body-1 text-ink font-700 leading-snug mb-4">글을 아예 못 쓰는 날은<br>어떻게 하지?</h3>
+        <p class="t-body-3 text-muted leading-relaxed">기록하고 싶은 마음은 있었는데,<br>글이 도저히 안 써질 땐 어떻게 할지 몰랐어요.</p>
+      </article>
+      <div class="hidden lg:flex items-center justify-center text-2xl tracking-tighter" style="color:#6fbcbc">›››</div>
+      <article class="reveal rounded-2xl p-7 sm:p-9 text-center flex flex-col" style="background:linear-gradient(135deg,rgba(35,95,95,0.30) 0%,rgba(18,45,50,0.30) 100%);border:1px solid rgba(52,216,216,0.5)">
+        <span class="text-sm mb-4 pb-2 border-b self-center" style="color:#7fd0d0;border-color:rgba(120,200,200,0.3)">Solution 02</span>
+        <h3 class="t-body-1 font-700 leading-snug mb-4" style="color:#aee7e7">키워드 모드<br>“무들이 대신 써드릴게요”</h3>
+        <p class="t-body-3 leading-relaxed" style="color:#9fd4d4">태그만 골라도 AI가 일기를 완성해줘요. “써야 한다”는 부담을 “골라도 된다”는 허락으로 바꿔버렸어요.</p>
+      </article>
+    </div>
+    <!-- 03 -->
+    <div class="grid lg:grid-cols-[1fr_auto_1fr] gap-4 lg:gap-6 items-stretch">
+      <article class="reveal rounded-2xl p-7 sm:p-9 text-center flex flex-col" style="background:linear-gradient(135deg,#34343b 0%,#232328 100%)">
+        <span class="text-sm text-subtle mb-4 pb-2 border-b self-center" style="border-color:rgba(255,255,255,0.3)">Problem 03</span>
+        <h3 class="t-body-1 text-ink font-700 leading-snug mb-4">달력에서 그림을<br>제대로 볼 수 없을까?</h3>
+        <p class="t-body-3 text-muted leading-relaxed">달력에선 그림이 작아 썸네일로만 보였는데,<br>마음에 안 들어도 바꿀 방법이 없었어요.</p>
+      </article>
+      <div class="hidden lg:flex items-center justify-center text-2xl tracking-tighter" style="color:#6fbcbc">›››</div>
+      <article class="reveal rounded-2xl p-7 sm:p-9 text-center flex flex-col" style="background:linear-gradient(135deg,rgba(35,95,95,0.30) 0%,rgba(18,45,50,0.30) 100%);border:1px solid rgba(52,216,216,0.5)">
+        <span class="text-sm mb-4 pb-2 border-b self-center" style="color:#7fd0d0;border-color:rgba(120,200,200,0.3)">Solution 03</span>
+        <h3 class="t-body-1 font-700 leading-snug mb-4" style="color:#aee7e7">캘린더 뷰 + 리스트 뷰<br>두 가지 방식</h3>
+        <p class="t-body-3 leading-relaxed" style="color:#9fd4d4">달력에선 흐름을 한눈에 보고, 리스트에선 그림을 크게 확인할 수 있어요. 보는 방식은 원하는 대로 선택하면 돼요.</p>
+      </article>
+    </div>
+  </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 4-4. BI DESIGN (로고 컨셉) ============================ -->
+<section class="site-pad pb-[207px] sm:pb-[369px]">
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-center">
+    <div class="reveal">
+      <p class="t-caption text-subtle mb-6">BI Design</p>
+      <h2 class="t-h2 text-ink">사람의 감정을<br>담은 AI붓</h2>
+      <p class="t-body-2 text-muted mt-4">사람 + AI붓 + 감정</p>
+    </div>
+    <!-- 로고 조합 공식 (아이콘·최종 로고는 이미지 자리) -->
+    <div class="reveal flex items-center justify-center flex-wrap gap-3 sm:gap-5">
+      <span class="w-12 h-12 rounded-xl bg-[#2c2c31] flex items-center justify-center text-white/70 text-xs">사람</span>
+      <span class="text-subtle">+</span>
+      <span class="w-12 h-12 rounded-xl bg-[#2c2c31] flex items-center justify-center text-white/70 text-xs">AI붓</span>
+      <span class="text-subtle">+</span>
+      <span class="w-12 h-12 rounded-xl bg-[#2c2c31] flex items-center justify-center text-white/70 text-xs">감정</span>
+      <span class="hidden sm:block w-12 h-px bg-line mx-1"></span>
+      <span class="w-20 h-20 rounded-2xl bg-[#2c2c31] ring-1 ring-line flex items-center justify-center text-white/40 text-xs">로고</span>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 4-5. DESIGN SYSTEM (컬러 · 타이포 · 아이콘) ============================ -->
+<section class="site-pad pb-[207px] sm:pb-[369px]">
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
+    <div class="reveal">
+      <p class="t-caption text-subtle mb-6">Design System</p>
+      <h2 class="t-h2 text-ink">디자인 시스템</h2>
+    </div>
+    <div>
+
+  <!-- Color Styles -->
+  <h3 class="reveal text-ink font-700 text-lg mb-6">Color Styles</h3>
+  <div class="reveal grid sm:grid-cols-2 gap-3 mb-3">
+    <div class="rounded-xl p-5 h-24 flex flex-col justify-between" style="background:#607D8B;color:#fff"><span class="font-700">Blue Gray</span><span class="text-sm opacity-80">607D8B</span></div>
+    <div class="rounded-xl p-5 h-24 flex flex-col justify-between" style="background:#CED7DB;color:#1F1F1F"><span class="font-700">Blue Gray Light</span><span class="text-sm opacity-70">CED7DB</span></div>
+  </div>
+  <div class="reveal grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-16">
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between ring-1 ring-line" style="background:#FFFFFF;color:#1F1F1F"><span class="text-xs font-700">Gray 0</span><span class="text-xs opacity-70">FFFFFF</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#EEEEEE;color:#1F1F1F"><span class="text-xs font-700">Gray 50</span><span class="text-xs opacity-70">EEEEEE</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#D2D2D2;color:#1F1F1F"><span class="text-xs font-700">Gray 100</span><span class="text-xs opacity-70">D2D2D2</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#AFAFAF;color:#1F1F1F"><span class="text-xs font-700">Gray 200</span><span class="text-xs opacity-70">AFAFAF</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#898989;color:#fff"><span class="text-xs font-700">Gray 300</span><span class="text-xs opacity-80">898989</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#666666;color:#fff"><span class="text-xs font-700">Gray 400</span><span class="text-xs opacity-80">666666</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#444444;color:#fff"><span class="text-xs font-700">Gray 500</span><span class="text-xs opacity-80">444444</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#3A3A3A;color:#fff"><span class="text-xs font-700">Gray 600</span><span class="text-xs opacity-80">3A3A3A</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#303030;color:#fff"><span class="text-xs font-700">Gray 700</span><span class="text-xs opacity-80">303030</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#272727;color:#fff"><span class="text-xs font-700">Gray 800</span><span class="text-xs opacity-80">272727</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between ring-1 ring-line" style="background:#1F1F1F;color:#fff"><span class="text-xs font-700">Gray 900</span><span class="text-xs opacity-80">1F1F1F</span></div>
+  </div>
+
+  <!-- Emotion-Color -->
+  <h3 class="reveal text-ink font-700 text-lg mb-6">Emotion-Color</h3>
+  <div class="reveal grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-16">
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#e78600;color:#fff"><span class="text-sm font-700">기쁜</span><span class="text-xs opacity-90">e78600</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#ffcd00;color:#1F1F1F"><span class="text-sm font-700">즐거운</span><span class="text-xs opacity-80">ffcd00</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#ff20a8;color:#fff"><span class="text-sm font-700">설레는</span><span class="text-xs opacity-90">ff20a8</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#9be99b;color:#1F1F1F"><span class="text-sm font-700">평화로운</span><span class="text-xs opacity-80">9be99b</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#a1a1a1;color:#1F1F1F"><span class="text-sm font-700">무기력한</span><span class="text-xs opacity-80">a1a1a1</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#6e1842;color:#fff"><span class="text-sm font-700">긴장되는</span><span class="text-xs opacity-90">6e1842</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#004fc7;color:#fff"><span class="text-sm font-700">슬픈</span><span class="text-xs opacity-90">004fc7</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#ce1717;color:#fff"><span class="text-sm font-700">화나는</span><span class="text-xs opacity-90">ce1717</span></div>
+  </div>
+
+  <!-- Typography -->
+  <h3 class="reveal text-ink font-700 text-lg mb-6">Typography</h3>
+  <div class="reveal text-center mb-8">
+    <p class="font-700 text-ink" style="font-size:clamp(48px,9vw,110px);line-height:1;letter-spacing:-0.02em">Pretendard</p>
+    <p class="mt-4 text-muted text-sm"><b class="text-ink font-700">Bold</b> &nbsp; <span class="font-500">Medium</span> &nbsp; <span class="font-400">Regular</span></p>
+  </div>
+  <div class="reveal rounded-2xl p-8 sm:p-10 grid grid-cols-2 lg:grid-cols-4 gap-8" style="background:#202024">
+    <div class="text-center">
+      <p class="text-ink font-700 mb-4">Display</p>
+      <div class="flex items-center justify-center gap-1 flex-wrap text-white/80 text-sm">
+        <span class="rounded-full bg-[#2c2c31] w-10 h-10 flex items-center justify-center">44</span><span class="text-subtle">·</span>
+        <span class="rounded-full bg-[#2c2c31] w-10 h-10 flex items-center justify-center">32</span><span class="text-subtle">·</span>
+        <span class="rounded-full bg-[#2c2c31] w-10 h-10 flex items-center justify-center">28</span>
+      </div>
+    </div>
+    <div class="text-center">
+      <p class="text-ink font-700 mb-4">Headline</p>
+      <div class="flex items-center justify-center gap-1 flex-wrap text-white/80 text-sm">
+        <span class="rounded-full bg-[#2c2c31] w-10 h-10 flex items-center justify-center">24</span><span class="text-subtle">·</span>
+        <span class="rounded-full bg-[#2c2c31] w-10 h-10 flex items-center justify-center">22</span><span class="text-subtle">·</span>
+        <span class="rounded-full bg-[#2c2c31] w-10 h-10 flex items-center justify-center">20</span><span class="text-subtle">·</span>
+        <span class="rounded-full bg-[#2c2c31] w-10 h-10 flex items-center justify-center">18</span>
+      </div>
+    </div>
+    <div class="text-center">
+      <p class="text-ink font-700 mb-4">Body</p>
+      <div class="flex items-center justify-center gap-1 flex-wrap text-white/80 text-sm">
+        <span class="rounded-full bg-[#2c2c31] w-10 h-10 flex items-center justify-center">18</span><span class="text-subtle">·</span>
+        <span class="rounded-full bg-[#2c2c31] w-10 h-10 flex items-center justify-center">16</span><span class="text-subtle">·</span>
+        <span class="rounded-full bg-[#2c2c31] w-10 h-10 flex items-center justify-center">14</span>
+      </div>
+    </div>
+    <div class="text-center">
+      <p class="text-ink font-700 mb-4">Caption</p>
+      <div class="flex items-center justify-center gap-1 flex-wrap text-white/80 text-sm">
+        <span class="rounded-full bg-[#2c2c31] w-10 h-10 flex items-center justify-center">12</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Icon (이미지 자리) -->
+  <h3 class="reveal text-ink font-700 text-lg mt-16 mb-6">Icon</h3>
+  <div class="reveal rounded-2xl p-8 sm:p-12 flex items-center justify-center text-subtle text-sm" style="background:#202024;min-height:140px">아이콘 세트 이미지 자리</div>
+    </div>
+  </div>
+</section>
+
 <!-- ============================ 5. PROCESS (질문 → 분석 → 컨셉 → 시스템) ============================ -->
-<section class="site-pad pb-24 sm:pb-40">
+<section class="site-pad pb-[207px] sm:pb-[369px]">
   <p class="reveal t-caption text-subtle mb-6">Process</p>
   <h2 class="reveal t-h2 text-ink mb-14 sm:mb-20 max-w-[16ch]">질문에서<br>해답까지</h2>
   <ol class="flex flex-col border-b border-line">
@@ -291,7 +541,7 @@
 </section>
 
 <!-- ============================ 6. KEY SCREENS (따뜻하게 그림으로 남기다) ============================ -->
-<section class="site-pad pb-24 sm:pb-40">
+<section class="site-pad pb-[207px] sm:pb-[369px]">
   <p class="reveal t-caption text-subtle mb-6">Key Screens</p>
   <h2 class="reveal t-h2 text-ink mb-14 sm:mb-16">따뜻하게<br>그림으로 남기다</h2>
   <div class="grid sm:grid-cols-3 gap-4 sm:gap-6">
@@ -302,7 +552,7 @@
 </section>
 
 <!-- ============================ 7. RESULT / RETROSPECTIVE ============================ -->
-<section class="site-pad pb-24 sm:pb-40">
+<section class="site-pad pb-[207px] sm:pb-[369px]">
   <div class="reveal rounded-3xl bg-cream ring-1 ring-line p-8 sm:p-16">
     <p class="t-caption text-white/45 mb-8 sm:mb-10">Retrospective</p>
     <p class="font-display text-2xl sm:text-4xl font-500 text-ink leading-snug mb-12 sm:mb-16 max-w-[22ch]">남기지 않아도, 지나가도 남아있어요.</p>
@@ -315,7 +565,7 @@
 </section>
 
 <!-- ============================ 8. NEXT PROJECT ============================ -->
-<section class="site-pad pb-28 sm:pb-40">
+<section class="site-pad pb-[207px] sm:pb-[369px]">
   <div class="reveal flex flex-wrap items-center justify-between gap-6 border-t border-line pt-14">
     <h2 class="t-h2 text-ink">다음 프로젝트도 살펴보세요</h2>
     <a href="project-2.html" class="pick-time">Pick Time<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>

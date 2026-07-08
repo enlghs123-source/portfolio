@@ -46,15 +46,16 @@
      · nav 콘텐츠 높이는 그대로(상단), padding-bottom으로 배경 영역만 130px까지 확장 · 그 영역은 클릭 통과 */
   /* ===== 타입 스케일 (Header/Body 체계) ===== */
   :root{
-    --fs-display-1:clamp(4.5rem,12vw,10.5rem); /* NEW · Hero 전용 · Display 2 ×1.5 · 72 → 168 */
-    --fs-display-2:clamp(3rem,8vw,7rem);       /* 기존 Display · 48 → 112 */
-    --fs-h1:clamp(3rem,5.6vw,4.5rem);    /* 48 → 72 */
-    --fs-h2:clamp(1.5rem,3vw,2.5rem);    /* 24 → 40 */
-    --fs-h3:clamp(1.25rem,1.9vw,1.75rem);/* 20 → 28 */
-    --fs-body-1:1.5rem;                  /* 24 · Body 1 */
-    --fs-body-2:1.25rem;                 /* 20 · Body 2 */
-    --fs-body-3:1rem;                    /* 16 · Body 3 (신규) */
-    --fs-caption:.75rem;                 /* 12 */
+    /* 반응형 타입 스케일 — PC 최대값은 기존 유지, 태블릿·모바일에서 clamp로 자연 축소 */
+    --fs-display-1:clamp(48px,12vw,168px); /* Hero 전용 · 데스크톱 168 유지 */
+    --fs-display-2:clamp(32px,8vw,112px);  /* 기존 Display · 112 유지 */
+    --fs-h1:clamp(40px,5.6vw,72px);        /* 72 유지 · 모바일 위계 확보 */
+    --fs-h2:clamp(30px,3.8vw,48px);        /* 44 → 48 (4배수 1단계↑) */
+    --fs-h3:clamp(22px,2.4vw,28px);        /* 28 유지 */
+    --fs-body-1:clamp(17px,1.8vw,24px);    /* 24 유지 · 모바일 한 단계↓ */
+    --fs-body-2:clamp(16px,1.5vw,20px);    /* 20 유지 · 모바일 한 단계↓ */
+    --fs-body-3:clamp(14px,1.2vw,16px);    /* 16 유지 · 모바일 한 단계↓ */
+    --fs-caption:clamp(11px,0.9vw,12px);   /* 12 유지 */
   }
   #nav { color:#FFFFFF; width:100%; box-shadow:none; border:none; pointer-events:none; padding-bottom:70px;
     background-image:linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,.30) 35%, rgba(0,0,0,.12) 70%, rgba(0,0,0,0) 100%);
@@ -202,7 +203,7 @@
   .single-image-text { overflow:visible;
     display:flex; flex-direction:column; align-items:center; text-align:center;
     color:#fff; pointer-events:none; padding:0 6vw;
-    font-size:var(--fs-h2); line-height:1.45; font-weight:400; letter-spacing:-0.01em; }
+    font-size:clamp(24px,4.2vw,48px); line-height:1.45; font-weight:400; letter-spacing:-0.01em; }
   .single-image-text .line-wrapper { display:block; overflow:hidden; }
   .single-image-text .split-line { display:block; }
   .single-image-text .split-char { display:inline-block; will-change:transform; }
@@ -336,7 +337,7 @@
   .marquee { display:flex; gap:3rem; width:max-content; animation: slide 34s linear infinite; }
   @keyframes slide { to { transform: translateX(-50%); } }
   .marquee-wrap:hover .marquee { animation-play-state: paused; }
-  .mq-sep { height:0.8em; width:auto; flex:none; align-self:center; }
+  .mq-sep { height:24px; width:auto; flex:none; align-self:center; }
   .watermark { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:700; letter-spacing:-.04em; line-height:.8; color:transparent; -webkit-text-stroke:1px rgba(255,255,255,.10); }
 
   ::-webkit-scrollbar { width:11px; } ::-webkit-scrollbar-track { background:#F1F1EF; }
@@ -505,7 +506,7 @@
     <!-- 좌측: CTA 타이틀 + 이메일 버튼 (왼쪽 정렬) -->
     <div class="reveal text-left flex flex-col items-start" data-delay="1">
       <h2 class="text-[length:var(--fs-h1)] font-500 leading-[1.04] tracking-[-0.02em] text-ink" style="font-family:'Pretendard',sans-serif">다음 프로젝트,<br>함께 <span class="em" style="font-family:'Pretendard',sans-serif;font-style:normal">만들까요?</span></h2>
-      <a href="mailto:hello@example.com" class="inline-flex items-center gap-3 rounded-full bg-[#8B3DFF] px-7 py-4 mt-9 text-base font-600 text-white hover:bg-[#6E1CF6] transition-colors duration-200 cursor-pointer">hello@example.com<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      <a href="mailto:hello@example.com" class="inline-flex items-center gap-3 rounded-full bg-[#8B3DFF] px-[clamp(20px,3vw,28px)] py-[clamp(12px,1.6vw,16px)] mt-9 text-[clamp(15px,1.5vw,16px)] font-600 text-white hover:bg-[#6E1CF6] transition-colors duration-200 cursor-pointer">hello@example.com<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
     </div>
     <!-- 우측: 게시글 리스트 (제목 + 날짜, 행 단위 · 얇은 구분선) -->
     <div class="post-list reveal">
@@ -520,10 +521,10 @@
     </div>
   </div>
   <!-- 하단: 스킬 마퀴 (Contact 섹션을 마무리하는 띠 요소) -->
-  <div class="marquee-wrap border-t border-line overflow-hidden py-4 sm:py-5">
+  <div class="marquee-wrap border-t border-line overflow-hidden py-6 sm:py-[1.875rem]">
     <div class="marquee text-ink">
-      <span class="font-display text-2xl sm:text-3xl font-500 flex gap-12 whitespace-nowrap"><span>Figma</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Design Systems</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Prototyping</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>User Research</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Interaction Design</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Accessibility</span><img src="img/main/AI.svg" class="mq-sep" alt=""></span>
-      <span class="font-display text-2xl sm:text-3xl font-500 flex gap-12 whitespace-nowrap" aria-hidden="true"><span>Figma</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Design Systems</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Prototyping</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>User Research</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Interaction Design</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Accessibility</span><img src="img/main/AI.svg" class="mq-sep" alt=""></span>
+      <span class="font-display text-[clamp(22px,2.6vw,32px)] font-500 flex gap-12 whitespace-nowrap"><span>Figma</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Design Systems</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Prototyping</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>User Research</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Interaction Design</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Accessibility</span><img src="img/main/AI.svg" class="mq-sep" alt=""></span>
+      <span class="font-display text-[clamp(22px,2.6vw,32px)] font-500 flex gap-12 whitespace-nowrap" aria-hidden="true"><span>Figma</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Design Systems</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Prototyping</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>User Research</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Interaction Design</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Accessibility</span><img src="img/main/AI.svg" class="mq-sep" alt=""></span>
     </div>
   </div>
   </section><!-- /#contact -->
