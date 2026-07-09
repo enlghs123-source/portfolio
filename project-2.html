@@ -21,12 +21,14 @@
 
 <style>
   html { scroll-behavior: smooth; }
-  body { background:#FFFFFF; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
-  .em { font-family:'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 400; letter-spacing:.01em; }
+  body { background:#FFFFFF; -webkit-font-smoothing: antialiased; overflow-x: hidden; font-weight:300; }
+  /* 숫자 font-weight 유틸 (bold=700 / medium=500 / regular=300) */
+  .font-300{ font-weight:300; } .font-400{ font-weight:300; } .font-500{ font-weight:400; } .font-600{ font-weight:400; } .font-700{ font-weight:700; }
+  .em { font-family:'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 300; letter-spacing:.01em; }
   .site-pad { padding-left:7vw; padding-right:7vw; }
   @media (max-width:900px){ .site-pad { padding-left:24px; padding-right:24px; } }
 
-  .pf-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; border-radius:999px; padding:0.85em 1.7em; font-family:'Pretendard',sans-serif; font-weight:600; font-size:clamp(.9rem,1.05vw,1.05rem); cursor:pointer; transition:background-color .2s ease, color .2s ease, border-color .2s ease; }
+  .pf-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; border-radius:999px; padding:0.85em 1.7em; font-family:'Pretendard',sans-serif; font-weight:400; font-size:clamp(.9rem,1.05vw,1.05rem); cursor:pointer; transition:background-color .2s ease, color .2s ease, border-color .2s ease; }
   .pf-btn-primary { background:#1C60FF; color:#fff; }
   .pf-btn-primary:hover { background:#1750d8; }
   .pf-btn-ghost { border:1.5px solid #1C60FF; color:#1C60FF; background:transparent; }
@@ -46,8 +48,8 @@
 
 <header class="fixed top-0 inset-x-0 z-50 bg-paper/85 backdrop-blur-md border-b border-line">
   <div class="site-pad py-5 flex items-center justify-between">
-    <a href="portfolio.html" class="font-display text-base font-700 tracking-tight">홍길동<span class="text-subtle">.</span></a>
-    <a href="portfolio.html#about" class="inline-flex items-center gap-2 text-sm font-600 text-muted hover:text-ink transition-colors">
+    <a href="portfolio.html" class="font-display text-[length:var(--fs-body-3)] font-700 tracking-tight">홍길동<span class="text-subtle">.</span></a>
+    <a href="portfolio.html#about" class="inline-flex items-center gap-2 text-[length:var(--fs-body-3)] font-600 text-muted hover:text-ink transition-colors">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M11 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       프로젝트로 돌아가기
     </a>
@@ -56,11 +58,11 @@
 
 <!-- HERO -->
 <section class="site-pad pt-36 sm:pt-44 pb-12">
-  <p class="reveal text-xs tracking-[0.22em] uppercase text-point font-600 mb-5">Product Design · 2024</p>
+  <p class="reveal text-[length:var(--fs-caption)] tracking-[0.22em] uppercase text-point font-600 mb-5">Product Design · 2024</p>
   <h1 class="reveal font-display text-[clamp(2.4rem,6vw,5rem)] font-500 leading-[1.05] tracking-[-0.02em] text-ink max-w-[18ch]">
     셀러 통합 <span class="em">대시보드</span>
   </h1>
-  <p class="reveal text-lg text-muted leading-relaxed mt-7 max-w-2xl">
+  <p class="reveal text-[length:var(--fs-body-2)] text-muted leading-relaxed mt-7 max-w-2xl">
     여러 도구에 흩어져 있던 셀러 운영 데이터를 하나의 화면으로 통합하고, 정보 위계를 재설계해 핵심 지표에 빠르게 도달하도록 만든 프로젝트입니다.
   </p>
 </section>
@@ -76,8 +78,8 @@
 <section class="site-pad pb-24 sm:pb-32">
   <div class="grid lg:grid-cols-12 gap-12 lg:gap-16">
     <div class="lg:col-span-7 reveal">
-      <h2 class="font-display text-2xl sm:text-3xl font-600 text-ink mb-6">프로젝트 개요</h2>
-      <p class="text-muted leading-relaxed text-lg">
+      <h2 class="font-display text-[length:var(--fs-body-1)] sm:text-[length:var(--fs-h2)] font-600 text-ink mb-6">프로젝트 개요</h2>
+      <p class="text-muted leading-relaxed text-[length:var(--fs-body-2)]">
         셀러는 주문·정산·광고 데이터를 확인하기 위해 매번 여러 화면을 오가야 했습니다.
         데이터 밀도가 높은 화면을 정보 위계 기준으로 재구성하고, 핵심 지표를 상단에 고정해
         ‘오늘 무엇을 봐야 하는지’를 한눈에 파악할 수 있도록 설계했습니다.
@@ -85,10 +87,10 @@
     </div>
     <div class="lg:col-span-5 reveal">
       <dl class="divide-y divide-line border-y border-line">
-        <div class="py-4 flex justify-between gap-6"><dt class="text-sm text-subtle">담당 역할 (Role)</dt><dd class="text-sm font-600 text-ink text-right">Product Designer<br>데이터 시각화 · 정보 위계 · 인터랙션</dd></div>
-        <div class="py-4 flex justify-between gap-6"><dt class="text-sm text-subtle">기간</dt><dd class="text-sm font-600 text-ink text-right">2024.03 – 2024.08 (5개월)</dd></div>
-        <div class="py-4 flex justify-between gap-6"><dt class="text-sm text-subtle">사용 툴</dt><dd class="text-sm font-600 text-ink text-right">Figma · Amplitude · FigJam</dd></div>
-        <div class="py-4 flex justify-between gap-6"><dt class="text-sm text-subtle">플랫폼</dt><dd class="text-sm font-600 text-ink text-right">Web (Desktop)</dd></div>
+        <div class="py-4 flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">담당 역할 (Role)</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">Product Designer<br>데이터 시각화 · 정보 위계 · 인터랙션</dd></div>
+        <div class="py-4 flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">기간</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">2024.03 – 2024.08 (5개월)</dd></div>
+        <div class="py-4 flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">사용 툴</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">Figma · Amplitude · FigJam</dd></div>
+        <div class="py-4 flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">플랫폼</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">Web (Desktop)</dd></div>
       </dl>
     </div>
   </div>
@@ -96,31 +98,31 @@
 
 <!-- 문제 정의 -->
 <section class="site-pad pb-24 sm:pb-32">
-  <p class="reveal text-xs tracking-[0.22em] uppercase text-subtle mb-5">01 — Problem</p>
-  <h2 class="reveal font-display text-3xl sm:text-4xl font-500 text-ink mb-10 max-w-[20ch]">무엇이 문제였나</h2>
+  <p class="reveal text-[length:var(--fs-caption)] tracking-[0.22em] uppercase text-subtle mb-5">01 — Problem</p>
+  <h2 class="reveal font-display text-[length:var(--fs-h2)] sm:text-[length:var(--fs-h1)] font-500 text-ink mb-10 max-w-[20ch]">무엇이 문제였나</h2>
   <div class="grid sm:grid-cols-3 gap-px bg-line rounded-2xl overflow-hidden border border-line">
-    <div class="reveal bg-paper p-7"><div class="font-display text-3xl font-700 text-point">5개</div><p class="text-sm text-muted mt-3 leading-relaxed">셀러가 운영 현황을 보기 위해 오가야 했던 화면·도구의 수.</p></div>
-    <div class="reveal bg-paper p-7"><div class="font-display text-3xl font-700 text-point">2분+</div><p class="text-sm text-muted mt-3 leading-relaxed">핵심 지표 하나에 도달하기까지 걸리던 평균 시간.</p></div>
-    <div class="reveal bg-paper p-7"><div class="font-display text-3xl font-700 text-point">낮음</div><p class="text-sm text-muted mt-3 leading-relaxed">정보 위계 부재로 ‘무엇이 중요한지’ 판단이 어려웠습니다.</p></div>
+    <div class="reveal bg-paper p-7"><div class="font-display text-[length:var(--fs-h2)] font-700 text-point">5개</div><p class="text-[length:var(--fs-body-3)] text-muted mt-3 leading-relaxed">셀러가 운영 현황을 보기 위해 오가야 했던 화면·도구의 수.</p></div>
+    <div class="reveal bg-paper p-7"><div class="font-display text-[length:var(--fs-h2)] font-700 text-point">2분+</div><p class="text-[length:var(--fs-body-3)] text-muted mt-3 leading-relaxed">핵심 지표 하나에 도달하기까지 걸리던 평균 시간.</p></div>
+    <div class="reveal bg-paper p-7"><div class="font-display text-[length:var(--fs-h2)] font-700 text-point">낮음</div><p class="text-[length:var(--fs-body-3)] text-muted mt-3 leading-relaxed">정보 위계 부재로 ‘무엇이 중요한지’ 판단이 어려웠습니다.</p></div>
   </div>
 </section>
 
 <!-- 해결 과정 -->
 <section class="site-pad pb-24 sm:pb-32">
-  <p class="reveal text-xs tracking-[0.22em] uppercase text-subtle mb-5">02 — Process</p>
-  <h2 class="reveal font-display text-3xl sm:text-4xl font-500 text-ink mb-12 max-w-[20ch]">어떻게 해결했나</h2>
+  <p class="reveal text-[length:var(--fs-caption)] tracking-[0.22em] uppercase text-subtle mb-5">02 — Process</p>
+  <h2 class="reveal font-display text-[length:var(--fs-h2)] sm:text-[length:var(--fs-h1)] font-500 text-ink mb-12 max-w-[20ch]">어떻게 해결했나</h2>
   <ol class="grid sm:grid-cols-2 lg:grid-cols-4 gap-px bg-line rounded-2xl overflow-hidden border border-line">
-    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-sm font-600">01</span><h3 class="font-display text-lg font-600 mt-4 mb-2">과업 정의</h3><p class="text-sm text-muted leading-relaxed">셀러 인터뷰로 ‘매일 확인하는 지표’ 우선순위를 정렬.</p></li>
-    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-sm font-600">02</span><h3 class="font-display text-lg font-600 mt-4 mb-2">정보 위계</h3><p class="text-sm text-muted leading-relaxed">핵심 KPI를 상단 고정, 상세는 점진적 노출로 재구성.</p></li>
-    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-sm font-600">03</span><h3 class="font-display text-lg font-600 mt-4 mb-2">데이터 시각화</h3><p class="text-sm text-muted leading-relaxed">차트 유형을 데이터 성격에 맞게 정리하고 일관된 규칙 정의.</p></li>
-    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-sm font-600">04</span><h3 class="font-display text-lg font-600 mt-4 mb-2">검증</h3><p class="text-sm text-muted leading-relaxed">베타 셀러 대상 A/B 및 지표 도달 시간 측정으로 효과 확인.</p></li>
+    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-[length:var(--fs-body-3)] font-600">01</span><h3 class="font-display text-[length:var(--fs-body-2)] font-600 mt-4 mb-2">과업 정의</h3><p class="text-[length:var(--fs-body-3)] text-muted leading-relaxed">셀러 인터뷰로 ‘매일 확인하는 지표’ 우선순위를 정렬.</p></li>
+    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-[length:var(--fs-body-3)] font-600">02</span><h3 class="font-display text-[length:var(--fs-body-2)] font-600 mt-4 mb-2">정보 위계</h3><p class="text-[length:var(--fs-body-3)] text-muted leading-relaxed">핵심 KPI를 상단 고정, 상세는 점진적 노출로 재구성.</p></li>
+    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-[length:var(--fs-body-3)] font-600">03</span><h3 class="font-display text-[length:var(--fs-body-2)] font-600 mt-4 mb-2">데이터 시각화</h3><p class="text-[length:var(--fs-body-3)] text-muted leading-relaxed">차트 유형을 데이터 성격에 맞게 정리하고 일관된 규칙 정의.</p></li>
+    <li class="reveal bg-paper p-7"><span class="font-display text-point/50 text-[length:var(--fs-body-3)] font-600">04</span><h3 class="font-display text-[length:var(--fs-body-2)] font-600 mt-4 mb-2">검증</h3><p class="text-[length:var(--fs-body-3)] text-muted leading-relaxed">베타 셀러 대상 A/B 및 지표 도달 시간 측정으로 효과 확인.</p></li>
   </ol>
 </section>
 
 <!-- 주요 화면 -->
 <section class="site-pad pb-24 sm:pb-32">
-  <p class="reveal text-xs tracking-[0.22em] uppercase text-subtle mb-5">03 — Key Screens</p>
-  <h2 class="reveal font-display text-3xl sm:text-4xl font-500 text-ink mb-12">주요 화면</h2>
+  <p class="reveal text-[length:var(--fs-caption)] tracking-[0.22em] uppercase text-subtle mb-5">03 — Key Screens</p>
+  <h2 class="reveal font-display text-[length:var(--fs-h2)] sm:text-[length:var(--fs-h1)] font-500 text-ink mb-12">주요 화면</h2>
   <div class="grid sm:grid-cols-2 gap-5">
     <!-- 교체하세요: 주요 화면 이미지 -->
     <div class="reveal aspect-[16/10] rounded-2xl overflow-hidden bg-cream ring-1 ring-line"><img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=1100&auto=format&fit=crop" alt="주요 화면 1" class="w-full h-full object-cover"></div>
@@ -131,11 +133,11 @@
 <!-- 결과 및 성과 -->
 <section class="site-pad pb-24 sm:pb-32">
   <div class="reveal rounded-3xl bg-ink text-paper p-8 sm:p-14">
-    <p class="text-xs tracking-[0.22em] uppercase text-white/45 mb-8">04 — Results</p>
+    <p class="text-[length:var(--fs-caption)] tracking-[0.22em] uppercase text-white/45 mb-8">04 — Results</p>
     <div class="grid sm:grid-cols-3 gap-10">
-      <div><div class="font-display text-5xl font-700 text-point">−50%</div><p class="text-sm text-white/70 mt-3">핵심 지표 도달 시간 단축</p></div>
-      <div><div class="font-display text-5xl font-700">+22%</div><p class="text-sm text-white/70 mt-3">대시보드 일간 재방문율</p></div>
-      <div><div class="font-display text-5xl font-700">1개</div><p class="text-sm text-white/70 mt-3">화면으로 통합된 운영 데이터</p></div>
+      <div><div class="font-display text-[length:var(--fs-h2)] font-700 text-point">−50%</div><p class="text-[length:var(--fs-body-3)] text-white/70 mt-3">핵심 지표 도달 시간 단축</p></div>
+      <div><div class="font-display text-[length:var(--fs-h2)] font-700">+22%</div><p class="text-[length:var(--fs-body-3)] text-white/70 mt-3">대시보드 일간 재방문율</p></div>
+      <div><div class="font-display text-[length:var(--fs-h2)] font-700">1개</div><p class="text-[length:var(--fs-body-3)] text-white/70 mt-3">화면으로 통합된 운영 데이터</p></div>
     </div>
   </div>
 </section>
@@ -143,7 +145,7 @@
 <!-- CTA -->
 <section class="site-pad pb-28">
   <div class="reveal flex flex-wrap items-center justify-between gap-6 border-t border-line pt-12">
-    <h2 class="font-display text-2xl sm:text-3xl font-600 text-ink">다른 프로젝트도 살펴보세요</h2>
+    <h2 class="font-display text-[length:var(--fs-body-1)] sm:text-[length:var(--fs-h2)] font-600 text-ink">다른 프로젝트도 살펴보세요</h2>
     <div class="flex gap-3">
       <a href="portfolio.html#about" class="pf-btn pf-btn-ghost">목록으로</a>
       <a href="project-1.html" class="pf-btn pf-btn-primary">이전 프로젝트</a>
@@ -151,7 +153,7 @@
   </div>
 </section>
 
-<footer class="site-pad py-8 border-t border-line text-sm text-muted flex flex-col sm:flex-row items-center justify-between gap-3">
+<footer class="site-pad py-8 border-t border-line text-[length:var(--fs-body-3)] text-muted flex flex-col sm:flex-row items-center justify-between gap-3">
   <span class="font-display tracking-tight text-ink">홍길동<span class="text-subtle">.</span></span>
   <p>© 2026 홍길동. All rights reserved.</p>
 </footer>

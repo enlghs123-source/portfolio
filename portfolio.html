@@ -28,7 +28,7 @@
 
 <style>
   html { scroll-behavior: smooth; }
-  body { background:#1a1a1a; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  body { background:#1a1a1a; -webkit-font-smoothing: antialiased; overflow-x: hidden; font-weight:300; }
   /* Hero 배경(bg2.jpeg)에서 추출한 공통 그라데이션 토큰 — 보라·핑크·블루 (Hero · 소개 동일 디자인 언어) */
   :root { --grad-hero: linear-gradient(135deg, #B24CE8 0%, #6E1CF6 30%, #4A33F0 60%, #2A56F5 100%); }
   /* 세방고딕 볼드 (워드마크 "홍길동 2026" 전용) */
@@ -39,7 +39,7 @@
   /* 섹션 공통 좌우 패딩 — 프로젝트(pf-slide 0 7vw) 기준으로 통일 */
   .site-pad { padding-left:7vw; padding-right:7vw; }
   @media (max-width:900px){ .site-pad { padding-left:24px; padding-right:24px; } }
-  .em { font-family:'Poppins','Pretendard',Georgia,serif; font-style: italic; font-weight: 400; letter-spacing:.01em; }
+  .em { font-family:'Poppins','Pretendard',Georgia,serif; font-style: italic; font-weight: 300; letter-spacing:.01em; }
 
   /* ===== 다크 헤더 (FineNuts 컨셉) ===== */
   /* Nav: 경계선/그림자 없이, Nav 자체 background-image(gradient)만으로 아래까지 은은하게 녹아내림
@@ -57,6 +57,8 @@
     --fs-body-3:clamp(14px,1.2vw,16px);    /* 16 유지 · 모바일 한 단계↓ */
     --fs-caption:clamp(11px,0.9vw,12px);   /* 12 유지 */
   }
+  /* 숫자 font-weight 유틸 (bold=700 무조건 적용) */
+  .font-300{ font-weight:300; } .font-400{ font-weight:300; } .font-500{ font-weight:400; } .font-600{ font-weight:400; } .font-700{ font-weight:700; }
   #nav { color:#FFFFFF; width:100%; box-shadow:none; border:none; pointer-events:none; padding-bottom:70px;
     background-image:linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,.30) 35%, rgba(0,0,0,.12) 70%, rgba(0,0,0,0) 100%);
     background-repeat:no-repeat; background-position:top; background-size:100% 130px;
@@ -71,7 +73,7 @@
   /* wbbr 참고 루트 컬러 — 미니멀 pill (테두리 없이 채움, radius 50vw) : MENU · CLOSE */
   .nav-pill { --wb-bg:#1a1a1a; --wb-white:#fff; --wb-grey:#bababa; --wb-radius:50vw;
     display:inline-flex; align-items:center; border:none; outline:none; box-shadow:none; border-radius:var(--wb-radius);
-    padding:10px 22px; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-size:.78rem; font-weight:600; letter-spacing:.08em;
+    padding:10px 22px; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-size:.78rem; font-weight:400; letter-spacing:.08em;
     text-transform:uppercase; color:var(--wb-white); background:rgba(255,255,255,.1); cursor:pointer; white-space:nowrap; font-size:var(--fs-caption);
     transition:background .25s ease, color .25s ease; }
   .nav-pill:hover { background:var(--wb-white); color:var(--wb-bg); }
@@ -109,7 +111,7 @@
   @media (prefers-reduced-motion:reduce){ .hero-mq-track { animation:none; } }
   /* 설명: 흐름상 타이틀 아래 큰 여백 뒤, 중앙보다 살짝 오른쪽 배치 (콘텐츠 높이에 기여) */
   .hero-desc { position:relative; z-index:2; margin:clamp(140px,22vh,320px) 0 0 38%; width:min(44ch,44vw);
-    font-family:'Instrument Serif', Georgia, serif; font-weight:400; font-size:clamp(1.1rem,1.55vw,1.6rem);
+    font-family:'Instrument Serif', Georgia, serif; font-weight:300; font-size:clamp(1.1rem,1.55vw,1.6rem);
     line-height:1.5; color:rgba(255,255,255,.72); }
   @media (max-width:820px){
     .hero-mq-group { font-size:clamp(3rem,18vw,7rem); }
@@ -158,7 +160,7 @@
   .si-imgbox:hover img { transform:scale(1.05); } /* hover 시 이미지 살짝 확대 */
   /* 하단: 다음 프로젝트 제목만 (가로 100% 너비) */
   .si-nav { display:flex; align-items:center; width:100%; padding:clamp(16px,2.6vh,28px) 7vw 0; border-top:1px solid rgba(255,255,255,.14); }
-  .si-nav .nx-title { font-family:'Poppins','Pretendard',sans-serif; font-weight:600; font-size:clamp(1.1rem,1.9vw,1.7rem); color:#fff; }
+  .si-nav .nx-title { font-family:'Poppins','Pretendard',sans-serif; font-weight:400; font-size:clamp(1.1rem,1.9vw,1.7rem); color:#fff; }
   @media (max-width:900px){
     .stack-item{ padding:78px 0 18px; }
     .si-inner{ grid-template-columns:1fr; gap:20px; align-content:center; padding:0 24px; }
@@ -169,7 +171,7 @@
   }
   /* 프로젝트 버튼 (pf-text 하단) — #1C60FF, 둥근 버튼 */
   .pf-btns { display:flex; flex-wrap:wrap; gap:12px; margin-top:2em; }
-  .pf-btn { display:inline-flex; align-items:center; justify-content:center; border-radius:999px; padding:0.85em 1.7em; font-family:'Poppins','Pretendard',sans-serif; font-weight:600; font-size:clamp(.9rem,1.05vw,1.05rem); cursor:pointer; transition:background-color .2s ease, color .2s ease, border-color .2s ease; }
+  .pf-btn { display:inline-flex; align-items:center; justify-content:center; border-radius:999px; padding:0.85em 1.7em; font-family:'Poppins','Pretendard',sans-serif; font-weight:400; font-size:clamp(.9rem,1.05vw,1.05rem); cursor:pointer; transition:background-color .2s ease, color .2s ease, border-color .2s ease; }
   .pf-btn-primary { background:#1C60FF; color:#fff; }
   .pf-btn-primary:hover { background:#1750d8; }
   .pf-btn-primary:active { background:#1545b0; transform:translateY(1px); }
@@ -203,7 +205,7 @@
   .single-image-text { overflow:visible;
     display:flex; flex-direction:column; align-items:center; text-align:center;
     color:#fff; pointer-events:none; padding:0 6vw;
-    font-size:clamp(24px,4.2vw,48px); line-height:1.45; font-weight:400; letter-spacing:-0.01em; }
+    font-size:var(--fs-h2); line-height:1.45; font-weight:700; letter-spacing:-0.01em; }
   .single-image-text .line-wrapper { display:block; overflow:hidden; }
   .single-image-text .split-line { display:block; }
   .single-image-text .split-char { display:inline-block; will-change:transform; }
@@ -215,7 +217,7 @@
   .work-inner { position:relative; z-index:1; background:#1a1a1a; color:#fff; box-sizing:border-box;
     padding:clamp(150px,22vh,300px) clamp(24px,7vw,120px) clamp(150px,22vh,300px); }  /* 섹션 간 공통 여백 (상·하 동일) */
   .work-intro-inner { text-align:left; margin-bottom:clamp(40px,7vh,90px); }
-  .work-title { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; font-size:var(--fs-h1); line-height:1.0; letter-spacing:-0.03em; margin:0; }
+  .work-title { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; font-size:var(--fs-h1); line-height:1.0; letter-spacing:-0.03em; margin:0; }
   /* MYCEL no-pd-140--y 방식 — 핀 없음. 카드들이 처음엔 겹쳐 있다가 섹션 스크롤 진행에 따라 계단식으로 벌어짐 (transform scrub).
      카드 디자인은 대형 이미지 + 하단 텍스트 오버레이(번호/제목/설명/버튼). */
   .work-container { display:flex; flex-direction:column; gap:clamp(24px,4vh,60px); }  /* 최종 분리 상태 = 카드 간 간격 (MYCEL처럼) · 50% 축소 */
@@ -225,15 +227,15 @@
   .wi-img { position:absolute; left:0; top:-8%; width:100%; height:116%; object-fit:cover; will-change:transform; }
   /* 가독성용 하단 그라데이션 (이미지 z0 · 그라데이션 z1 · 텍스트 z2) */
   .work-image::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
-    background:linear-gradient(to top, rgba(0,0,0,.6) 0%, rgba(0,0,0,.28) 34%, rgba(0,0,0,0) 66%); }
+    background:linear-gradient(to top, rgba(0,0,0,.8) 0%, rgba(0,0,0,.48) 34%, rgba(0,0,0,0) 66%); }
   /* 텍스트를 이미지 위에 오버레이 (하단 좌측) */
   .work-content { position:absolute; z-index:2; left:0; bottom:0; padding:clamp(28px,4vw,64px);
     display:flex; flex-direction:column; align-items:flex-start; gap:clamp(12px,1.6vh,22px); max-width:min(70ch,90%); }
-  .wi-num { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; font-size:clamp(1rem,1.3vw,1.4rem); line-height:1; color:rgba(255,255,255,.42); letter-spacing:.02em; }
-  .wi-name { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; font-size:var(--fs-h2); letter-spacing:-0.03em; line-height:1.0; margin:0; }
+  .wi-num { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; font-size:clamp(1rem,1.3vw,1.4rem); line-height:1; color:rgba(255,255,255,.42); letter-spacing:.02em; }
+  .wi-name { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; font-size:var(--fs-h2); letter-spacing:-0.03em; line-height:1.0; margin:0; }
   .wi-desc { font-family:'Poppins','Pretendard',sans-serif; font-size:var(--fs-body-2); line-height:1.65; color:rgba(255,255,255,.6); margin:0; max-width:54ch; }
   /* 연락 섹션 버튼과 동일한 pill · 퍼플 */
-  .wi-link { margin-top:clamp(8px,1vh,16px); display:inline-flex; align-items:center; gap:10px; border-radius:9999px; background:#8B3DFF; color:#fff; padding:13px 25px; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-size:.87rem; font-weight:500; letter-spacing:.01em; white-space:nowrap; transition:background .2s; }
+  .wi-link { margin-top:clamp(8px,1vh,16px); display:inline-flex; align-items:center; gap:10px; border-radius:9999px; background:#8B3DFF; color:#fff; padding:13px 25px; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-size:.87rem; font-weight:400; letter-spacing:.01em; white-space:nowrap; transition:background .2s; }
   .wi-link:hover { background:#7325E0; }
   .wi-link svg { width:16px; height:16px; }
   @media (max-width:768px){
@@ -280,14 +282,14 @@
     box-shadow:inset 0 0 22px rgba(255,255,255,.6), inset 0 -14px 30px rgba(80,90,200,.35), inset 0 14px 30px rgba(255,255,255,.45), 0 24px 50px rgba(40,40,90,.24); }
   .about-3d::after { content:""; position:absolute; inset:13%; border-radius:50%; mix-blend-mode:screen; filter:blur(2px);
     background:conic-gradient(from 40deg, transparent, rgba(255,255,255,.55), transparent 42%); }
-  .about-copy { margin:0; font-family:'Poppins','Pretendard',sans-serif; font-weight:500; line-height:1.4; letter-spacing:-0.01em;
+  .about-copy { margin:0; font-family:'Poppins','Pretendard',sans-serif; font-weight:400; line-height:1.4; letter-spacing:-0.01em;
     font-size:clamp(1.13rem,2.93vw,2.5rem); text-align:center; max-width:none; color:#111114; }
   /* offbeat식 split-char: line-wrapper(가림틀) → split-line → split-char(글자 단위) */
   .about-copy .line-wrapper { display:block; overflow:hidden; padding-bottom:.12em; }
   .about-copy .split-line { display:inline-block; white-space:nowrap; }
   .about-copy .split-char { display:inline-block; will-change:transform; }
   /* 강조어(정의·방향·증명): Hero 배경과 동일한 그라데이션 유지 (글자 단위) */
-  .about-copy .split-char.emph { font-weight:500; color:#111114; -webkit-text-fill-color:#111114; }
+  .about-copy .split-char.emph { font-weight:400; color:#111114; -webkit-text-fill-color:#111114; }
   @media (max-width:768px){ .about-copy{ font-size:clamp(1rem,5.4vw,1.6rem); } }
 
   /* ===== 연락 — 게시글 리스트 (우측 50%) ===== */
@@ -296,7 +298,7 @@
   .post-row::before { content:''; position:absolute; inset:0; background:#0E0E10; transform:scaleY(0); transform-origin:bottom; transition:transform .45s cubic-bezier(0.16,1,0.3,1); z-index:0; }
   .post-row:hover::before { transform:scaleY(1); }
   .post-row:last-child { border-bottom:none; }
-  .post-title { position:relative; z-index:1; font-family:'Poppins','Pretendard',sans-serif; font-weight:500; font-size:var(--fs-body-2); color:#111114; letter-spacing:-0.01em; transition:color .35s ease; }
+  .post-title { position:relative; z-index:1; font-family:'Poppins','Pretendard',sans-serif; font-weight:400; font-size:var(--fs-body-2); color:#111114; letter-spacing:-0.01em; transition:color .35s ease; }
   .post-date { position:relative; z-index:1; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-size:.85rem; color:#8A8A93; white-space:nowrap; flex:none; transition:color .35s ease; }
   .post-row:hover .post-title { color:#FFFFFF; }
   .post-row:hover .post-date { color:rgba(255,255,255,.7); }
@@ -314,15 +316,15 @@
   @media (max-width:900px){ .site-footer { min-height:auto; padding-top:0; } .ft-inner { padding:80px 24px 40px; } }
   /* 상단 줄: 헤드라인(좌) + 3D 오브젝트(우측 상단, 기존 푸터-도형 자리) */
   .ft-top-row { display:flex; align-items:flex-start; justify-content:space-between; gap:clamp(20px,4vw,64px); }
-  .ft-headline { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; font-size:clamp(2.4rem,9vw,9rem); line-height:.98; letter-spacing:-0.035em; margin:0; text-align:left; }
+  .ft-headline { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; font-size:clamp(2.4rem,9vw,9rem); line-height:.98; letter-spacing:-0.035em; margin:0; text-align:left; }
   /* 소개 섹션 3D 오브젝트 재사용 (푸터 우측 상단 크기로 조정) */
   .ft-3d { flex:none; width:clamp(96px,12vw,160px); }
   .ft-grid { display:grid; grid-template-columns:1fr auto; gap:40px; align-items:end; }
-  .ft-info-col { display:flex; flex-direction:column; gap:7px; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-size:clamp(.85rem,1vw,.98rem); color:rgba(255,255,255,.66); }
+  .ft-info-col { display:flex; flex-direction:column; gap:7px; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-size:clamp(.85rem,1vw,.98rem); color:#adadad; }
   .ft-info-col .k { display:inline-block; min-width:84px; color:rgba(255,255,255,.4); }
   .ft-info-col .ft-copy { margin-top:18px; color:rgba(255,255,255,.38); font-size:.8rem; }
   .ft-menu { display:flex; flex-direction:row; align-items:center; gap:clamp(20px,2.4vw,40px); }
-  .ft-menu a { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; font-size:clamp(1.05rem,1.6vw,1.4rem); color:#fff; transition:color .2s ease; }
+  .ft-menu a { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; font-size:clamp(1.05rem,1.6vw,1.4rem); color:#fff; transition:color .2s ease; }
   .ft-menu a:hover { color:#6E1CF6; }
   @media (max-width:768px){ .ft-grid { grid-template-columns:1fr; gap:32px; align-items:start; } }
 
@@ -440,7 +442,6 @@
         <a class="work-image" href="project-1.html" aria-label="UX/UI Portfolio 프로젝트 보기">
           <img class="wi-img" src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=1800&auto=format&fit=crop" alt="UX/UI Portfolio" loading="lazy">
           <div class="work-content">
-            <span class="wi-num">01</span>
             <h3 class="wi-name">UX/UI Portfolio</h3>
             <p class="wi-desc">문제를 정의하고 경험을 설계한 프로젝트. 사용자 리서치부터 정보 구조, 화면 설계까지 하나의 흐름으로 구축했습니다.</p>          </div>
         </a>
@@ -450,7 +451,6 @@
         <a class="work-image" href="project-2.html" aria-label="Design System 프로젝트 보기">
           <img class="wi-img" src="https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=1800&auto=format&fit=crop" alt="Design System" loading="lazy">
           <div class="work-content">
-            <span class="wi-num">02</span>
             <h3 class="wi-name">Design System</h3>
             <p class="wi-desc">일관된 인터페이스를 위한 토큰과 컴포넌트 구조. 120+ 컴포넌트 체계로 디자인–개발 핸드오프 시간을 40% 단축했습니다.</p>          </div>
         </a>
@@ -460,7 +460,6 @@
         <div class="work-image">
           <img class="wi-img" src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f?q=80&w=1800&auto=format&fit=crop" alt="Interaction Design" loading="lazy">
           <div class="work-content">
-            <span class="wi-num">03</span>
             <h3 class="wi-name">Interaction Design</h3>
             <p class="wi-desc">스크롤, 모션, 전환을 활용한 인터랙션 설계. 콘텐츠의 리듬에 맞춰 자연스럽게 이어지는 경험을 만듭니다.</p>          </div>
         </div>
@@ -470,7 +469,6 @@
         <div class="work-image">
           <img class="wi-img" src="https://images.unsplash.com/photo-1559028012-481c04fa702d?q=80&w=1800&auto=format&fit=crop" alt="Motion & Prototyping" loading="lazy">
           <div class="work-content">
-            <span class="wi-num">04</span>
             <h3 class="wi-name">Motion &amp; Prototyping</h3>
             <p class="wi-desc">프로토타입과 마이크로 인터랙션으로 아이디어를 빠르게 검증하고, 실제 사용감을 설계에 반영했습니다.</p>          </div>
         </div>
@@ -480,7 +478,6 @@
         <div class="work-image">
           <img class="wi-img" src="https://images.unsplash.com/photo-1517292987719-0369a794ec0f?q=80&w=1800&auto=format&fit=crop" alt="Design Ops" loading="lazy">
           <div class="work-content">
-            <span class="wi-num">05</span>
             <h3 class="wi-name">Design Ops</h3>
             <p class="wi-desc">팀의 디자인 프로세스와 핸드오프를 체계화해, 반복 작업을 줄이고 일관성을 높였습니다.</p>          </div>
         </div>
@@ -490,7 +487,6 @@
         <div class="work-image">
           <img class="wi-img" src="https://images.unsplash.com/photo-1481487196290-c152efe083f5?q=80&w=1800&auto=format&fit=crop" alt="Brand & Visual" loading="lazy">
           <div class="work-content">
-            <span class="wi-num">06</span>
             <h3 class="wi-name">Brand &amp; Visual</h3>
             <p class="wi-desc">로고부터 제품 UI까지 일관된 비주얼 언어를 정립해 브랜드 경험을 하나로 이었습니다.</p>          </div>
         </div>
@@ -544,7 +540,6 @@
         <span><span class="k">주소</span>서울특별시</span>
         <span><span class="k">분야</span>UX/UI Design</span>
         <span><span class="k">이메일</span>hello@example.com</span>
-        <span><span class="k">경력</span>7년 (2019 — 2026)</span>
         <span><span class="k">TEL</span>+82 10 0000 0000</span>
         <span class="ft-copy">Copyright © <span id="year">2026</span> HONG GILDONG. All Rights Reserved.</span>
       </div>
