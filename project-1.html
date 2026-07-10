@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Moodle Diary · 홍길동</title>
+<title>Moodle Diary · LEE JUNGMIN</title>
 <meta name="description" content="감정과 그림으로 하루를 가볍게 남기는 다이어리 앱, Moodle Diary 케이스 스터디." />
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -76,6 +76,10 @@
   .scroll-arrow{ animation:arrowBob 1.9s cubic-bezier(0.45,0,0.55,1) infinite; }
   @keyframes arrowBobX { 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(7px); } }
   .scroll-arrow-x{ animation:arrowBobX 1.9s cubic-bezier(0.45,0,0.55,1) infinite; }
+  /* Hero 대표 이미지: bg 위에 목업이 둥둥 떠다님 */
+  .mockup-float{ animation:mockFloat 3.5s ease-in-out infinite; will-change:transform; }
+  @keyframes mockFloat { 0%,100%{ transform:translateY(-9.9px); } 50%{ transform:translateY(9.9px); } }
+  @media (prefers-reduced-motion: reduce){ .mockup-float{ animation:none; } }
   @media (prefers-reduced-motion: reduce){ .scroll-arrow, .scroll-arrow-x{ animation:none; } }
   .concl-box{ position:relative; border-radius:16px;
     background:linear-gradient(315deg, rgba(224,199,164,0.05) 0%, rgba(248,224,192,0.15) 100%); }
@@ -159,7 +163,12 @@
   @media (max-width:900px){ .site-footer { min-height:auto; padding-top:0; } .ft-inner { padding:80px 24px 40px; } }
   .ft-top-row { display:flex; align-items:flex-start; justify-content:space-between; gap:clamp(20px,4vw,64px); }
   .ft-headline { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; font-size:clamp(2.4rem,9vw,9rem); line-height:.98; letter-spacing:-0.035em; margin:0; text-align:left; }
-  .ft-3d { flex:none; width:clamp(96px,12vw,160px); }
+  .ft-3d { flex:none; width:clamp(115px,14.4vw,192px); }   /* 20% 확대 */
+  .ft-media { position:relative; display:inline-block; }
+  .ft-media .ft-video { width:100%; height:auto; display:block; position:relative; z-index:1; transform:scaleX(-1); }   /* 좌우반전 */
+  .ft-media::before { content:''; position:absolute; left:50%; top:50%; width:168%; height:168%;
+    transform:translate(-50%,-50%); border-radius:50%; z-index:0; pointer-events:none;
+    background:radial-gradient(circle, #1d1b1d 0 42%, rgba(29,27,29,0) 70%); }
   .ft-grid { display:grid; grid-template-columns:1fr auto; gap:40px; align-items:end; }
   .ft-info-col { display:flex; flex-direction:column; gap:7px; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-size:clamp(.85rem,1vw,.98rem); color:#adadad; }
   .ft-info-col .k { display:inline-block; min-width:84px; color:rgba(255,255,255,.4); }
@@ -176,7 +185,7 @@
 <!-- ============================ NAV ============================ -->
 <header id="nav" class="fixed top-0 inset-x-0 z-50">
   <div class="w-full flex items-center justify-between px-5 sm:px-10 py-5 text-[0.95rem]">
-    <a href="portfolio.html" class="font-display text-[1.1rem] font-700 tracking-tight whitespace-nowrap">홍길동<span class="opacity-50">.</span></a>
+    <a href="portfolio.html" class="font-display text-[1.1rem] font-700 tracking-tight whitespace-nowrap">LEE JUNGMIN<span class="opacity-50">.</span></a>
     <button id="menuBtn" class="nav-pill justify-self-end" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">MENU</button>
   </div>
 </header>
@@ -200,9 +209,14 @@
       <span class="tl-wrap"><span class="tl-line">Moodle <span class="em">Diary</span></span></span>
     </h1>
   </div>
-  <!-- 이미지: 텍스트 아래 전폭 배치 -->
-  <div class="reveal mt-14 sm:mt-20 rounded-2xl overflow-hidden w-[95%] mx-auto" data-delay="1">
-    <img class="w-full h-auto object-cover" src="img/Moodle Diary/main.png" alt="Moodle Diary 대표 화면">
+  <!-- 이미지: 텍스트 아래 전폭 배치 (bg 위에 목업이 둥둥 떠다님) -->
+  <div class="reveal mt-14 sm:mt-20 w-[95%] mx-auto" data-delay="1">
+    <div class="relative rounded-2xl overflow-hidden">
+      <img class="w-full h-auto block" src="img/Moodle Diary/bg.png" alt="Moodle Diary 배경">
+      <div class="absolute inset-0 flex items-center justify-center p-[5%]">
+        <img class="mockup-float max-w-full max-h-full w-auto" src="img/Moodle Diary/목업.png" alt="Moodle Diary 목업">
+      </div>
+    </div>
   </div>
 </section>
 
@@ -690,16 +704,16 @@
   <div class="ft-inner">
     <div class="ft-top-row">
       <h2 class="ft-headline">DESIGN WITH<br>PURPOSE</h2>
-      <div class="about-3d ft-3d" aria-hidden="true"></div>
+      <div class="ft-3d ft-media"><img class="ft-video" src="img/main/about-3d.gif" alt="" aria-hidden="true"></div>
     </div>
     <div class="ft-grid">
       <div class="ft-info-col">
-        <span><span class="k">이름</span>홍길동</span>
+        <span><span class="k">이름</span>LEE JUNGMIN</span>
         <span><span class="k">주소</span>서울특별시</span>
         <span><span class="k">분야</span>UX/UI Design</span>
         <span><span class="k">이메일</span>hello@example.com</span>
         <span><span class="k">TEL</span>+82 10 0000 0000</span>
-        <span class="ft-copy">Copyright © <span id="year">2026</span> HONG GILDONG. All Rights Reserved.</span>
+        <span class="ft-copy">Copyright © <span id="year">2026</span> LEE JUNGMIN. All Rights Reserved.</span>
       </div>
       <nav class="ft-menu">
         <a href="portfolio.html#about">About</a>
@@ -718,8 +732,8 @@
     gsap.registerPlugin(ScrollTrigger);
     document.documentElement.classList.add('gsap');
     gsap.utils.toArray('.reveal').forEach((el) => {
-      gsap.fromTo(el, { opacity:0, y:28 }, { opacity:1, y:0, duration:0.9, ease:'power3.out',
-        scrollTrigger:{ trigger:el, start:'top 88%', toggleActions:'restart none none reverse' } });
+      gsap.fromTo(el, { opacity:0, y:28 }, { opacity:1, y:0, duration:1.4, ease:'power3.out',
+        scrollTrigger:{ trigger:el, start:'top 78%', toggleActions:'restart none none reverse' } });
     });
     // 이미지 — clip-path 리빌 (아래→위 열림)
     gsap.utils.toArray('.img-reveal').forEach((el) => {
