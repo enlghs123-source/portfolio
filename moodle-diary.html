@@ -65,6 +65,7 @@
   #desk-research article b, #desk-research article .font-600{ font-weight:700; }  /* 강조 bold */
   #desk-research article h3.t-body-1{ font-weight:700; }  /* 카드 헤드라인 bold */
   #desk-research article .t-caption, #desk-research article p.t-body-3{ color:#c1c1c1; }  /* 라벨·본문 색 (강조 b 제외) */
+  #desk-research article p.t-body-3{ text-align:left; }  /* 카드 본문 좌측정렬 */
   /* 결론 박스: 15% 투명 fill(뒤 다크 비침) + 반대방향(315°) 그라데이션 border 링 */
   #desk-research .concl-box p.font-700{ font-weight:700; }  /* 결론 첫 줄 bold */
   /* 페르소나 카드: h3(이름) 제외 모든 텍스트 weight 200 */
@@ -78,6 +79,7 @@
     color:#e5e5e5; font-size:var(--fs-caption); font-weight:500; cursor:pointer; transition:background .2s ease, color .2s ease, border-color .2s ease; }
   .proc-btn:hover{ border-color:rgba(217,203,182,.7); }
   .proc-btn.active{ background:#D9CBB6; color:#1a1a1a; border-color:#D9CBB6; }
+  .proc-row p.t-body-3{ color:#ffffff; max-width:70%; }   /* 설명 텍스트 흰색 · 박스 폭 70%에서 자동 줄바꿈 */
   .scroll-arrow{ animation:arrowBob 1.9s cubic-bezier(0.45,0,0.55,1) infinite; }
   @keyframes arrowBobX { 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(7px); } }
   .scroll-arrow-x{ animation:arrowBobX 1.9s cubic-bezier(0.45,0,0.55,1) infinite; }
@@ -202,7 +204,7 @@
   .ft-inner { width:100%; margin:0; padding:clamp(40px,6vh,72px) 7vw; display:flex; flex-direction:column; gap:clamp(28px,5vh,60px); }
   @media (max-width:900px){ .site-footer { min-height:auto; padding-top:0; } .ft-inner { padding:80px 24px 40px; } }
   .ft-top-row { display:flex; align-items:flex-start; justify-content:space-between; gap:clamp(20px,4vw,64px); }
-  .ft-headline { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; font-size:clamp(2.4rem,9vw,9rem); line-height:.98; letter-spacing:-0.035em; margin:0; text-align:left; }
+  .ft-headline { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:700; font-size:clamp(2.4rem,9vw,9rem); line-height:.98; letter-spacing:-0.035em; margin:0; text-align:left; }
   .ft-3d { flex:none; width:clamp(115px,14.4vw,192px); }   /* 20% 확대 */
   .ft-media { position:relative; display:inline-block; }
   .ft-media .ft-video { width:100%; height:auto; display:block; position:relative; z-index:1; transform:scaleX(-1); }   /* 좌우반전 */
@@ -265,17 +267,17 @@
   <div class="grid lg:grid-cols-[3fr_7fr] gap-y-12 gap-x-16 items-start">
     <div class="reveal">
       <p class="t-caption text-[#adadad] mb-6">Overview</p>
-      <h2 class="t-h2 text-ink">개요 제목<br>자리입니다</h2>
+      <h2 class="t-h2 text-ink">일기,<br>매번 포기하시나요?</h2>
     </div>
     <div>
       <p class="reveal t-body-1 text-ink w-full max-w-none mb-14 sm:mb-20">
-        완벽하게 쓰려는 부담 때문에 일기를 포기하는 사람이 많습니다. Moodle Diary는 글쓰기 대신 감정과 그림으로 하루를 기록하게 해, 꾸준히 이어갈 수 있는 가벼운 기록·회고 경험을 목표로 설계했습니다.
+        글로 표현하자니 막막하고 그림으로 남기자니 자신이 없고, 쓰다가 며칠 만에 덮어버린 일기장 한 번쯤 있으시지 않나요? 감정은 분명히 있는데 그걸 기록하는 방법을 몰라서 결국 아무것도 남기지 못했던 경험 저도 있었어요.
       </p>
       <dl class="reveal grid sm:grid-cols-2 gap-x-16 border-t border-line">
-        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">담당 역할 (Role)</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">Product Designer<br>UX 리서치 · UI · 디자인 시스템</dd></div>
-        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">기간</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">2025 (개인 프로젝트)</dd></div>
-        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">사용 툴</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">Figma · Illustrator · Pretendard</dd></div>
-        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">플랫폼</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">iOS · Android</dd></div>
+        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">담당 역할 (Role)</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">UX 리서치 · UI · 디자인 시스템</dd></div>
+        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">기간</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">2026.01</dd></div>
+        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">사용 툴</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">Figma · AI · Illustrator</dd></div>
+        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">플랫폼</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">Android</dd></div>
       </dl>
     </div>
   </div>
@@ -294,6 +296,7 @@
     <div class="reveal">
       <p class="t-caption text-[#adadad] mb-6" style="color:#adadad">Desk Research</p>
       <h2 class="t-h2 text-ink">그 경험에서<br>시작됐어요.</h2>
+      <p class="t-body-2 mt-4" style="color:#adadad">감정을 기록하기 어려운 건 저만의 고민이 아니었습니다. 리서치를 통해 많은 사람들이 같은 어려움을 겪고 있다는 것을 확인했습니다.</p>
     </div>
     <!-- 우측 컬럼: 리서치 카드 3장 + 결론 -->
     <div>
@@ -621,14 +624,14 @@
 
 <!-- ============================ 5. PROCESS (화면·플로우 · tsitsipas on-court 레이아웃) ============================ -->
 <section class="site-pad pb-[133px] sm:pb-[236px]">
-  <p class="reveal t-caption text-[#adadad] mb-6">Process</p>
+  <p class="reveal t-caption text-[#adadad] mb-6">UI Design</p>
   <h2 class="reveal t-h2 text-ink">하루하루가 그림으로 남아요.</h2>
   <p class="reveal t-body-2 text-[#adadad] mt-4 mb-14 sm:mb-20">한 달의 감정을 그림으로 돌아볼 수 있어요.</p>
 
   <div class="grid lg:grid-cols-[3fr_7fr] gap-10 lg:gap-16 items-start">
     <!-- 좌: sticky 대표 화면 (이미지 자리) -->
     <div class="lg:sticky lg:top-28 lg:self-start">
-      <div class="reveal relative h-[700px] rounded-2xl overflow-hidden bg-[#202024] ring-1 ring-line">
+      <div class="relative h-[700px] rounded-2xl overflow-hidden bg-[#202024] ring-1 ring-line">
         <img class="proc-layer" src="img/Moodle Diary/Process_01.jpg" alt="Moodle Diary 대표 화면" style="opacity:1">
         <img class="proc-layer" src="" alt="" style="opacity:0" aria-hidden="true">
       </div>
@@ -638,33 +641,33 @@
     <div class="border-t border-line">
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
         <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">캘린더</span>
-        <h3 class="t-body-1 font-700 text-ink leading-snug">한 달의 감정을 한눈에</h3>
-        <p class="t-body-3 text-muted leading-relaxed">월간 캘린더에서 그림으로 채운 하루하루를 한눈에 훑어봐요.</p>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">한 달의 감정을 한눈에 조망해요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">날짜마다 AI가 그린 그림 썸네일이 채워지면서, 캘린더 자체가 나만의 감정 갤러리가 돼요. 오늘 날짜를 탭하면 바로 일기 작성을 시작할 수 있어요.</p>
       </div>
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
         <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">리스트</span>
-        <h3 class="t-body-1 font-700 text-ink leading-snug">일기 내용을 빠르게 스캔</h3>
-        <p class="t-body-3 text-muted leading-relaxed">리스트 뷰로 기록 내용을 위에서 아래로 빠르게 스캔해요.</p>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">일기 내용을 빠르게 스캔해요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">AI 그림과 제목, 본문 미리보기, 키워드 태그가 날짜별로 정리돼요.</p>
       </div>
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
         <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">상세</span>
-        <h3 class="t-body-1 font-700 text-ink leading-snug">그림을 앱에서 크게 보기</h3>
-        <p class="t-body-3 text-muted leading-relaxed">그림 일기를 앱 안에서 크게 열어 자세히 감상할 수 있어요.</p>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">그림을 탭하면 자세히 볼 수 있어요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">캘린더에서 날짜를 탭하면 AI 그림을 크게 확인할 수 있어요. 공유하고, 저장하고, 삭제까지 AI 그림에 문제가 있을 땐 오류 제보도 가능해요.</p>
       </div>
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
         <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">기분표</span>
-        <h3 class="t-body-1 font-700 text-ink leading-snug">감정 변화를 그래프로</h3>
-        <p class="t-body-3 text-muted leading-relaxed">주간·월간 감정 변화를 그래프로 그려 흐름을 돌아봐요.</p>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">감정 변화를 돌아볼 수 있어요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">주간·월간·연간 단위로 감정 흐름 그래프와 날짜별 무들 캐릭터 이모션을 확인할 수 있어요.</p>
       </div>
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
         <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">마이</span>
-        <h3 class="t-body-1 font-700 text-ink leading-snug">나의 기록을 한눈에</h3>
-        <p class="t-body-3 text-muted leading-relaxed">작성한 일수와 그림 수, 계정 정보를 한 화면에서 관리해요.</p>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">나의 기록을 한눈에 확인해요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">작성한 일기 수와 받은 그림 수를 확인하고, 계정 정보와 앱 설정을 관리할 수 있어요.</p>
       </div>
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
         <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">감정</span>
-        <h3 class="t-body-1 font-700 text-ink leading-snug">컬러로 오늘의 감정을 골라요</h3>
-        <p class="t-body-3 text-muted leading-relaxed">복잡한 입력 없이, 색으로 오늘의 감정을 먼저 골라요.</p>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">3단계로 완성하는 감정 기록</h3>
+        <p class="t-body-3 text-muted leading-relaxed">감정을 선택하고, 더 구체적으로 표현한 뒤, 키워드나 짧은 글로 부담 없이 하루를 기록하세요.</p>
         <div class="sm:col-span-3 flex flex-wrap gap-2 mt-3">
           <button type="button" class="proc-btn active" data-src="img/Moodle%20Diary/Process_06.jpg">감정</button>
           <button type="button" class="proc-btn" data-src="img/Moodle%20Diary/Process_06-1.jpg">세부감정</button>
@@ -673,18 +676,18 @@
       </div>
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
         <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">키워드</span>
-        <h3 class="t-body-1 font-700 text-ink leading-snug">쓰기 어려운 날엔 키워드만 골라요</h3>
-        <p class="t-body-3 text-muted leading-relaxed">글이 안 써지는 날엔 태그·키워드만 골라도 기록이 완성돼요.</p>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">쓰기 어려운 날엔 키워드만 골라요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">날씨를 선택하고, 오늘 있었던 일을 자유롭게 써요. 글쓰기가 어려운 날엔 키워드 모드로 전환할 수 있어요.</p>
       </div>
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
         <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">생성</span>
-        <h3 class="t-body-1 font-700 text-ink leading-snug">무들이 그림을 그리고 있어요</h3>
-        <p class="t-body-3 text-muted leading-relaxed">선택한 감정과 키워드를 바탕으로 AI가 그림을 그려줘요.</p>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">무들이 그림을 그리고 있어요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">감정·키워드 기반으로 AI가 그림 1장을 만들어요. 기다리는 시간도 무들과 함께예요.</p>
       </div>
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
         <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">완성</span>
-        <h3 class="t-body-1 font-700 text-ink leading-snug">그림과 함께 하루가 완성돼요</h3>
-        <p class="t-body-3 text-muted leading-relaxed">글 없이도 그림과 함께 오늘 하루가 일기로 완성돼요.</p>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">그림과 함께 하루가 완성돼요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">AI 그림 + 키워드 태그 + 무들의 한 마디로 오늘 하루가 완성돼요. 마음에 안 들면 새로 생성할 수 있어요.</p>
       </div>
     </div>
   </div>
@@ -703,11 +706,11 @@
     <!-- 라이트/다크 토글 카드 (좌 이미지 · 우 내용 2단) -->
     <div id="dm-card" class="reveal rounded-2xl overflow-hidden p-6 sm:p-8 grid sm:grid-cols-2 gap-6 sm:gap-8 items-stretch transition-colors duration-[1000ms]" style="background:#ffffff">
       <div class="rounded-2xl overflow-hidden pt-6 sm:pt-10 flex items-center justify-center" style="background:transparent">
-        <img id="dm-img" src="img/Moodle Diary/right.png" alt="라이트 모드 화면" class="max-w-[70%] h-auto transition-opacity duration-300">
+        <img id="dm-img" src="img/Moodle Diary/right.png" alt="라이트 모드 화면" class="max-w-[63%] h-auto transition-opacity duration-300">
       </div>
       <div class="flex flex-col h-full">
         <h3 id="dm-title" class="t-body-1 font-700 mt-10 sm:mt-14" style="color:#1a1a1a">밝고 따뜻한 낮의 무들</h3>
-        <p id="dm-desc" class="t-body-3 mt-3 leading-relaxed" style="color:#52525b">화이트 배경에 베이지·그레이 톤으로 포근한 감성 유지. 낮에 일상을 기록할 때 편안한 시각 경험</p>
+        <p id="dm-desc" class="t-body-3 mt-3 leading-relaxed max-w-[70%]" style="color:#52525b">화이트 배경에 베이지·그레이 톤으로 포근한 감성 유지. 낮에 일상을 기록할 때 편안한 시각 경험</p>
         <div class="mt-auto flex flex-col items-end gap-3">
           <button id="dm-toggle" type="button" aria-label="라이트/다크 모드 전환" class="w-11 h-11 rounded-xl flex items-center justify-center transition-colors cursor-pointer" style="border:1.5px solid #1a1a1a">
             <span id="dm-icon" class="material-symbols-outlined" style="color:#1a1a1a;font-size:24px">light_mode</span>
@@ -720,15 +723,15 @@
 </section>
 
 <!-- ============================ 6. FULL IMAGE (대표 이미지 자리) ============================ -->
-<section class="pb-[133px] sm:pb-[236px]">
-  <div class="img-reveal w-full h-[58vh] sm:h-[80vh] overflow-hidden bg-[#202024] ring-1 ring-line">
-    <img class="parallax w-full h-[120%] object-cover" src="img/Moodle Diary/full-imag2.jpg" alt="Moodle Diary 대표 이미지">
+<section class="pb-[13px] sm:pb-[24px]">
+  <div class="img-reveal w-full overflow-hidden bg-[#202024]">
+    <img class="w-full h-auto block" src="img/Moodle Diary/full-imag2.jpg" alt="Moodle Diary 대표 이미지">
   </div>
 </section>
 
 <!-- ============================ 8. NEXT PROJECT ============================ -->
 <section class="site-pad pb-[133px] sm:pb-[236px]">
-  <div class="reveal flex flex-wrap items-center justify-between gap-6 border-t border-b border-line pt-[37px] pb-[37px]">
+  <div class="reveal flex flex-wrap items-center justify-between gap-6 border-b border-line pt-[37px] pb-[37px]">
     <h2 class="t-h3 text-ink font-700">다음 프로젝트도 살펴보세요.</h2>
     <a href="project-2.html" class="pick-time">Pick Time<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
   </div>
@@ -746,8 +749,7 @@
         <span><span class="k">이름</span>LEE JUNGMIN</span>
         <span><span class="k">주소</span>서울특별시</span>
         <span><span class="k">분야</span>UX/UI Design</span>
-        <span><span class="k">이메일</span>hello@example.com</span>
-        <span><span class="k">TEL</span>+82 10 0000 0000</span>
+        <span><span class="k">이메일</span>enlghs123@gmail.com</span>
         <span class="ft-copy">Copyright © <span id="year">2026</span> LEE JUNGMIN. All Rights Reserved.</span>
       </div>
       <nav class="ft-menu">
