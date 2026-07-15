@@ -285,6 +285,12 @@
   /* 대형 이미지 — height 고정(≈51vh), 가로 100%, object-fit cover, radius 24px · 텍스트 오버레이 컨텍스트 */
   .work-image { display:block; position:relative; width:100%; height:clamp(36vh,51vh,54vh); overflow:hidden; border-radius:24px; background:#1a1a1d; cursor:none; }
   .wi-img { position:absolute; left:0; top:-8%; width:100%; height:116%; object-fit:cover; will-change:transform; }
+  /* 가로 100% · 자르지 않고 원본 비율로 (컨테이너 높이 = 이미지 높이) */
+  .work-image--fit { height:auto; }
+  .work-image--fit .wi-img { position:static; top:0; width:100%; height:auto; object-fit:unset; transition:transform .6s cubic-bezier(.22,1,.36,1); }
+  .work-image--fit:hover .wi-img { transform:scale(1.03); }   /* hover 시 3% 확대 */
+  .work-image--fit::after { display:none; }               /* 하단 그라데이션(그림자) 숨김 */
+  .work-image--fit .work-content { display:none; }        /* 텍스트·태그 숨김 */
   /* 가독성용 하단 그라데이션 (이미지 z0 · 그라데이션 z1 · 텍스트 z2) */
   .work-image::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
     background:linear-gradient(to top, rgba(0,0,0,.8) 0%, rgba(0,0,0,.48) 34%, rgba(0,0,0,0) 66%); }
@@ -313,6 +319,10 @@
   /* ===== Other Projects — 한 줄 배치 + 커서 패럴랙스 (phantom.com 스타일) ===== */
   .flip-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:clamp(32px,3.6vw,56px); margin:clamp(20px,4vh,48px) 0 0; }   /* 전체 폭 양쪽정렬 · 빈공간만큼 카드 확대 · 여백 2배 */
   .flip-card { position:relative; aspect-ratio:3/4; background-color:transparent; will-change:transform; }
+  /* flip 카드 앞면 이미지 + 가독성 그라데이션 */
+  .flip-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; z-index:0; }
+  .flip-card-front::after { display:none; }                              /* 검은 그라데이션 숨김 */
+  .flip-card-front .flip-cat, .flip-card-front .flip-title { display:none; }   /* 카테고리·제목 텍스트 숨김 */
   /* hover 시 마우스 진입 방향으로 사선 핀볼 튕김 (JS가 방향 지정 · 이중 바운스: 풀→절반) */
   .flip-card-inner { --bx:0px; --by:0px; position:relative; width:100%; height:100%; text-align:left; transform-style:preserve-3d; }
   @keyframes cardPinball {
@@ -546,8 +556,8 @@
 
     <div class="work-container no-pd-140--y">
       <article class="work-item">
-        <a class="work-image" href="project-1.html" aria-label="UX/UI Portfolio 프로젝트 보기">
-          <img class="wi-img" src="https://images.unsplash.com/photo-1551650975-87deedd944c3?q=80&w=1800&auto=format&fit=crop" alt="UX/UI Portfolio" loading="lazy">
+        <a class="work-image work-image--fit" href="project-1.html" aria-label="UX/UI Portfolio 프로젝트 보기">
+          <img class="wi-img" src="img/main/Moodle Diary.jpg" alt="Moodle Diary" loading="lazy">
           <div class="work-content">
             <h3 class="wi-name">Moodle Diary</h3>
             <p class="wi-desc">글과 그림의 부담을 줄여 누구나 꾸준히 기록할 수 있도록 만든 다이어리 앱입니다. 기획에 참여하고 사용자 중심으로 설계한 프로젝트입니다.</p>
@@ -557,8 +567,8 @@
       </article>
 
       <article class="work-item">
-        <a class="work-image" href="project-2.html" aria-label="Design System 프로젝트 보기">
-          <img class="wi-img" src="https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=1800&auto=format&fit=crop" alt="Design System" loading="lazy">
+        <a class="work-image work-image--fit" href="project-2.html" aria-label="Design System 프로젝트 보기">
+          <img class="wi-img" src="img/main/Pick Time.jpg" alt="Pick Time" loading="lazy">
           <div class="work-content">
             <h3 class="wi-name">Pick Time</h3>
             <p class="wi-desc">AI 기반 취향 분석으로 선물 선택의 고민을 줄이는 서비스입니다. 개인 프로젝트로 기획부터 UX/UI 설계까지 전 과정을 진행했습니다.</p>
@@ -573,6 +583,7 @@
       <div class="flip-card">
         <div class="flip-card-inner">
           <div class="flip-card-front">
+            <img class="flip-img" src="img/main/1_Food Eat Note.jpg" alt="" loading="lazy">
             <p class="flip-cat">Interaction</p>
             <h4 class="flip-title">Food Eat Note</h4>
           </div>
@@ -586,6 +597,7 @@
       <div class="flip-card">
         <div class="flip-card-inner">
           <div class="flip-card-front">
+            <img class="flip-img" src="img/main/2_어허손떼.jpg" alt="" loading="lazy">
             <p class="flip-cat">Prototyping</p>
             <h4 class="flip-title">잘지내요</h4>
           </div>
@@ -599,6 +611,7 @@
       <div class="flip-card">
         <div class="flip-card-inner">
           <div class="flip-card-front">
+            <img class="flip-img" src="img/main/3_인터벌 타이머.jpg" alt="" loading="lazy">
             <p class="flip-cat">Ops</p>
             <h4 class="flip-title">어허 손떼</h4>
           </div>
@@ -612,6 +625,7 @@
       <div class="flip-card">
         <div class="flip-card-inner">
           <div class="flip-card-front">
+            <img class="flip-img" src="img/main/4_냉장고 재고 관리.jpg" alt="" loading="lazy">
             <p class="flip-cat">Brand</p>
             <h4 class="flip-title">냉장고 재고 관리</h4>
           </div>
@@ -1048,6 +1062,8 @@
               opacity: () => 1 - (isMobile() ? 0.03 : 0.06) * i },
             { y: 0, scale: 1, opacity: 1, duration: i }, 0);   // 체인: 각 카드가 이전 카드 자리를 거쳐 순차 도달
         }
+        // 이미지 로드 후 위치 재계산(오프셋 보정)
+        container.querySelectorAll('img').forEach((img) => { if (!img.complete) img.addEventListener('load', () => ScrollTrigger.refresh()); });
       })();
 
       // Other Projects — 카드들이 좌측에 겹쳐 있다가 스크롤에 따라 우측으로 펼쳐짐(contact 도달 전 완료)
