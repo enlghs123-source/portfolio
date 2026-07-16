@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pick Time · LEE JUNGMIN</title>
+<meta name="description" content="Pick Time 케이스 스터디." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Poppins:wght@200;300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = { theme: { extend: {
+    colors: { paper:'#1a1a1a', cream:'#202024', ink:'#FFFFFF', black:'#000000', fg:'#EDEDED', muted:'#9C9CA5', subtle:'#86868b', line:'#2C2C31', point:'#7C5CFF' },
+    fontFamily: { sans:['"Poppins"','Pretendard','system-ui','sans-serif'], display:['Poppins','Pretendard','sans-serif'], serif:['"Instrument Serif"','Georgia','serif'] },
+    fontSize: {
+      'display-1':['var(--fs-display-1)',{lineHeight:'1.0',letterSpacing:'-0.03em'}],
+      'display-2':['var(--fs-display-2)',{lineHeight:'1.02',letterSpacing:'-0.03em'}],
+      'h1':['var(--fs-h1)',{lineHeight:'1.05'}], 'h2':['var(--fs-h2)',{lineHeight:'1.2'}], 'h3':['var(--fs-h3)',{lineHeight:'1.25'}],
+      'body-1':['var(--fs-body-1)',{lineHeight:'1.5'}], 'body-2':['var(--fs-body-2)',{lineHeight:'1.5'}], 'body-3':['var(--fs-body-3)',{lineHeight:'1.6'}], 'caption':['var(--fs-caption)',{lineHeight:'1.4'}],
+    },
+  } } };
+</script>
+
+<style>
+  html { scroll-behavior: smooth; }
+  body { background:#1a1a1a; color:#EDEDED; -webkit-font-smoothing: antialiased; overflow-x: hidden; font-weight:300; }
+
+  /* ===== 타입 스케일 (Header/Body 체계) ===== */
+  :root{
+    /* 반응형 타입 스케일 — PC 최대값은 기존 유지, 태블릿·모바일에서 clamp로 자연 축소 */
+    --fs-display-1:clamp(48px,12vw,168px); /* Hero 전용 · 데스크톱 168 유지 */
+    --fs-display-2:clamp(32px,8vw,112px);  /* 기존 Display · 112 유지 */
+    --fs-h1:clamp(40px,5.6vw,72px);        /* 72 유지 · 모바일 위계 확보 */
+    --fs-h2:clamp(30px,3.8vw,48px);        /* 44 → 48 (4배수 1단계↑) */
+    --fs-h3:clamp(22px,2.4vw,28px);        /* 28 유지 */
+    --fs-body-1:clamp(17px,1.8vw,24px);    /* 24 유지 · 모바일 한 단계↓ */
+    --fs-body-2:clamp(16px,1.5vw,20px);    /* 20 유지 · 모바일 한 단계↓ */
+    --fs-body-3:clamp(14px,1.2vw,16px);    /* 16 유지 · 모바일 한 단계↓ */
+    --fs-caption:clamp(11px,0.9vw,12px);   /* 12 유지 */
+  }
+  .t-display-1{ font-size:var(--fs-display-1); font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; line-height:1.0; letter-spacing:-0.03em; }
+  .t-display-2{ font-size:var(--fs-display-2); font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; line-height:1.02; letter-spacing:-0.03em; }
+  .t-h1{ font-size:var(--fs-h1); font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; line-height:1.05; letter-spacing:-0.02em; }
+  .t-h2{ font-size:var(--fs-h2); font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:700; line-height:1.3; letter-spacing:-0.015em; }
+  .t-h3{ font-size:var(--fs-h3); font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; line-height:1.25; letter-spacing:-0.01em; }
+  .t-body-1{ font-size:var(--fs-body-1); font-family:'Poppins','Pretendard',sans-serif; font-weight:300; line-height:1.5; }   /* 24 · lh 150% */
+  .t-body-2{ font-size:var(--fs-body-2); font-family:'Poppins','Pretendard',sans-serif; font-weight:300; line-height:1.5; }   /* 20 · lh 150% */
+  .t-body-3{ font-size:var(--fs-body-3); font-family:'Poppins','Pretendard',sans-serif; font-weight:300; line-height:1.6; }   /* 16 · lh 160% (신규) */
+  .t-caption{ font-size:var(--fs-caption); letter-spacing:.2em; text-transform:uppercase; }
+  /* 숫자 font-weight 유틸 (bold=700 무조건 적용) */
+  .font-300{ font-weight:300; } .font-400{ font-weight:300; } .font-500{ font-weight:400; } .font-600{ font-weight:400; } .font-700{ font-weight:700; }
+  /* Desk Research 섹션 내부 텍스트 전체 흰색 */
+  #desk-research, #desk-research *:not(img):not(svg):not(path){ color:#ffffff; }
+  /* Desk Research: h3 계열 제외한 텍스트 weight 한 단계씩 다운(600→500 / 500→400 / 400→300) */
+  #desk-research p:not(.t-h3){ font-weight:300; }
+  #desk-research .t-h2{ font-weight:700; }
+  #desk-research b, #desk-research .font-600{ font-weight:400; }
+  /* 리서치 카드(desk-1,2,3) 텍스트만 한 단계 더 다운 · body-1(헤드라인) 제외 */
+  #desk-research article p:not(.t-body-1){ font-weight:300; }   /* 라벨·본문 300→200 */
+  #desk-research article b, #desk-research article .font-600{ font-weight:700; }  /* 강조 bold */
+  #desk-research article h3.t-body-1{ font-weight:700; }  /* 카드 헤드라인 bold */
+  #desk-research article .t-caption, #desk-research article p.t-body-3{ color:#c1c1c1; }  /* 라벨·본문 색 (강조 b 제외) */
+  #desk-research article p.t-body-3{ text-align:left; }  /* 카드 본문 좌측정렬 */
+  /* 결론 박스: 15% 투명 fill(뒤 다크 비침) + 반대방향(315°) 그라데이션 border 링 */
+  #desk-research .concl-box p.font-700{ font-weight:700; }  /* 결론 첫 줄 bold */
+  /* 페르소나 카드: h3(이름) 제외 모든 텍스트 weight 200 */
+  .persona-card *:not(.t-h3){ font-weight:300; }
+  /* 디자인 화살표 — 은은한 아래위 바운스 */
+  @keyframes arrowBob { 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(7px); } }
+  /* Process 대표 이미지 크로스페이드 레이어 */
+  .proc-layer{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; will-change:opacity,transform; transition:opacity .7s ease, transform 1.1s ease; }
+  /* Process 6번(감정) 하위 이미지 전환 버튼 */
+  .proc-btn{ padding:6px 14px; border-radius:9999px; border:1px solid rgba(255,255,255,.25); background:rgba(255,255,255,.06);
+    color:#e5e5e5; font-size:var(--fs-caption); font-weight:500; cursor:pointer; transition:background .2s ease, color .2s ease, border-color .2s ease; }
+  .proc-btn:hover{ border-color:rgba(217,203,182,.7); }
+  .proc-btn.active{ background:#D9CBB6; color:#1a1a1a; border-color:#D9CBB6; }
+  .proc-row p.t-body-3{ color:#ffffff; max-width:70%; }   /* 설명 텍스트 흰색 · 박스 폭 70%에서 자동 줄바꿈 */
+  .scroll-arrow{ animation:arrowBob 1.9s cubic-bezier(0.45,0,0.55,1) infinite; }
+  @keyframes arrowBobX { 0%,100%{ transform:translateX(0); } 50%{ transform:translateX(7px); } }
+  .scroll-arrow-x{ animation:arrowBobX 1.9s cubic-bezier(0.45,0,0.55,1) infinite; }
+  /* Hero 대표 이미지: bg 위에 목업이 둥둥 떠다님 */
+  .mockup-float{ animation:mockFloat 3.5s ease-in-out infinite; will-change:transform; }
+  @keyframes mockFloat { 0%,100%{ transform:translateY(-9.9px); } 50%{ transform:translateY(9.9px); } }
+  @media (prefers-reduced-motion: reduce){ .mockup-float{ animation:none; } }
+  /* Full Image → TenderPlus 스타일 카드 */
+  .tp-card { position:relative; width:100%; box-sizing:border-box; border-radius:clamp(20px,2vw,32px); overflow:hidden;
+    min-height:clamp(240px,32vw,440px); padding:clamp(28px,4.2vw,68px);
+    background:linear-gradient(to bottom, #1A1A1A 0%, #4B4945 185%);   /* 연속 블렌드 · 다크 더 넓게 */
+    font-family:'Poppins','Poppins','Pretendard',sans-serif; }
+  /* 글라스 라인(상단이 밝은 그라데이션 보더) */
+  .tp-card::before { content:''; position:absolute; inset:0; z-index:3; border-radius:inherit; padding:1px; pointer-events:none;
+    background:linear-gradient(to bottom, rgba(255,255,255,.6) 0%, rgba(255,255,255,.28) 50%, rgba(255,255,255,.4) 100%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor;
+    mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite:exclude; }
+  /* 이미지만 채우는 카드(텍스트·아이콘 제외, 둥근 카드·글라스 보더 유지) · 높이는 이미지 비율에 맞춤 */
+  .tp-card--img { padding:0; min-height:0; }
+  .tp-full { position:relative; z-index:1; display:block; width:100%; height:auto; }
+  .tp-text { position:relative; z-index:2; max-width:min(58%, 46ch); }
+  .tp-title { margin:0; font-weight:700; font-size:clamp(1.8rem,4vw,3.6rem); line-height:1.05; letter-spacing:-0.02em; color:#ffffff; }
+  .tp-sub { margin:clamp(14px,2vw,28px) 0 0; font-weight:300; font-size:clamp(.9rem,1.35vw,1.15rem); line-height:1.65; color:#ffffff; }
+  .tp-sub b { font-weight:600; color:#ffffff; }
+  /* 우측 3D 캡슐(둥둥) */
+  .tp-object { position:absolute; z-index:1; right:clamp(96px,14vw,250px); top:50%;
+    width:clamp(112px,13vw,200px); transform-style:preserve-3d;
+    animation:tpFloat 5s ease-in-out infinite; }
+  .tp-object img { width:100%; height:auto; display:block; filter:drop-shadow(0 30px 42px rgba(0,0,0,.5)); }
+  /* 3D 원근으로 옆으로 틀어진 채 둥둥 */
+  @keyframes tpFloat {
+    0%,100% { transform:perspective(760px) translateY(calc(-50% - 9px)) rotateY(-22deg) rotateX(7deg); }
+    50%     { transform:perspective(760px) translateY(calc(-50% + 9px)) rotateY(-14deg) rotateX(3deg); }
+  }
+  /* 우측 원형 버튼 2개 */
+  .tp-btns { position:absolute; z-index:2; right:clamp(16px,2vw,30px); top:50%; transform:translateY(-50%); display:flex; flex-direction:column; gap:clamp(10px,1.3vw,18px); }
+  .tp-btn { width:clamp(42px,4.2vw,60px); height:clamp(42px,4.2vw,60px); border-radius:50%; border:1px solid rgba(150,180,240,.28);
+    background:rgba(255,255,255,.06); color:#c8d6ff; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:background .2s ease; }
+  .tp-btn:hover { background:rgba(255,255,255,.15); }
+  .tp-btn svg { width:44%; height:44%; }
+  @media (prefers-reduced-motion: reduce){ .tp-object{ animation:none; } }
+  @media (max-width:640px){ .tp-text{ max-width:70%; } .tp-object{ right:64px; } }
+  @media (prefers-reduced-motion: reduce){ .scroll-arrow, .scroll-arrow-x{ animation:none; } }
+  .concl-box{ position:relative; border-radius:16px;
+    background:linear-gradient(315deg, rgba(224,199,164,0.05) 0%, rgba(248,224,192,0.15) 100%); }
+  .concl-box::before{ content:''; position:absolute; inset:0; border-radius:inherit; padding:1px;
+    background:linear-gradient(135deg, rgba(228,196,156,0.6) 0%, rgba(251,222,184,0.6) 100%);
+    -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
+  .em { font-family:'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 300; letter-spacing:.01em; }
+  .site-pad { padding-left:7vw; padding-right:7vw; }
+  @media (max-width:900px){ .site-pad { padding-left:24px; padding-right:24px; } }
+
+  /* 디자인 시스템 — 버튼(#1C60FF·둥근) */
+  .pf-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; border-radius:999px; padding:0.85em 1.7em; font-family:'Poppins','Pretendard',sans-serif; font-weight:400; font-size:clamp(.9rem,1.05vw,1.05rem); cursor:pointer; transition:background-color .2s ease, color .2s ease, border-color .2s ease; }
+  .pf-btn-primary { background:#7C5CFF; color:#fff; }
+  .pf-btn-primary:hover { background:#6A46F0; }
+  .pf-btn-ghost { border:1.5px solid rgba(255,255,255,.25); color:#EDEDED; background:transparent; }
+  .pf-btn-ghost:hover { background:#7C5CFF; border-color:#7C5CFF; color:#fff; }
+
+  /* Next Project — Pick Time 링크: 호버 시 퍼플 pill 배경이 좌→우로 채워짐(clip-path), 텍스트 위치 고정 */
+  .pick-time { position:relative; z-index:0; display:inline-flex; align-items:center; gap:9px;
+    padding:0.85em 1.7em; border-radius:999px; color:#fff; cursor:pointer;
+    font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; letter-spacing:.01em;
+    font-size:18px; line-height:1; white-space:nowrap; -webkit-tap-highlight-color:transparent; }
+  .pick-time svg { width:17px; height:17px; }
+  .pick-time::before { content:""; position:absolute; inset:0; z-index:-1; border-radius:inherit;
+    background:#7C5CFF; clip-path:inset(0 100% 0 0);
+    transition:clip-path .6s cubic-bezier(0.16,1,0.3,1); }
+  .pick-time:hover::before, .pick-time:focus-visible::before { clip-path:inset(0 0 0 0); }
+
+  /* 스크롤 리빌 (본 사이트와 동일한 애니메이션 스타일) */
+  .reveal { opacity:0; transform: translateY(28px); }
+  html.gsap .reveal { opacity:0; }
+
+  ::-webkit-scrollbar { width:11px; } ::-webkit-scrollbar-track { background:#1a1a1a; }
+  ::-webkit-scrollbar-thumb { background:#3A3A40; border-radius:99px; border:3px solid #1a1a1a; } ::-webkit-scrollbar-thumb:hover { background:#4A4A52; }
+  a:focus-visible, button:focus-visible { outline:2px solid #7C5CFF; outline-offset:3px; border-radius:4px; }
+  @media (prefers-reduced-motion: reduce){ .reveal{ opacity:1 !important; transform:none !important; } }
+
+  /* ===== WBBR 에디토리얼 상세 — 라인 리빌 / 이미지 클립 리빌 / 약한 패럴랙스 ===== */
+  .hero-title, .hero-title .em { color:#fff; }
+  .hero-title .tl-wrap { display:block; overflow:hidden; padding-bottom:.06em; }
+  .hero-title .tl-line, .hero-title .tl-line .em { display:inline-block; will-change:transform; color:#fff; font-family:'Poppins',sans-serif; font-style:normal; font-weight:700; }
+  html.gsap .img-reveal { clip-path: inset(0 0 100% 0); }
+  @media (prefers-reduced-motion: reduce){
+    .hero-title .tl-line{ transform:none !important; }
+    .img-reveal{ clip-path:none !important; }
+  }
+
+  /* ===== 포트폴리오 메인 NAV (동일) ===== */
+  #nav { color:#FFFFFF; width:100%; box-shadow:none; border:none; pointer-events:none; padding-bottom:70px;
+    background-image:linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,.30) 35%, rgba(0,0,0,.12) 70%, rgba(0,0,0,0) 100%);
+    background-repeat:no-repeat; background-position:top; background-size:100% 130px; transition:color .35s ease; }
+  #nav, #nav * { box-shadow:none; border:none; }
+  #nav > *, #nav a, #nav button, #nav span { pointer-events:auto; }
+  .nav-pill { --wb-bg:#1a1a1a; --wb-white:#fff; --wb-radius:50vw;
+    display:inline-flex; align-items:center; border:none; outline:none; box-shadow:none; border-radius:var(--wb-radius);
+    padding:10px 22px; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-size:.78rem; font-weight:400; letter-spacing:.08em;
+    text-transform:uppercase; color:var(--wb-white); background:rgba(255,255,255,.1); cursor:pointer; white-space:nowrap;
+    transition:background .25s ease, color .25s ease; }
+  .nav-pill:hover { background:var(--wb-white); color:var(--wb-bg); }
+  #menu-overlay { position:fixed; inset:0; z-index:60; background:#141414; visibility:hidden;
+    clip-path:inset(0 0 100% 0); display:flex; flex-direction:column; justify-content:center; padding:0 clamp(40px,8vw,150px); }
+  #menu-overlay .menu-close { position:absolute; top:20px; right:clamp(20px,5vw,40px); }
+  .menu-list { display:flex; flex-direction:column; gap:clamp(6px,1.2vh,16px); }
+  .menu-item { display:block; width:fit-content; overflow:hidden; }
+  .menu-item span { display:block; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; font-size:clamp(2.6rem,9vw,7rem);
+    line-height:1.62; letter-spacing:-0.02em; color:#f5f5f4; transition:color .2s ease, opacity .2s ease; will-change:transform; }
+  .menu-item:hover span { color:#6E1CF6; }
+  /* 프로젝트 하위 리스트: 한 줄 배치 + 텍스트 절반 크기 */
+  .menu-sub-row { display:flex; flex-wrap:wrap; align-items:baseline; gap:clamp(16px,3vw,44px); }
+  .menu-item--sub span { font-size:clamp(1.3rem,4.5vw,3.5rem); }
+
+  /* ===== 포트폴리오 메인 푸터 (동일) ===== */
+  .about-3d { width:clamp(92px,13vw,156px); aspect-ratio:1/1; border-radius:50%; position:relative; will-change:transform;
+    background:
+      radial-gradient(120% 120% at 30% 24%, rgba(255,255,255,.95) 0%, rgba(255,255,255,0) 32%),
+      conic-gradient(from 210deg at 50% 50%, #a8f0e6, #ffd4ea, #c9b8ff, #a6e6ff, #fff0c4, #b6f3df, #a8f0e6);
+    filter:saturate(1.35) contrast(1.08);
+    box-shadow:inset 0 0 22px rgba(255,255,255,.6), inset 0 -14px 30px rgba(80,90,200,.35), inset 0 14px 30px rgba(255,255,255,.45), 0 24px 50px rgba(40,40,90,.24); }
+  .about-3d::after { content:""; position:absolute; inset:13%; border-radius:50%; mix-blend-mode:screen; filter:blur(2px);
+    background:conic-gradient(from 40deg, transparent, rgba(255,255,255,.55), transparent 42%); }
+  .site-footer { background:#1a1a1a; color:#ffffff; min-height:100vh; display:flex; align-items:center; box-sizing:border-box; padding-top:66px; }
+  .ft-inner { width:100%; margin:0; padding:clamp(40px,6vh,72px) 7vw; display:flex; flex-direction:column; gap:clamp(28px,5vh,60px); }
+  @media (max-width:900px){ .site-footer { min-height:auto; padding-top:0; } .ft-inner { padding:80px 24px 40px; } }
+  .ft-top-row { display:flex; align-items:flex-start; justify-content:space-between; gap:clamp(20px,4vw,64px); }
+  .ft-headline { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:700; font-size:clamp(2.4rem,9vw,9rem); line-height:.98; letter-spacing:-0.035em; margin:0; text-align:left; }
+  .ft-3d { flex:none; width:clamp(115px,14.4vw,192px); }   /* 20% 확대 */
+  .ft-media { position:relative; display:inline-block; }
+  .ft-media .ft-video { width:100%; height:auto; display:block; position:relative; z-index:1; transform:scaleX(-1); }   /* 좌우반전 */
+  .ft-media::before { content:''; position:absolute; left:50%; top:50%; width:168%; height:168%;
+    transform:translate(-50%,-50%); border-radius:50%; z-index:0; pointer-events:none;
+    background:radial-gradient(circle, #1d1b1d 0 42%, rgba(29,27,29,0) 70%); }
+  .ft-grid { display:grid; grid-template-columns:1fr auto; gap:40px; align-items:end; }
+  .ft-info-col { display:flex; flex-direction:column; gap:7px; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-size:clamp(.85rem,1vw,.98rem); color:#adadad; }
+  .ft-info-col .k { display:inline-block; min-width:84px; color:rgba(255,255,255,.4); }
+  .ft-info-col .ft-copy { margin-top:18px; color:rgba(255,255,255,.38); font-size:.8rem; }
+  .ft-menu { display:flex; flex-direction:row; align-items:center; gap:clamp(20px,2.4vw,40px); }
+  .ft-menu a { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; font-size:clamp(1.05rem,1.6vw,1.4rem); color:#fff; transition:color .2s ease; }
+  .ft-menu a:hover { color:#6E1CF6; }
+  @media (max-width:768px){ .ft-grid { grid-template-columns:1fr; gap:32px; align-items:start; } }
+</style>
+</head>
+
+<body class="bg-paper text-fg font-sans antialiased selection:bg-ink selection:text-paper">
+
+<!-- ============================ NAV ============================ -->
+<header id="nav" class="fixed top-0 inset-x-0 z-50">
+  <div class="w-full flex items-center justify-between px-5 sm:px-10 py-5 text-[0.95rem]">
+    <a href="index.html" class="font-display text-[1.1rem] font-700 tracking-tight whitespace-nowrap">LEE JUNGMIN<span class="opacity-50">.</span></a>
+    <button id="menuBtn" class="nav-pill justify-self-end" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">MENU</button>
+  </div>
+</header>
+
+<!-- 전체화면 메뉴 오버레이 (MENU 클릭 시 확장) -->
+<div id="menu-overlay" aria-hidden="true">
+  <button id="menuClose" class="nav-pill menu-close">CLOSE</button>
+  <nav class="menu-list">
+    <a href="index.html#top" class="menu-item"><span>Home</span></a>
+    <a href="moodle-diary.html" class="menu-item"><span>Moodle Diary</span></a>
+    <a href="pick-time.html" class="menu-item"><span>Pick Time</span></a>
+    <div class="menu-sub-row">
+      <a href="https://www.figma.com/design/Xjrclf5kH63ZTBdTfmsHpi/Food-Eat-Note?node-id=0-1&t=kpn4Eh9sMzkg2BYg-1" target="_blank" rel="noopener" class="menu-item menu-item--sub"><span>Food Eat Note</span></a>
+      <a href="https://www.figma.com/design/JhebkZsnAbigUfLShVFjAu/%EC%96%B4%ED%97%88-%EC%86%90-%EB%96%BC?node-id=51178-269&t=1itzqeN2JSF1C9N8-1" target="_blank" rel="noopener" class="menu-item menu-item--sub"><span>어허 손떼</span></a>
+      <a href="https://www.figma.com/design/FiqSzKc6dbBPZiwHDGTHpl/%EC%9D%B8%ED%84%B0%EB%B2%8C-%ED%83%80%EC%9D%B4%EB%A8%B8?node-id=0-1&t=k6gyZAi8KrLW5wvi-1" target="_blank" rel="noopener" class="menu-item menu-item--sub"><span>인터벌 타이머</span></a>
+      <a href="https://www.figma.com/design/0J9bHIusEPS6QhUMz8dAOY/%EB%83%89%EC%9E%A5%EA%B3%A0-%EC%9E%AC%EA%B3%A0-%EA%B4%80%EB%A6%AC?node-id=0-1&t=jFoF8xhkYzTx3yTe-1" target="_blank" rel="noopener" class="menu-item menu-item--sub"><span>냉장고 재고 관리</span></a>
+    </div>
+  </nav>
+</div>
+
+<main>
+<!-- ============================ 1. HERO (타이포 중심 · 라인 리빌) ============================ -->
+<section class="site-pad pb-24 sm:pb-36" style="background:linear-gradient(180deg, rgba(144,58,255,0.4) 0%, rgba(144,58,255,0) 70%)">
+  <div class="text-center min-h-screen flex items-center justify-center">
+    <h1 class="hero-title reveal t-display-1 text-ink">
+      <span class="tl-wrap"><span class="tl-line">Pick <span class="em">Time</span></span></span>
+    </h1>
+  </div>
+  <!-- 이미지: 텍스트 아래 전폭 배치 (bg 위에 목업이 둥둥 떠다님) -->
+  <div class="reveal mt-14 sm:mt-20 w-[95%] mx-auto mb-[-12vh]" data-delay="1">
+    <div class="relative rounded-2xl overflow-hidden" style="transform:translateY(-20%)">
+      <img class="w-1/2 h-auto block mx-auto" src="img/pick-time/back-bg.png" alt="Pick Time 배경">
+      <div class="absolute inset-0 flex items-center justify-center p-[5%]">
+        <img class="mockup-float max-w-full max-h-full w-auto" src="img/pick-time/mockup.png" alt="Pick Time 목업">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 2. PROJECT OVERVIEW (+ Full Image 한 그룹) ============================ -->
+<section class="site-pad pt-36 sm:pt-60 pb-[84px] sm:pb-36">
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-12 gap-x-16 items-start">
+    <div class="reveal">
+      <p class="t-caption text-[#adadad] mb-6">Overview</p>
+      <h2 class="t-h2 text-ink">일기,<br>매번 포기하시나요?</h2>
+    </div>
+    <div>
+      <p class="reveal t-body-1 text-ink w-full max-w-none mb-14 sm:mb-20">
+        글로 표현하자니 막막하고 그림으로 남기자니 자신이 없고, 쓰다가 며칠 만에 덮어버린 일기장 한 번쯤 있으시지 않나요? 감정은 분명히 있는데 그걸 기록하는 방법을 몰라서 결국 아무것도 남기지 못했던 경험 저도 있었어요.
+      </p>
+      <dl class="reveal grid sm:grid-cols-2 gap-x-16 border-t border-line">
+        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">담당 역할 (Role)</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">UX 리서치 · UI · 디자인 시스템</dd></div>
+        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">기간</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">2026.01</dd></div>
+        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">사용 툴</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">Figma · AI · Illustrator</dd></div>
+        <div class="py-6 border-b border-line flex justify-between gap-6"><dt class="text-[length:var(--fs-body-3)] text-subtle">플랫폼</dt><dd class="text-[length:var(--fs-body-3)] font-600 text-ink text-right">Android</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 3. FULL IMAGE → TenderPlus 스타일 카드 ============================ -->
+<section class="site-pad pb-[200px] sm:pb-[354px]">
+  <div class="reveal tp-card tp-card--img" data-delay="1">
+    <img class="tp-full" src="img/Moodle Diary/full image.jpg" alt="TenderPlus">
+  </div>
+</section>
+
+<!-- ============================ 4. DESK RESEARCH ============================ -->
+<section id="desk-research" class="site-pad pb-[200px] sm:pb-[354px]">
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-14 gap-x-16 items-start">
+    <div class="reveal">
+      <p class="t-caption text-[#adadad] mb-6" style="color:#adadad">Desk Research</p>
+      <h2 class="t-h2 text-ink">그 경험에서<br>시작됐어요.</h2>
+      <p class="t-body-2 mt-4" style="color:#adadad">감정을 기록하기 어려운 건 저만의 고민이 아니었습니다. 리서치를 통해 많은 사람들이 같은 어려움을 겪고 있다는 것을 확인했습니다.</p>
+    </div>
+    <!-- 우측 컬럼: 리서치 카드 3장 + 결론 -->
+    <div>
+    <!-- 리서치 카드 3장 (상단 GIF · 아이콘 · 라벨 · 헤드라인 · 본문) -->
+    <div class="grid sm:grid-cols-3 gap-4 sm:gap-6">
+      <article class="reveal flex flex-col text-center rounded-2xl p-8 sm:p-9" style="background:linear-gradient(135deg, #3d3d47 0%, #232328 100%)">
+        <div class="aspect-[4/3] rounded-xl overflow-hidden mb-6 flex items-center justify-center">
+          <img class="max-w-[90%] max-h-[90%] object-contain" src="img/Moodle Diary/desk-1.png" alt="일기 앱 사용 패턴" loading="lazy">
+        </div>
+        <img src="img/Moodle%20Diary/desk_object.svg" alt="" class="block mx-auto mb-4" style="width:11.2px;height:11.2px;" />
+        <p class="t-caption text-subtle mb-3">일기 앱 사용 패턴</p>
+        <h3 class="t-body-1 text-ink leading-snug mb-4">시작은 쉽지만<br>지속이 어렵다.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">다운로드 후 <b class="font-600 text-fg">이탈률은 급증</b>하고 기록 지속률은 하락해요. 진입 장벽을 낮추지 않으면 습관 형성이 어려워요.</p>
+      </article>
+
+      <article class="reveal flex flex-col text-center rounded-2xl p-8 sm:p-9" style="background:linear-gradient(135deg, #3d3d47 0%, #232328 100%)">
+        <div class="aspect-[4/3] rounded-xl overflow-hidden mb-6 flex items-center justify-center">
+          <img class="max-w-[90%] max-h-[90%] object-contain" src="img/Moodle Diary/desk-2.png" alt="글쓰기의 심리적 부담" loading="lazy">
+        </div>
+        <img src="img/Moodle%20Diary/desk_object.svg" alt="" class="block mx-auto mb-4" style="width:11.2px;height:11.2px;" />
+        <p class="t-caption text-subtle mb-3">글쓰기의 심리적 부담</p>
+        <h3 class="t-body-1 text-ink leading-snug mb-4">감정은 있는데<br>말로 못 쓰겠다.</h3>
+        <p class="t-body-3 text-muted leading-relaxed"><b class="font-600 text-fg">응답자 60% 이상</b>이 감정을 글로 표현하는 데 어려움을 느낀다고 답했어요.</p>
+      </article>
+
+      <article class="reveal flex flex-col text-center rounded-2xl p-8 sm:p-9" style="background:linear-gradient(135deg, #3d3d47 0%, #232328 100%)">
+        <div class="aspect-[4/3] rounded-xl overflow-hidden mb-6 flex items-center justify-center">
+          <img class="max-w-[90%] max-h-[90%] object-contain" src="img/Moodle Diary/desk-3.png" alt="그림일기에 대한 인식" loading="lazy">
+        </div>
+        <img src="img/Moodle%20Diary/desk_object.svg" alt="" class="block mx-auto mb-4" style="width:11.2px;height:11.2px;" />
+        <p class="t-caption text-subtle mb-3">그림일기에 대한 인식</p>
+        <h3 class="t-body-1 text-ink leading-snug mb-4">그림일기 로망,<br>하지만 못 그린다.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">그림일기에 <b class="font-600 text-fg">감성적 로망</b>을 갖고 있지만, 그림 실력 부족으로 시작조차 못해요.</p>
+      </article>
+    </div>
+
+    <!-- 결론: 리서치 → 아이디어 도출 (카드 영역과 같은 컬럼 안) -->
+    <div class="reveal flex flex-col items-center text-center mt-16 sm:mt-24">
+      <svg class="scroll-arrow block mx-auto mb-16 sm:mb-24" width="18" height="80" viewBox="0 0 18 80" fill="none" aria-hidden="true">
+        <defs><linearGradient id="arrGrad" x1="9" y1="0" x2="9" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff" stop-opacity="0"/><stop offset="0.55" stop-color="#ffffff" stop-opacity="0.85"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs>
+        <path d="M9 2 V70" stroke="url(#arrGrad)" stroke-width="1.4" stroke-linecap="round"/>
+        <path d="M3 62.5 L9 71 L15 62.5" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <h3 class="t-h3 mb-8 sm:mb-10" style="color:#D9CBB6;font-weight:700">그래서 떠올렸어요.</h3>
+      <div class="concl-box px-8 py-8 sm:px-14 sm:py-11 w-full">
+        <p class="t-body-1 text-ink font-700 leading-snug mb-2">AI 기술을 활용하면, 사용자가 글을 쓰지 않아도</p>
+        <p class="t-body-1 text-muted leading-snug">누구나 감정을 그림으로 기록할 수 있겠다는 아이디어에서 출발했어요.</p>
+      </div>
+    </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 4-2. WHO (문제를 겪던 두 사람 · 페르소나) ============================ -->
+<section class="site-pad pb-[200px] sm:pb-[354px]">
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
+    <div class="reveal">
+      <p class="t-caption text-[#adadad] mb-6">WHO</p>
+      <h2 class="t-h2 text-ink">이 문제를 겪고 있던<br>두 사람이 있었어요.</h2>
+      <p class="t-body-2 text-[#adadad] mt-4">시작은 달랐지만, 포기한 순간은 닮아 있었어요.</p>
+    </div>
+    <div>
+  <div class="grid md:grid-cols-2 gap-4 sm:gap-6">
+    <!-- 페르소나 1 -->
+    <article class="persona-card reveal rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center" style="background:linear-gradient(135deg,#34343b 0%,#232328 100%)">
+      <div class="w-[222px] h-[222px] rounded-full overflow-hidden bg-[#2b2932] mb-6 p-[6.3px] flex items-center justify-center">
+        <img src="img/Moodle%20Diary/persona-1.gif" alt="이수아" class="w-full h-full object-contain" loading="lazy">
+      </div>
+      <p class="mb-1"><span class="text-ink t-h3" style="font-weight:700">이수아</span> <span class="text-[length:var(--fs-body-3)]" style="color:#c1c1c1">29세 / 대학원생</span></p>
+      <p class="font-600 text-ink text-[length:var(--fs-body-3)] mb-5">글로도, 그림으로도 표현하기 어려웠어요.</p>
+      <div class="flex flex-wrap justify-center gap-2 mb-6">
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">기록 의지 있음</span>
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">빈 페이지 압박</span>
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">그림 표현 한계</span>
+      </div>
+      <img src="img/Moodle%20Diary/desk_object.svg" alt="" class="mb-3" style="width:11.2px;height:11.2px">
+      <p class="t-body-3 text-white leading-relaxed mb-6" style="font-weight:400">쓰고 싶어도 빈 페이지 앞에서 막막하고,<br>그리고 싶어도 손재주가 없어 결국 포기했어요.</p>
+      <div class="w-full rounded-xl px-5 py-4 mt-auto t-body-3 text-muted leading-relaxed" style="background:rgba(255,255,255,0.04);font-weight:700">그림일기를 꿈꿨지만 실력이 없어 시작조차 못 했고,<br>빈 페이지 압박에 글도 결국 못 썼어요.</div>
+      <svg class="scroll-arrow my-3" width="14" height="30" viewBox="0 0 14 30" fill="none" aria-hidden="true"><defs><linearGradient id="arrGradS" x1="7" y1="0" x2="7" y2="30" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff" stop-opacity="0"/><stop offset="0.55" stop-color="#ffffff" stop-opacity="0.7"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M7 1 V25" stroke="url(#arrGradS)" stroke-width="1.3" stroke-linecap="round"/><path d="M2.5 20 L7 25.5 L11.5 20" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="w-full rounded-xl px-5 py-4 min-h-[100px] flex flex-col justify-center" style="background:linear-gradient(135deg,rgba(120,224,224,0.16) 0%,rgba(56,132,132,0.16) 100%);border:1px solid rgba(150,240,240,0.55)">
+        <p class="t-body-2" style="color:#5fe3e3;font-weight:700">AI가 감정을 그림으로 대신 그려준다면?</p>
+        <p class="t-body-2 font-700 mt-1" style="color:#a6f5f5">그냥 오늘 기분만 고르면 돼요.</p>
+      </div>
+    </article>
+
+    <!-- 페르소나 2 -->
+    <article class="persona-card reveal rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center" style="background:linear-gradient(135deg,#34343b 0%,#232328 100%)">
+      <div class="w-[222px] h-[222px] rounded-full overflow-hidden bg-[#2b2932] mb-6 p-[6.3px] flex items-center justify-center">
+        <img src="img/Moodle%20Diary/persona-2.gif" alt="박민준" class="w-full h-full object-contain" loading="lazy">
+      </div>
+      <p class="mb-1"><span class="text-ink t-h3" style="font-weight:700">박민준</span> <span class="text-[length:var(--fs-body-3)]" style="color:#c1c1c1">29세 / 스타트업 개발자</span></p>
+      <p class="font-600 text-ink text-[length:var(--fs-body-3)] mb-5">기록 습관 유지의 어려워요.</p>
+      <div class="flex flex-wrap justify-center gap-2 mb-6">
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">빠른 일상</span>
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">습관 형성 실패</span>
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">반복 이탈</span>
+      </div>
+      <img src="img/Moodle%20Diary/desk_object.svg" alt="" class="mb-3" style="width:11.2px;height:11.2px">
+      <p class="t-body-3 text-white leading-relaxed mb-6" style="font-weight:400">처음엔 잘 쓰다가 며칠 빠지면<br>밀린 날을 채워야 할 것 같은 압박이 생기고,<br>결국 앱이 부담이 돼서 지워버렸어요.</p>
+      <div class="w-full rounded-xl px-5 py-4 mt-auto t-body-3 text-muted leading-relaxed" style="background:rgba(255,255,255,0.04);font-weight:700">며칠 빠지면 죄책감이 생기고, 그게 부담이 되다 보니<br>결국 앱을 지워버리는 패턴이 반복됐어요.</div>
+      <svg class="scroll-arrow my-3" width="14" height="30" viewBox="0 0 14 30" fill="none" aria-hidden="true"><defs><linearGradient id="arrGradS" x1="7" y1="0" x2="7" y2="30" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff" stop-opacity="0"/><stop offset="0.55" stop-color="#ffffff" stop-opacity="0.7"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs><path d="M7 1 V25" stroke="url(#arrGradS)" stroke-width="1.3" stroke-linecap="round"/><path d="M2.5 20 L7 25.5 L11.5 20" stroke="#ffffff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="w-full rounded-xl px-5 py-4 min-h-[100px] flex flex-col justify-center" style="background:linear-gradient(135deg,rgba(120,224,224,0.16) 0%,rgba(56,132,132,0.16) 100%);border:1px solid rgba(150,240,240,0.55)">
+        <p class="t-body-2" style="color:#5fe3e3;font-weight:700">키워드 하나만 골라도 기록이 완성된다면?</p>
+        <p class="t-body-2 font-700 mt-1" style="color:#a6f5f5">오늘 하루를 30초면 남길 수 있어요.</p>
+      </div>
+    </article>
+  </div>
+
+  <!-- 결론 화살표 + Solution 통합 문장 -->
+  <div class="reveal flex flex-col items-center mt-16 sm:mt-24">
+    <svg class="scroll-arrow block mx-auto mb-16 sm:mb-24" width="18" height="80" viewBox="0 0 18 80" fill="none" aria-hidden="true">
+      <defs><linearGradient id="arrGrad2" x1="9" y1="0" x2="9" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff" stop-opacity="0"/><stop offset="0.55" stop-color="#ffffff" stop-opacity="0.85"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs>
+      <path d="M9 2 V70" stroke="url(#arrGrad2)" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M3 62.5 L9 71 L15 62.5" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="concl-box w-full px-8 py-8 sm:px-12 sm:py-10 flex flex-col items-center text-center gap-4 sm:gap-5">
+      <span class="text-[length:var(--fs-body-3)]" style="color:#e0c7a4;text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(224,199,164,0.4)">Insight</span>
+      <p class="t-body-1 text-ink leading-snug">두 사람 모두에게 필요한 건 더 쉬운 시작이었어요.<br><b class="font-700">글 대신 그림으로, 긴 문장 대신 키워드 하나로. 나머지는 AI가 채워주는 일기예요.</b></p>
+    </div>
+  </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 4-3. DECISION (세 가지 결정 · Problem/Solution) ============================ -->
+<section class="site-pad pb-[200px] sm:pb-[354px]">
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
+    <div class="reveal">
+      <p class="t-caption text-[#adadad] mb-6">DECISION</p>
+      <h2 class="t-h2 text-ink">디자인하면서<br>가장 고민했던 게 뭔가요?</h2>
+      <p class="t-body-2 text-[#adadad] mt-4">세 가지 결정이 특히 어려웠어요.</p>
+    </div>
+    <div>
+  <div class="flex flex-col gap-4 sm:gap-6">
+    <!-- 01 -->
+    <div class="grid lg:grid-cols-[1fr_auto_1fr] gap-4 lg:gap-6 items-stretch">
+      <article class="reveal rounded-2xl p-7 sm:p-9 text-center flex flex-col" style="background:linear-gradient(135deg,#34343b 0%,#232328 100%)">
+        <span class="text-[length:var(--fs-body-3)] text-subtle mb-4 self-center" style="text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(255,255,255,0.3)">Problem 01</span>
+        <h3 class="t-body-1 text-ink font-700 leading-snug mb-4">감정 입력을<br>얼마나 단순하게 만들까?</h3>
+        <p class="t-body-3 text-muted leading-relaxed">무슨 감정인지 알면서도,<br>막상 글로 쓰려니 손이 멈췄어요.</p>
+      </article>
+      <div class="hidden lg:flex items-center justify-center"><svg class="scroll-arrow-x" width="56" height="18" viewBox="0 0 56 18" fill="none" aria-hidden="true"><defs><linearGradient id="arrGradX" x1="0" y1="9" x2="56" y2="9" gradientUnits="userSpaceOnUse"><stop stop-color="#6fbcbc" stop-opacity="0"/><stop offset="0.55" stop-color="#6fbcbc" stop-opacity="0.85"/><stop offset="1" stop-color="#8fe0e0"/></linearGradient></defs><path d="M2 9 H48" stroke="url(#arrGradX)" stroke-width="1.4" stroke-linecap="round"/><path d="M41 3.5 L49 9 L41 14.5" stroke="#8fe0e0" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <article class="reveal rounded-2xl p-7 sm:p-9 text-center flex flex-col" style="background:linear-gradient(135deg,rgba(120,224,224,0.16) 0%,rgba(56,132,132,0.16) 100%);border:1px solid rgba(150,240,240,0.55)">
+        <span class="text-[length:var(--fs-body-3)] mb-4 self-center" style="color:#a6eeee;text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(150,240,240,0.4)">Solution 01</span>
+        <h3 class="t-body-1 font-700 leading-snug mb-4" style="color:#5fe3e3">컬러 카드 → 세부 감정 → 키워드<br>3단계 구조</h3>
+        <p class="t-body-3 leading-relaxed" style="color:#a6f5f5">색으로 감정을 고르고, 그 감정을 가장 잘 나타내는 표현 하나만 고르면 돼요. 글 없이도 오늘 하루를 남길 수 있어요.</p>
+      </article>
+    </div>
+    <!-- 02 -->
+    <div class="grid lg:grid-cols-[1fr_auto_1fr] gap-4 lg:gap-6 items-stretch">
+      <article class="reveal rounded-2xl p-7 sm:p-9 text-center flex flex-col" style="background:linear-gradient(135deg,#34343b 0%,#232328 100%)">
+        <span class="text-[length:var(--fs-body-3)] text-subtle mb-4 self-center" style="text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(255,255,255,0.3)">Problem 02</span>
+        <h3 class="t-body-1 text-ink font-700 leading-snug mb-4">글을 아예 못 쓰는 날은<br>어떻게 하지?</h3>
+        <p class="t-body-3 text-muted leading-relaxed">기록하고 싶은 마음은 있었는데,<br>글이 도저히 안 써질 땐 어떻게 할지 몰랐어요.</p>
+      </article>
+      <div class="hidden lg:flex items-center justify-center"><svg class="scroll-arrow-x" width="56" height="18" viewBox="0 0 56 18" fill="none" aria-hidden="true"><defs><linearGradient id="arrGradX" x1="0" y1="9" x2="56" y2="9" gradientUnits="userSpaceOnUse"><stop stop-color="#6fbcbc" stop-opacity="0"/><stop offset="0.55" stop-color="#6fbcbc" stop-opacity="0.85"/><stop offset="1" stop-color="#8fe0e0"/></linearGradient></defs><path d="M2 9 H48" stroke="url(#arrGradX)" stroke-width="1.4" stroke-linecap="round"/><path d="M41 3.5 L49 9 L41 14.5" stroke="#8fe0e0" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <article class="reveal rounded-2xl p-7 sm:p-9 text-center flex flex-col" style="background:linear-gradient(135deg,rgba(120,224,224,0.16) 0%,rgba(56,132,132,0.16) 100%);border:1px solid rgba(150,240,240,0.55)">
+        <span class="text-[length:var(--fs-body-3)] mb-4 self-center" style="color:#a6eeee;text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(150,240,240,0.4)">Solution 02</span>
+        <h3 class="t-body-1 font-700 leading-snug mb-4" style="color:#5fe3e3">키워드 모드<br>“무들이 대신 써드릴게요”</h3>
+        <p class="t-body-3 leading-relaxed" style="color:#a6f5f5">태그만 골라도 AI가 일기를 완성해줘요. “써야 한다”는 부담을 “골라도 된다”는 허락으로 바꿔버렸어요.</p>
+      </article>
+    </div>
+    <!-- 03 -->
+    <div class="grid lg:grid-cols-[1fr_auto_1fr] gap-4 lg:gap-6 items-stretch">
+      <article class="reveal rounded-2xl p-7 sm:p-9 text-center flex flex-col" style="background:linear-gradient(135deg,#34343b 0%,#232328 100%)">
+        <span class="text-[length:var(--fs-body-3)] text-subtle mb-4 self-center" style="text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(255,255,255,0.3)">Problem 03</span>
+        <h3 class="t-body-1 text-ink font-700 leading-snug mb-4">달력에서 그림을<br>제대로 볼 수 없을까?</h3>
+        <p class="t-body-3 text-muted leading-relaxed">달력에선 그림이 작아 썸네일로만 보였는데,<br>마음에 안 들어도 바꿀 방법이 없었어요.</p>
+      </article>
+      <div class="hidden lg:flex items-center justify-center"><svg class="scroll-arrow-x" width="56" height="18" viewBox="0 0 56 18" fill="none" aria-hidden="true"><defs><linearGradient id="arrGradX" x1="0" y1="9" x2="56" y2="9" gradientUnits="userSpaceOnUse"><stop stop-color="#6fbcbc" stop-opacity="0"/><stop offset="0.55" stop-color="#6fbcbc" stop-opacity="0.85"/><stop offset="1" stop-color="#8fe0e0"/></linearGradient></defs><path d="M2 9 H48" stroke="url(#arrGradX)" stroke-width="1.4" stroke-linecap="round"/><path d="M41 3.5 L49 9 L41 14.5" stroke="#8fe0e0" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <article class="reveal rounded-2xl p-7 sm:p-9 text-center flex flex-col" style="background:linear-gradient(135deg,rgba(120,224,224,0.16) 0%,rgba(56,132,132,0.16) 100%);border:1px solid rgba(150,240,240,0.55)">
+        <span class="text-[length:var(--fs-body-3)] mb-4 self-center" style="color:#a6eeee;text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(150,240,240,0.4)">Solution 03</span>
+        <h3 class="t-body-1 font-700 leading-snug mb-4" style="color:#5fe3e3">캘린더 뷰 + 리스트 뷰<br>두 가지 방식</h3>
+        <p class="t-body-3 leading-relaxed" style="color:#a6f5f5">달력에선 흐름을 한눈에 보고, 리스트에선 그림을 크게 확인할 수 있어요. 보는 방식은 원하는 대로 선택하면 돼요.</p>
+      </article>
+    </div>
+  </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 4-4. BI DESIGN (로고 컨셉) ============================ -->
+<section class="site-pad pb-[200px] sm:pb-[354px]">
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-center">
+    <div class="reveal">
+      <p class="t-caption text-[#adadad] mb-6">BI Design</p>
+      <h2 class="t-h2 text-ink">사람의 감정을<br>담은 AI붓</h2>
+      <p class="t-body-2 text-[#adadad] mt-4">사람 + AI붓 + 감정</p>
+    </div>
+    <!-- 로고 조합 공식 (아이콘·최종 로고는 이미지 자리) -->
+    <div id="bi-formula" class="flex items-center justify-center flex-wrap gap-5 sm:gap-9">
+      <img src="img/Moodle%20Diary/person.png" alt="사람" class="w-[58px] h-[58px] rounded-xl object-contain" loading="lazy">
+      <span class="inline-flex items-center justify-center w-[26px] h-[26px] rounded-full bg-[#D9CBB6] ring-1 ring-line shrink-0" aria-hidden="true">
+        <svg width="15.4" height="15.4" viewBox="0 0 14 14" fill="none" stroke="#4a4238" stroke-width="1.6" stroke-linecap="round"><path d="M7 2.5v9M2.5 7h9"/></svg>
+      </span>
+      <img src="img/Moodle%20Diary/pen.png" alt="AI붓" class="w-[58px] h-[58px] rounded-xl object-contain" loading="lazy">
+      <span class="inline-flex items-center justify-center w-[26px] h-[26px] rounded-full bg-[#D9CBB6] ring-1 ring-line shrink-0" aria-hidden="true">
+        <svg width="15.4" height="15.4" viewBox="0 0 14 14" fill="none" stroke="#4a4238" stroke-width="1.6" stroke-linecap="round"><path d="M7 2.5v9M2.5 7h9"/></svg>
+      </span>
+      <img src="img/Moodle%20Diary/emotion.png" alt="감정" class="w-[58px] h-[58px] rounded-xl object-contain" loading="lazy">
+      <span class="inline-flex items-center justify-center mx-1 shrink-0" aria-hidden="true">
+        <svg width="40" height="14" viewBox="0 0 40 14" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <defs><linearGradient id="biArrowGrad" x1="0" y1="0" x2="40" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#5fe3e3" stop-opacity="0"/><stop offset="1" stop-color="#5fe3e3" stop-opacity="1"/>
+          </linearGradient></defs>
+          <path class="bi-arrow-path" d="M2 7h34M30 2l6 5-6 5" stroke="#ffffff"/>
+        </svg>
+      </span>
+      <img src="img/Moodle%20Diary/logo.png" alt="로고" class="w-[192px] h-[192px] rounded-2xl object-contain" loading="lazy" style="filter:drop-shadow(0 0 24px rgba(217,203,182,0.4))">
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 4-5. DESIGN SYSTEM (컬러 · 타이포 · 아이콘) ============================ -->
+<section class="site-pad pb-[200px] sm:pb-[354px]">
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
+    <div class="reveal">
+      <p class="t-caption text-[#adadad] mb-6">Design System</p>
+      <h2 class="t-h2 text-ink">디자인 시스템</h2>
+    </div>
+    <div>
+
+  <!-- Color Styles -->
+  <h3 class="reveal text-ink font-500 text-[length:var(--fs-body-2)] mb-6">Color Styles</h3>
+  <div class="reveal grid sm:grid-cols-2 gap-3 mb-3">
+    <div class="rounded-xl p-5 h-24 flex flex-col justify-between" style="background:#607D8B;color:#fff"><span class="font-700">Blue Gray</span><span class="text-[length:var(--fs-body-3)] opacity-80">607D8B</span></div>
+    <div class="rounded-xl p-5 h-24 flex flex-col justify-between" style="background:#CED7DB;color:#1F1F1F"><span class="font-700">Blue Gray Light</span><span class="text-[length:var(--fs-body-3)] opacity-70">CED7DB</span></div>
+  </div>
+  <div class="reveal grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-16">
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between ring-1 ring-line" style="background:#FFFFFF;color:#1F1F1F"><span class="text-[length:var(--fs-caption)] font-700">Gray 0</span><span class="text-[length:var(--fs-caption)] opacity-70">FFFFFF</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#EEEEEE;color:#1F1F1F"><span class="text-[length:var(--fs-caption)] font-700">Gray 50</span><span class="text-[length:var(--fs-caption)] opacity-70">EEEEEE</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#D2D2D2;color:#1F1F1F"><span class="text-[length:var(--fs-caption)] font-700">Gray 100</span><span class="text-[length:var(--fs-caption)] opacity-70">D2D2D2</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#AFAFAF;color:#1F1F1F"><span class="text-[length:var(--fs-caption)] font-700">Gray 200</span><span class="text-[length:var(--fs-caption)] opacity-70">AFAFAF</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#898989;color:#fff"><span class="text-[length:var(--fs-caption)] font-700">Gray 300</span><span class="text-[length:var(--fs-caption)] opacity-80">898989</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#666666;color:#fff"><span class="text-[length:var(--fs-caption)] font-700">Gray 400</span><span class="text-[length:var(--fs-caption)] opacity-80">666666</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#444444;color:#fff"><span class="text-[length:var(--fs-caption)] font-700">Gray 500</span><span class="text-[length:var(--fs-caption)] opacity-80">444444</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#3A3A3A;color:#fff"><span class="text-[length:var(--fs-caption)] font-700">Gray 600</span><span class="text-[length:var(--fs-caption)] opacity-80">3A3A3A</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#303030;color:#fff"><span class="text-[length:var(--fs-caption)] font-700">Gray 700</span><span class="text-[length:var(--fs-caption)] opacity-80">303030</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#272727;color:#fff"><span class="text-[length:var(--fs-caption)] font-700">Gray 800</span><span class="text-[length:var(--fs-caption)] opacity-80">272727</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between ring-1 ring-line" style="background:#1F1F1F;color:#fff"><span class="text-[length:var(--fs-caption)] font-700">Gray 900</span><span class="text-[length:var(--fs-caption)] opacity-80">1F1F1F</span></div>
+  </div>
+
+  <!-- Emotion-Color -->
+  <h3 class="reveal text-ink font-500 text-[length:var(--fs-body-2)] mb-6">Emotion-Color</h3>
+  <div class="reveal grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 mb-16">
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#e78600;color:#fff"><span class="text-[length:var(--fs-body-3)] font-700">기쁜</span><span class="text-[length:var(--fs-caption)] opacity-90">e78600</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#ffcd00;color:#1F1F1F"><span class="text-[length:var(--fs-body-3)] font-700">즐거운</span><span class="text-[length:var(--fs-caption)] opacity-80">ffcd00</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#ff20a8;color:#fff"><span class="text-[length:var(--fs-body-3)] font-700">설레는</span><span class="text-[length:var(--fs-caption)] opacity-90">ff20a8</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#9be99b;color:#1F1F1F"><span class="text-[length:var(--fs-body-3)] font-700">평화로운</span><span class="text-[length:var(--fs-caption)] opacity-80">9be99b</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#a1a1a1;color:#1F1F1F"><span class="text-[length:var(--fs-body-3)] font-700">무기력한</span><span class="text-[length:var(--fs-caption)] opacity-80">a1a1a1</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#6e1842;color:#fff"><span class="text-[length:var(--fs-body-3)] font-700">긴장되는</span><span class="text-[length:var(--fs-caption)] opacity-90">6e1842</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#004fc7;color:#fff"><span class="text-[length:var(--fs-body-3)] font-700">슬픈</span><span class="text-[length:var(--fs-caption)] opacity-90">004fc7</span></div>
+    <div class="rounded-xl p-4 h-20 flex flex-col justify-between" style="background:#ce1717;color:#fff"><span class="text-[length:var(--fs-body-3)] font-700">화나는</span><span class="text-[length:var(--fs-caption)] opacity-90">ce1717</span></div>
+  </div>
+
+  <!-- Typography -->
+  <h3 class="reveal text-ink font-500 text-[length:var(--fs-body-2)] mb-6">Typography</h3>
+  <div class="reveal text-center mb-8">
+    <p class="font-700" style="font-size:clamp(48px,9vw,110px);line-height:1;letter-spacing:-0.02em;background:linear-gradient(180deg,#ffffff 0%,#ffffff 50%,#1a1a1a 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent">Pretendard</p>
+    <p class="mt-4 text-[length:var(--fs-body-3)]" style="color:#ffffff"><span style="font-weight:700">Bold</span> &nbsp; <span style="font-weight:400">Medium</span> &nbsp; <span style="font-weight:300">Regular</span></p>
+  </div>
+  <div class="reveal rounded-2xl p-8 sm:p-14 flex flex-wrap justify-between gap-x-4 gap-y-12" style="background:#202024">
+    <div class="text-center">
+      <p class="text-ink font-700 mb-4">Display</p>
+      <div class="flex items-center justify-center gap-1 text-white text-[length:var(--fs-body-3)]">
+        <span class="rounded-full bg-[#1a1a1a] w-9 h-9 flex items-center justify-center">44</span><span class="shrink-0" style="width:20px;height:1px;background:repeating-linear-gradient(to right,#86868b 0 3px,transparent 3px 5px)"></span>
+        <span class="rounded-full bg-[#1a1a1a] w-9 h-9 flex items-center justify-center">32</span><span class="shrink-0" style="width:20px;height:1px;background:repeating-linear-gradient(to right,#86868b 0 3px,transparent 3px 5px)"></span>
+        <span class="rounded-full bg-[#1a1a1a] w-9 h-9 flex items-center justify-center">28</span>
+      </div>
+    </div>
+    <div class="text-center">
+      <p class="text-ink font-700 mb-4">Headline</p>
+      <div class="flex items-center justify-center gap-1 text-white text-[length:var(--fs-body-3)]">
+        <span class="rounded-full bg-[#1a1a1a] w-9 h-9 flex items-center justify-center">24</span><span class="shrink-0" style="width:20px;height:1px;background:repeating-linear-gradient(to right,#86868b 0 3px,transparent 3px 5px)"></span>
+        <span class="rounded-full bg-[#1a1a1a] w-9 h-9 flex items-center justify-center">22</span><span class="shrink-0" style="width:20px;height:1px;background:repeating-linear-gradient(to right,#86868b 0 3px,transparent 3px 5px)"></span>
+        <span class="rounded-full bg-[#1a1a1a] w-9 h-9 flex items-center justify-center">20</span><span class="shrink-0" style="width:20px;height:1px;background:repeating-linear-gradient(to right,#86868b 0 3px,transparent 3px 5px)"></span>
+        <span class="rounded-full bg-[#1a1a1a] w-9 h-9 flex items-center justify-center">18</span>
+      </div>
+    </div>
+    <div class="text-center">
+      <p class="text-ink font-700 mb-4">Body</p>
+      <div class="flex items-center justify-center gap-1 text-white text-[length:var(--fs-body-3)]">
+        <span class="rounded-full bg-[#1a1a1a] w-9 h-9 flex items-center justify-center">18</span><span class="shrink-0" style="width:20px;height:1px;background:repeating-linear-gradient(to right,#86868b 0 3px,transparent 3px 5px)"></span>
+        <span class="rounded-full bg-[#1a1a1a] w-9 h-9 flex items-center justify-center">16</span><span class="shrink-0" style="width:20px;height:1px;background:repeating-linear-gradient(to right,#86868b 0 3px,transparent 3px 5px)"></span>
+        <span class="rounded-full bg-[#1a1a1a] w-9 h-9 flex items-center justify-center">14</span>
+      </div>
+    </div>
+    <div class="text-center">
+      <p class="text-ink font-700 mb-4">Caption</p>
+      <div class="flex items-center justify-center gap-1 text-white text-[length:var(--fs-body-3)]">
+        <span class="rounded-full bg-[#1a1a1a] w-9 h-9 flex items-center justify-center">12</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Icon (이미지 자리) -->
+  <h3 class="reveal text-ink font-500 text-[length:var(--fs-body-2)] mt-16 mb-6">Icon</h3>
+  <div class="reveal rounded-2xl p-8 sm:p-14" style="background:#202024">
+    <div class="grid grid-cols-[repeat(auto-fill,52px)] gap-5 justify-center">
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_1.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_2.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_3.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_4.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_5.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_6.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_7.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_8.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_9.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_10.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_11.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_12.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_13.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_14.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_15.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_16.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_17.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_18.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_19.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_20.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_21.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_22.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_23.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_24.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_25.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_26.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_27.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_28.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_29.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_30.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/Moodle%20Diary/icon/icon_31.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+    </div>
+  </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 5. PROCESS (화면·플로우 · tsitsipas on-court 레이아웃) ============================ -->
+<section class="site-pad pb-[200px] sm:pb-[354px]">
+  <p class="reveal t-caption text-[#adadad] mb-6">UI Design</p>
+  <h2 class="reveal t-h2 text-ink">하루하루가 그림으로 남아요.</h2>
+  <p class="reveal t-body-2 text-[#adadad] mt-4 mb-14 sm:mb-20">한 달의 감정을 그림으로 돌아볼 수 있어요.</p>
+
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-10 lg:gap-16 items-start">
+    <!-- 좌: sticky 대표 화면 (이미지 자리) -->
+    <div class="lg:sticky lg:top-28 lg:self-start">
+      <div class="relative h-[700px] rounded-2xl overflow-hidden bg-[#202024] ring-1 ring-line">
+        <img class="proc-layer" src="img/Moodle Diary/Process_01.jpg" alt="Moodle Diary 대표 화면" style="opacity:1">
+        <img class="proc-layer" src="" alt="" style="opacity:0" aria-hidden="true">
+      </div>
+    </div>
+
+    <!-- 우: 화면·플로우 리스트 (chip · 제목 · 설명) -->
+    <div class="border-t border-line">
+      <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">캘린더</span>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">한 달의 감정을 한눈에 조망해요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">날짜마다 AI가 그린 그림 썸네일이 채워지면서, 캘린더 자체가 나만의 감정 갤러리가 돼요. 오늘 날짜를 탭하면 바로 일기 작성을 시작할 수 있어요.</p>
+      </div>
+      <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">리스트</span>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">일기 내용을 빠르게 스캔해요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">AI 그림과 제목, 본문 미리보기, 키워드 태그가 날짜별로 정리돼요.</p>
+      </div>
+      <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">상세</span>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">그림을 탭하면 자세히 볼 수 있어요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">캘린더에서 날짜를 탭하면 AI 그림을 크게 확인할 수 있어요. 공유하고, 저장하고, 삭제까지 AI 그림에 문제가 있을 땐 오류 제보도 가능해요.</p>
+      </div>
+      <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">기분표</span>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">감정 변화를 돌아볼 수 있어요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">주간·월간·연간 단위로 감정 흐름 그래프와 날짜별 무들 캐릭터 이모션을 확인할 수 있어요.</p>
+      </div>
+      <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">마이</span>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">나의 기록을 한눈에 확인해요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">작성한 일기 수와 받은 그림 수를 확인하고, 계정 정보와 앱 설정을 관리할 수 있어요.</p>
+      </div>
+      <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">감정</span>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">3단계로 완성하는 감정 기록</h3>
+        <p class="t-body-3 text-muted leading-relaxed">감정을 선택하고, 더 구체적으로 표현한 뒤, 키워드나 짧은 글로 부담 없이 하루를 기록하세요.</p>
+        <div class="sm:col-span-3 flex flex-wrap gap-2 mt-3">
+          <button type="button" class="proc-btn active" data-src="img/Moodle%20Diary/Process_06.jpg">감정</button>
+          <button type="button" class="proc-btn" data-src="img/Moodle%20Diary/Process_06-1.jpg">세부감정</button>
+          <button type="button" class="proc-btn" data-src="img/Moodle%20Diary/Process_06-2.jpg">일기 작성</button>
+        </div>
+      </div>
+      <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">키워드</span>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">쓰기 어려운 날엔 키워드만 골라요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">날씨를 선택하고, 오늘 있었던 일을 자유롭게 써요. 글쓰기가 어려운 날엔 키워드 모드로 전환할 수 있어요.</p>
+      </div>
+      <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">생성</span>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">무들이 그림을 그리고 있어요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">감정·키워드 기반으로 AI가 그림 1장을 만들어요. 기다리는 시간도 무들과 함께예요.</p>
+      </div>
+      <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">완성</span>
+        <h3 class="t-body-1 font-700 text-ink leading-snug">그림과 함께 하루가 완성돼요.</h3>
+        <p class="t-body-3 text-muted leading-relaxed">AI 그림 + 키워드 태그 + 무들의 한 마디로 오늘 하루가 완성돼요. 마음에 안 들면 새로 생성할 수 있어요.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 5-2. DARK MODE ============================ -->
+<section class="site-pad pb-[200px] sm:pb-[354px]">
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
+    <div class="reveal">
+      <p class="t-caption text-[#adadad] mb-6">Dark Mode</p>
+      <h2 class="t-h2 text-ink">낮에도 밤에도,<br>무들은 곁에 있어요.</h2>
+      <p class="t-body-2 text-[#adadad] mt-4">밤에 일기를 쓰는 사용자를 위해 눈에 부담 없는 다크 모드를 설계했어요. Figma 변수 구조는 이미 완성돼 있어요.</p>
+      <span class="inline-block mt-6 rounded-full px-4 py-1.5 text-[length:var(--fs-caption)] font-500" style="background:#F0463C;color:#fff">개발 적용 예정</span>
+    </div>
+
+    <!-- 라이트/다크 토글 카드 (좌 이미지 · 우 내용 2단) -->
+    <div id="dm-card" class="reveal rounded-2xl overflow-hidden p-6 sm:p-8 grid sm:grid-cols-2 gap-6 sm:gap-8 items-stretch transition-colors duration-[1000ms]" style="background:#ffffff">
+      <div class="rounded-2xl overflow-hidden pt-6 sm:pt-10 flex items-center justify-center" style="background:transparent">
+        <img id="dm-img" src="img/Moodle Diary/right.png" alt="라이트 모드 화면" class="max-w-[63%] h-auto transition-opacity duration-300">
+      </div>
+      <div class="flex flex-col h-full">
+        <h3 id="dm-title" class="t-body-1 font-700 mt-10 sm:mt-14" style="color:#1a1a1a">밝고 따뜻한 낮의 무들</h3>
+        <p id="dm-desc" class="t-body-3 mt-3 leading-relaxed max-w-[70%]" style="color:#52525b">화이트 배경에 베이지·그레이 톤으로 포근한 감성 유지. 낮에 일상을 기록할 때 편안한 시각 경험</p>
+        <div class="mt-auto flex flex-col items-end gap-3">
+          <button id="dm-toggle" type="button" aria-label="라이트/다크 모드 전환" class="w-11 h-11 rounded-xl flex items-center justify-center transition-colors cursor-pointer" style="border:1.5px solid #1a1a1a">
+            <span id="dm-icon" class="material-symbols-outlined" style="color:#1a1a1a;font-size:24px">light_mode</span>
+          </button>
+          <p id="dm-hint" class="text-[length:var(--fs-caption)] leading-relaxed text-right" style="color:#8A8A93">위 버튼을 눌러 낮·밤 모드를 직접 전환해 보세요.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ 6. FULL IMAGE (대표 이미지 자리) ============================ -->
+<section class="pb-[13px] sm:pb-[24px]">
+  <div class="img-reveal w-full overflow-hidden bg-[#202024]">
+    <img class="w-full h-auto block" src="img/Moodle Diary/full-imag2.jpg" alt="Moodle Diary 대표 이미지">
+  </div>
+</section>
+
+<!-- ============================ 8. NEXT PROJECT ============================ -->
+<section class="site-pad pb-[93px] sm:pb-[165px]">
+  <div class="reveal flex flex-wrap items-center justify-between gap-6 border-b border-line pt-[37px] pb-[37px]">
+    <h2 class="t-h3 text-ink font-700">다음 프로젝트도 살펴보세요.</h2>
+    <a href="moodle-diary.html" class="pick-time">Moodle Diary<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+  </div>
+</section>
+</main>
+
+<footer class="site-footer">
+  <div class="ft-inner">
+    <div class="ft-top-row">
+      <h2 class="ft-headline">DESIGN WITH<br>PURPOSE</h2>
+      <div class="ft-3d ft-media"><img class="ft-video" src="img/main/about-3d.gif" alt="" aria-hidden="true"></div>
+    </div>
+    <div class="ft-grid">
+      <div class="ft-info-col">
+        <span><span class="k">이름</span>LEE JUNGMIN</span>
+        <span><span class="k">주소</span>서울특별시</span>
+        <span><span class="k">분야</span>UX/UI Design</span>
+        <span><span class="k">이메일</span>enlghs123@gmail.com</span>
+        <span class="ft-copy">Copyright © <span id="year">2026</span> LEE JUNGMIN. All Rights Reserved.</span>
+      </div>
+      <nav class="ft-menu">
+        <a href="index.html#about">About</a>
+        <a href="index.html#work">Projects</a>
+        <a href="index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+<script>
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (typeof gsap !== 'undefined' && !reduceMotion) {
+    gsap.registerPlugin(ScrollTrigger);
+    document.documentElement.classList.add('gsap');
+    gsap.utils.toArray('.reveal').forEach((el) => {
+      gsap.fromTo(el, { opacity:0, y:28 }, { opacity:1, y:0, duration:1.4, ease:'power3.out',
+        scrollTrigger:{ trigger:el, start:'top 78%', toggleActions:'restart none none reverse' } });
+    });
+    // 이미지 — clip-path 리빌 (아래→위 열림)
+    gsap.utils.toArray('.img-reveal').forEach((el) => {
+      gsap.fromTo(el, { clipPath:'inset(0% 0% 100% 0%)' }, { clipPath:'inset(0% 0% 0% 0%)', duration:1.1, ease:'power3.inOut',
+        scrollTrigger:{ trigger:el, start:'top 82%', toggleActions:'restart none none reverse' } });
+    });
+    // 약한 parallax — 이미지가 컨테이너 안에서 천천히 이동
+    gsap.utils.toArray('.parallax').forEach((im) => {
+      gsap.fromTo(im, { yPercent:-8 }, { yPercent:8, ease:'none',
+        scrollTrigger:{ trigger: im.closest('.img-reveal') || im, start:'top bottom', end:'bottom top', scrub:true } });
+    });
+    // 푸터 3D 오브젝트 Floating (포트폴리오 메인과 동일)
+    gsap.utils.toArray('.about-3d').forEach((el) => gsap.to(el, { y:'+=16', duration:3, ease:'sine.inOut', yoyo:true, repeat:-1 }));
+
+    // BI Design 로고 공식 — 스크롤 진입 시 사람 → + → AI붓 → + → 감정 → 화살표 → 로고 순차 등장 + 로고 살짝 팝
+    (function initBiFormula(){
+      const wrap = document.getElementById('bi-formula');
+      if (!wrap) return;
+      const items = Array.from(wrap.children);
+      const logo = items[items.length - 1];
+      const arrow = wrap.querySelector('.bi-arrow-path');
+      gsap.set(items, { opacity:0, y:16, scale:0.8 });
+      // 화살표 선: 처음엔 그려지지 않은 상태(dash로 숨김)
+      let arrowLen = 0;
+      if (arrow) { arrowLen = arrow.getTotalLength(); gsap.set(arrow, { strokeDasharray:arrowLen, strokeDashoffset:arrowLen }); }
+      const tl = gsap.timeline({ scrollTrigger:{ trigger: wrap, start:'top 80%', once:true } });
+      tl.to(items, { opacity:1, y:0, scale:1, duration:0.5, ease:'back.out(1.7)', stagger:0.12 });
+      // 화살표가 등장하는 타이밍(감정 다음, 5번째)에 선이 로고 쪽으로 그려짐
+      if (arrow) {
+        // 로고 방향으로 선이 한 번 그려진 뒤 실선으로 유지(점선 없음)
+        tl.to(arrow, { strokeDashoffset:0, duration:0.6, ease:'power2.out' }, '-=0.5');
+      }
+      if (logo) {
+        // 요소가 모두 모이면 로고가 한 번 강조되며 팝
+        tl.fromTo(logo, { scale:1 }, { scale:1.12, duration:0.22, ease:'power2.out' }, '+=0.05')
+          .to(logo, { scale:1, duration:0.5, ease:'elastic.out(1,0.5)' })
+          .add(() => gsap.to(logo, { y:'-=8', duration:2.4, ease:'sine.inOut', yoyo:true, repeat:-1 }));   // 로고 은은한 플로팅
+      }
+    })();
+  } else {
+    document.querySelectorAll('.reveal').forEach((el)=>{ el.style.opacity=1; el.style.transform='none'; });
+  }
+
+  // 전체화면 메뉴 오버레이 — MENU 클릭 시 배경 확장 + 텍스트 아래→위 Fade Up, CLOSE 시 역방향 (포트폴리오 메인과 동일)
+  if (typeof gsap !== 'undefined') {
+    (function initMenuOverlay(){
+      const btn = document.getElementById('menuBtn');
+      const closeBtn = document.getElementById('menuClose');
+      const overlay = document.getElementById('menu-overlay');
+      if (!btn || !overlay) return;
+      const items = overlay.querySelectorAll('.menu-item span');
+      let open = false, tl;
+      const openMenu = () => {
+        if (open) return; open = true;
+        btn.setAttribute('aria-expanded','true'); overlay.setAttribute('aria-hidden','false');
+        if (tl) tl.kill();
+        gsap.set(overlay, { visibility:'visible' });
+        tl = gsap.timeline();
+        tl.fromTo(overlay, { clipPath:'inset(0% 0% 100% 0%)' }, { clipPath:'inset(0% 0% 0% 0%)', duration:0.7, ease:'power3.inOut' })
+          .fromTo(items, { yPercent:110, autoAlpha:0 }, { yPercent:0, autoAlpha:1, duration:0.6, ease:'power3.out', stagger:0.08 }, 0.28);
+      };
+      const closeMenu = () => {
+        if (!open) return; open = false;
+        btn.setAttribute('aria-expanded','false'); overlay.setAttribute('aria-hidden','true');
+        if (tl) tl.kill();
+        tl = gsap.timeline();
+        tl.to(items, { yPercent:110, autoAlpha:0, duration:0.4, ease:'power2.in', stagger:0.05 })
+          .to(overlay, { clipPath:'inset(0% 0% 100% 0%)', duration:0.6, ease:'power3.inOut' }, 0.15)
+          .set(overlay, { visibility:'hidden' });
+      };
+      btn.addEventListener('click', openMenu);
+      if (closeBtn) closeBtn.addEventListener('click', closeMenu);
+      overlay.querySelectorAll('.menu-item').forEach((a) => a.addEventListener('click', () => setTimeout(closeMenu, 10)));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeMenu(); });
+    })();
+  }
+
+  // Dark Mode 섹션: 버튼 클릭 시 라이트↔다크 내용 전환
+  (function initDarkModeToggle(){
+    const card = document.getElementById('dm-card'), img = document.getElementById('dm-img'),
+      title = document.getElementById('dm-title'), desc = document.getElementById('dm-desc'),
+      toggle = document.getElementById('dm-toggle'), icon = document.getElementById('dm-icon'),
+      hint = document.getElementById('dm-hint');
+    if (!card || !toggle) return;
+    const q = '?q=80&w=900&auto=format&fit=crop';
+    const modes = {
+      light: { bg:'#ffffff', txt:'#1a1a1a', sub:'#52525b', icon:'light_mode', border:'#1a1a1a',
+        img:'img/Moodle%20Diary/right.png',
+        title:'밝고 따뜻한 낮의 무들', desc:'화이트 배경에 베이지·그레이 톤으로 포근한 감성 유지. 낮에 일상을 기록할 때 편안한 시각 경험' },
+      dark: { bg:'#202024', txt:'#ffffff', sub:'#9C9CA5', icon:'dark_mode', border:'#ffffff',
+        img:'img/Moodle%20Diary/dark.png',
+        title:'조용하고 차분한 밤의 무들', desc:'다크 배경에서도 AI 그림의 색감이 더 선명하게 살아나요. 밤에 일기를 쓸 때 눈의 피로를 줄여줘요.' }
+    };
+    let cur = 'light', busy = false;
+    const textEls = [title, desc, hint].filter(Boolean);
+    textEls.forEach(el => el.style.transition = 'opacity .8s ease, transform 1s cubic-bezier(0.16,1,0.3,1), color 1s ease');
+    icon.style.transition = 'opacity .8s ease, transform 1.1s cubic-bezier(0.16,1,0.3,1)';
+    img.style.transition = 'opacity 1s ease, transform 1.5s cubic-bezier(0.16,1,0.3,1)';
+    const apply = (m) => {
+      const s = modes[m];
+      busy = true;
+      // 배경·테두리 (CSS transition-colors로 부드럽게)
+      card.style.background = s.bg;
+      toggle.style.borderColor = s.border;
+      // 아웃: 텍스트 위로 페이드, 아이콘 회전 축소, 이미지 페이드+줌
+      textEls.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(10px)'; });
+      icon.style.opacity = '0'; icon.style.transform = 'rotate(-120deg) scale(0.5)';
+      img.style.opacity = '0'; img.style.transform = 'scale(1.06)';
+      setTimeout(() => {
+        // 내용 교체
+        title.textContent = s.title; desc.textContent = s.desc;
+        title.style.color = s.txt; desc.style.color = s.sub; if (hint) hint.style.color = s.sub;
+        icon.textContent = s.icon; icon.style.color = s.txt;
+        img.src = s.img;
+        // 인: 아래에서 페이드업, 아이콘 회전 복귀, 이미지 페이드+줌아웃
+        textEls.forEach((el, i) => { el.style.transitionDelay = (i * 100) + 'ms'; el.style.opacity = '1'; el.style.transform = 'translateY(0)'; });
+        icon.style.opacity = '1'; icon.style.transform = 'rotate(0) scale(1)';
+        img.style.opacity = '1'; img.style.transform = 'scale(1)';
+        setTimeout(() => { textEls.forEach(el => el.style.transitionDelay = '0ms'); busy = false; }, 1000);
+      }, 550);
+      cur = m;
+    };
+    toggle.addEventListener('click', () => { if (!busy) apply(cur === 'light' ? 'dark' : 'light'); });
+  })();
+
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Process 리스트 hover → 좌측 대표 이미지 크로스페이드 전환 (tsitsipas on-court 방식)
+  (function initProcHover(){
+    const layers = [...document.querySelectorAll('.proc-layer')];
+    const rows = [...document.querySelectorAll('.proc-row')];
+    if (layers.length < 2 || !rows.length) return;
+    const defaultSrc = layers[0].getAttribute('src');
+    // Process 단계별 이미지(로컬) · 각 행 순서대로 매핑(없으면 기본 이미지)
+    const IMGS = [
+      'img/Moodle%20Diary/Process_01.jpg',
+      'img/Moodle%20Diary/Process_02.jpg',
+      'img/Moodle%20Diary/Process_03.jpg',
+      'img/Moodle%20Diary/Process_04.jpg',
+      'img/Moodle%20Diary/Process_05.jpg',
+      'img/Moodle%20Diary/Process_06.jpg',
+      'img/Moodle%20Diary/Process_07.jpg',
+      'img/Moodle%20Diary/Process_08.jpg',
+      'img/Moodle%20Diary/Process_09.jpg'
+    ];
+    let active = 0;            // 현재 보이는 레이어 index
+    let currentSrc = defaultSrc;
+    const show = (src) => {
+      if (src === currentSrc) return;
+      currentSrc = src;
+      const pre = new Image();
+      pre.onload = () => {
+        if (currentSrc !== src) return;      // 그 사이 다른 행으로 이동했으면 취소
+        const next = 1 - active;
+        const nextImg = layers[next], curImg = layers[active];
+        nextImg.src = src;
+        nextImg.style.transition = 'none';
+        nextImg.style.opacity = '0';
+        nextImg.style.transform = 'scale(1.06)';
+        void nextImg.offsetWidth;              // 리플로우 강제
+        setTimeout(() => {
+          nextImg.style.transition = '';       // CSS transition(.7s) 복귀
+          nextImg.style.opacity = '1';
+          nextImg.style.transform = 'scale(1)';
+          curImg.style.opacity = '0';
+          active = next;
+        }, 20);
+      };
+      pre.src = src;
+    };
+    rows.forEach((row, i) => row.addEventListener('pointerenter', () => show(IMGS[i] || defaultSrc)));
+    rows[0].parentElement.addEventListener('pointerleave', () => show(defaultSrc));
+    // 6번(감정) 행 버튼: 클릭 시 06 / 06-1 / 06-2 이미지 전환
+    document.querySelectorAll('.proc-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        show(btn.getAttribute('data-src'));
+        btn.parentElement.querySelectorAll('.proc-btn').forEach((b) => b.classList.remove('active'));
+        btn.classList.add('active');
+      });
+    });
+  })();
+</script>
+</body>
+</html>

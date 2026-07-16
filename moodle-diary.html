@@ -190,6 +190,9 @@
   .menu-item span { display:block; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; font-size:clamp(2.6rem,9vw,7rem);
     line-height:1.62; letter-spacing:-0.02em; color:#f5f5f4; transition:color .2s ease, opacity .2s ease; will-change:transform; }
   .menu-item:hover span { color:#6E1CF6; }
+  /* 프로젝트 하위 리스트: 한 줄 배치 + 텍스트 절반 크기 */
+  .menu-sub-row { display:flex; flex-wrap:wrap; align-items:baseline; gap:clamp(16px,3vw,44px); }
+  .menu-item--sub span { font-size:clamp(1.3rem,4.5vw,3.5rem); }
 
   /* ===== 포트폴리오 메인 푸터 (동일) ===== */
   .about-3d { width:clamp(92px,13vw,156px); aspect-ratio:1/1; border-radius:50%; position:relative; will-change:transform;
@@ -236,24 +239,29 @@
 <div id="menu-overlay" aria-hidden="true">
   <button id="menuClose" class="nav-pill menu-close">CLOSE</button>
   <nav class="menu-list">
-    <a href="index.html#top"     class="menu-item"><span>Home</span></a>
-    <a href="index.html#about"   class="menu-item"><span>About</span></a>
-    <a href="index.html#work"    class="menu-item"><span>Works</span></a>
-    <a href="index.html#contact" class="menu-item"><span>Contact</span></a>
+    <a href="index.html#top" class="menu-item"><span>Home</span></a>
+    <a href="moodle-diary.html" class="menu-item"><span>Moodle Diary</span></a>
+    <a href="pick-time.html" class="menu-item"><span>Pick Time</span></a>
+    <div class="menu-sub-row">
+      <a href="https://www.figma.com/design/Xjrclf5kH63ZTBdTfmsHpi/Food-Eat-Note?node-id=0-1&t=kpn4Eh9sMzkg2BYg-1" target="_blank" rel="noopener" class="menu-item menu-item--sub"><span>Food Eat Note</span></a>
+      <a href="https://www.figma.com/design/JhebkZsnAbigUfLShVFjAu/%EC%96%B4%ED%97%88-%EC%86%90-%EB%96%BC?node-id=51178-269&t=1itzqeN2JSF1C9N8-1" target="_blank" rel="noopener" class="menu-item menu-item--sub"><span>어허 손떼</span></a>
+      <a href="https://www.figma.com/design/FiqSzKc6dbBPZiwHDGTHpl/%EC%9D%B8%ED%84%B0%EB%B2%8C-%ED%83%80%EC%9D%B4%EB%A8%B8?node-id=0-1&t=k6gyZAi8KrLW5wvi-1" target="_blank" rel="noopener" class="menu-item menu-item--sub"><span>인터벌 타이머</span></a>
+      <a href="https://www.figma.com/design/0J9bHIusEPS6QhUMz8dAOY/%EB%83%89%EC%9E%A5%EA%B3%A0-%EC%9E%AC%EA%B3%A0-%EA%B4%80%EB%A6%AC?node-id=0-1&t=jFoF8xhkYzTx3yTe-1" target="_blank" rel="noopener" class="menu-item menu-item--sub"><span>냉장고 재고 관리</span></a>
+    </div>
   </nav>
 </div>
 
 <main>
 <!-- ============================ 1. HERO (타이포 중심 · 라인 리빌) ============================ -->
-<section class="site-pad pt-60 sm:pt-[506px] pb-24 sm:pb-36">
-  <div class="text-center">
+<section class="site-pad pb-24 sm:pb-36">
+  <div class="text-center min-h-screen flex items-center justify-center">
     <h1 class="hero-title reveal t-display-1 text-ink">
       <span class="tl-wrap"><span class="tl-line">Moodle <span class="em">Diary</span></span></span>
     </h1>
   </div>
   <!-- 이미지: 텍스트 아래 전폭 배치 (bg 위에 목업이 둥둥 떠다님) -->
-  <div class="reveal mt-14 sm:mt-20 w-[95%] mx-auto" data-delay="1">
-    <div class="relative rounded-2xl overflow-hidden">
+  <div class="reveal mt-14 sm:mt-20 w-[95%] mx-auto mb-[-12vh]" data-delay="1">
+    <div class="relative rounded-2xl overflow-hidden" style="transform:translateY(-20%)">
       <img class="w-full h-auto block" src="img/Moodle Diary/bg.png" alt="Moodle Diary 배경">
       <div class="absolute inset-0 flex items-center justify-center p-[5%]">
         <img class="mockup-float max-w-full max-h-full w-auto" src="img/Moodle Diary/목업.png" alt="Moodle Diary 목업">
@@ -744,7 +752,7 @@
 <section class="site-pad pb-[93px] sm:pb-[165px]">
   <div class="reveal flex flex-wrap items-center justify-between gap-6 border-b border-line pt-[37px] pb-[37px]">
     <h2 class="t-h3 text-ink font-700">다음 프로젝트도 살펴보세요.</h2>
-    <a href="project-2.html" class="pick-time">Pick Time<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    <a href="pick-time.html" class="pick-time">Pick Time<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
   </div>
 </section>
 </main>
