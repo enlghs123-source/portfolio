@@ -245,7 +245,7 @@
 
 <main>
 <!-- ============================ 1. HERO (타이포 중심 · 라인 리빌) ============================ -->
-<section class="site-pad pt-40 sm:pt-[337px] pb-16 sm:pb-24">
+<section class="site-pad pt-60 sm:pt-[506px] pb-24 sm:pb-36">
   <div class="text-center">
     <h1 class="hero-title reveal t-display-1 text-ink">
       <span class="tl-wrap"><span class="tl-line">Moodle <span class="em">Diary</span></span></span>
@@ -263,7 +263,7 @@
 </section>
 
 <!-- ============================ 2. PROJECT OVERVIEW (+ Full Image 한 그룹) ============================ -->
-<section class="site-pad pt-24 sm:pt-40 pb-14 sm:pb-24">
+<section class="site-pad pt-36 sm:pt-60 pb-[84px] sm:pb-36">
   <div class="grid lg:grid-cols-[3fr_7fr] gap-y-12 gap-x-16 items-start">
     <div class="reveal">
       <p class="t-caption text-[#adadad] mb-6">Overview</p>
@@ -284,14 +284,14 @@
 </section>
 
 <!-- ============================ 3. FULL IMAGE → TenderPlus 스타일 카드 ============================ -->
-<section class="site-pad pb-[133px] sm:pb-[236px]">
+<section class="site-pad pb-[200px] sm:pb-[354px]">
   <div class="reveal tp-card tp-card--img" data-delay="1">
     <img class="tp-full" src="img/Moodle Diary/full image.jpg" alt="TenderPlus">
   </div>
 </section>
 
 <!-- ============================ 4. DESK RESEARCH ============================ -->
-<section id="desk-research" class="site-pad pb-[133px] sm:pb-[236px]">
+<section id="desk-research" class="site-pad pb-[200px] sm:pb-[354px]">
   <div class="grid lg:grid-cols-[3fr_7fr] gap-y-14 gap-x-16 items-start">
     <div class="reveal">
       <p class="t-caption text-[#adadad] mb-6" style="color:#adadad">Desk Research</p>
@@ -351,7 +351,7 @@
 </section>
 
 <!-- ============================ 4-2. WHO (문제를 겪던 두 사람 · 페르소나) ============================ -->
-<section class="site-pad pb-[133px] sm:pb-[236px]">
+<section class="site-pad pb-[200px] sm:pb-[354px]">
   <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
     <div class="reveal">
       <p class="t-caption text-[#adadad] mb-6">WHO</p>
@@ -422,7 +422,7 @@
 </section>
 
 <!-- ============================ 4-3. DECISION (세 가지 결정 · Problem/Solution) ============================ -->
-<section class="site-pad pb-[133px] sm:pb-[236px]">
+<section class="site-pad pb-[200px] sm:pb-[354px]">
   <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
     <div class="reveal">
       <p class="t-caption text-[#adadad] mb-6">DECISION</p>
@@ -479,7 +479,7 @@
 </section>
 
 <!-- ============================ 4-4. BI DESIGN (로고 컨셉) ============================ -->
-<section class="site-pad pb-[133px] sm:pb-[236px]">
+<section class="site-pad pb-[200px] sm:pb-[354px]">
   <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-center">
     <div class="reveal">
       <p class="t-caption text-[#adadad] mb-6">BI Design</p>
@@ -487,20 +487,31 @@
       <p class="t-body-2 text-[#adadad] mt-4">사람 + AI붓 + 감정</p>
     </div>
     <!-- 로고 조합 공식 (아이콘·최종 로고는 이미지 자리) -->
-    <div class="reveal flex items-center justify-center flex-wrap gap-3 sm:gap-5">
-      <span class="w-12 h-12 rounded-xl bg-[#2c2c31] flex items-center justify-center text-white/70 text-[length:var(--fs-caption)]">사람</span>
-      <span class="text-subtle">+</span>
-      <span class="w-12 h-12 rounded-xl bg-[#2c2c31] flex items-center justify-center text-white/70 text-[length:var(--fs-caption)]">AI붓</span>
-      <span class="text-subtle">+</span>
-      <span class="w-12 h-12 rounded-xl bg-[#2c2c31] flex items-center justify-center text-white/70 text-[length:var(--fs-caption)]">감정</span>
-      <span class="hidden sm:block w-12 h-px bg-line mx-1"></span>
-      <span class="w-20 h-20 rounded-2xl bg-[#2c2c31] ring-1 ring-line flex items-center justify-center text-white/40 text-[length:var(--fs-caption)]">로고</span>
+    <div id="bi-formula" class="flex items-center justify-center flex-wrap gap-5 sm:gap-9">
+      <img src="img/Moodle%20Diary/person.png" alt="사람" class="w-[58px] h-[58px] rounded-xl object-contain" loading="lazy">
+      <span class="inline-flex items-center justify-center w-[26px] h-[26px] rounded-full bg-[#D9CBB6] ring-1 ring-line shrink-0" aria-hidden="true">
+        <svg width="15.4" height="15.4" viewBox="0 0 14 14" fill="none" stroke="#4a4238" stroke-width="1.6" stroke-linecap="round"><path d="M7 2.5v9M2.5 7h9"/></svg>
+      </span>
+      <img src="img/Moodle%20Diary/pen.png" alt="AI붓" class="w-[58px] h-[58px] rounded-xl object-contain" loading="lazy">
+      <span class="inline-flex items-center justify-center w-[26px] h-[26px] rounded-full bg-[#D9CBB6] ring-1 ring-line shrink-0" aria-hidden="true">
+        <svg width="15.4" height="15.4" viewBox="0 0 14 14" fill="none" stroke="#4a4238" stroke-width="1.6" stroke-linecap="round"><path d="M7 2.5v9M2.5 7h9"/></svg>
+      </span>
+      <img src="img/Moodle%20Diary/emotion.png" alt="감정" class="w-[58px] h-[58px] rounded-xl object-contain" loading="lazy">
+      <span class="inline-flex items-center justify-center mx-1 shrink-0" aria-hidden="true">
+        <svg width="40" height="14" viewBox="0 0 40 14" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <defs><linearGradient id="biArrowGrad" x1="0" y1="0" x2="40" y2="0" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#5fe3e3" stop-opacity="0"/><stop offset="1" stop-color="#5fe3e3" stop-opacity="1"/>
+          </linearGradient></defs>
+          <path class="bi-arrow-path" d="M2 7h34M30 2l6 5-6 5" stroke="#ffffff"/>
+        </svg>
+      </span>
+      <img src="img/Moodle%20Diary/logo.png" alt="로고" class="w-[192px] h-[192px] rounded-2xl object-contain" loading="lazy" style="filter:drop-shadow(0 0 24px rgba(217,203,182,0.4))">
     </div>
   </div>
 </section>
 
 <!-- ============================ 4-5. DESIGN SYSTEM (컬러 · 타이포 · 아이콘) ============================ -->
-<section class="site-pad pb-[133px] sm:pb-[236px]">
+<section class="site-pad pb-[200px] sm:pb-[354px]">
   <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
     <div class="reveal">
       <p class="t-caption text-[#adadad] mb-6">Design System</p>
@@ -623,7 +634,7 @@
 </section>
 
 <!-- ============================ 5. PROCESS (화면·플로우 · tsitsipas on-court 레이아웃) ============================ -->
-<section class="site-pad pb-[133px] sm:pb-[236px]">
+<section class="site-pad pb-[200px] sm:pb-[354px]">
   <p class="reveal t-caption text-[#adadad] mb-6">UI Design</p>
   <h2 class="reveal t-h2 text-ink">하루하루가 그림으로 남아요.</h2>
   <p class="reveal t-body-2 text-[#adadad] mt-4 mb-14 sm:mb-20">한 달의 감정을 그림으로 돌아볼 수 있어요.</p>
@@ -694,7 +705,7 @@
 </section>
 
 <!-- ============================ 5-2. DARK MODE ============================ -->
-<section class="site-pad pb-[133px] sm:pb-[236px]">
+<section class="site-pad pb-[200px] sm:pb-[354px]">
   <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
     <div class="reveal">
       <p class="t-caption text-[#adadad] mb-6">Dark Mode</p>
@@ -730,7 +741,7 @@
 </section>
 
 <!-- ============================ 8. NEXT PROJECT ============================ -->
-<section class="site-pad pb-[133px] sm:pb-[236px]">
+<section class="site-pad pb-[93px] sm:pb-[165px]">
   <div class="reveal flex flex-wrap items-center justify-between gap-6 border-b border-line pt-[37px] pb-[37px]">
     <h2 class="t-h3 text-ink font-700">다음 프로젝트도 살펴보세요.</h2>
     <a href="project-2.html" class="pick-time">Pick Time<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
@@ -784,6 +795,32 @@
     });
     // 푸터 3D 오브젝트 Floating (포트폴리오 메인과 동일)
     gsap.utils.toArray('.about-3d').forEach((el) => gsap.to(el, { y:'+=16', duration:3, ease:'sine.inOut', yoyo:true, repeat:-1 }));
+
+    // BI Design 로고 공식 — 스크롤 진입 시 사람 → + → AI붓 → + → 감정 → 화살표 → 로고 순차 등장 + 로고 살짝 팝
+    (function initBiFormula(){
+      const wrap = document.getElementById('bi-formula');
+      if (!wrap) return;
+      const items = Array.from(wrap.children);
+      const logo = items[items.length - 1];
+      const arrow = wrap.querySelector('.bi-arrow-path');
+      gsap.set(items, { opacity:0, y:16, scale:0.8 });
+      // 화살표 선: 처음엔 그려지지 않은 상태(dash로 숨김)
+      let arrowLen = 0;
+      if (arrow) { arrowLen = arrow.getTotalLength(); gsap.set(arrow, { strokeDasharray:arrowLen, strokeDashoffset:arrowLen }); }
+      const tl = gsap.timeline({ scrollTrigger:{ trigger: wrap, start:'top 80%', once:true } });
+      tl.to(items, { opacity:1, y:0, scale:1, duration:0.5, ease:'back.out(1.7)', stagger:0.12 });
+      // 화살표가 등장하는 타이밍(감정 다음, 5번째)에 선이 로고 쪽으로 그려짐
+      if (arrow) {
+        // 로고 방향으로 선이 한 번 그려진 뒤 실선으로 유지(점선 없음)
+        tl.to(arrow, { strokeDashoffset:0, duration:0.6, ease:'power2.out' }, '-=0.5');
+      }
+      if (logo) {
+        // 요소가 모두 모이면 로고가 한 번 강조되며 팝
+        tl.fromTo(logo, { scale:1 }, { scale:1.12, duration:0.22, ease:'power2.out' }, '+=0.05')
+          .to(logo, { scale:1, duration:0.5, ease:'elastic.out(1,0.5)' })
+          .add(() => gsap.to(logo, { y:'-=8', duration:2.4, ease:'sine.inOut', yoyo:true, repeat:-1 }));   // 로고 은은한 플로팅
+      }
+    })();
   } else {
     document.querySelectorAll('.reveal').forEach((el)=>{ el.style.opacity=1; el.style.transform='none'; });
   }

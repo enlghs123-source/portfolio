@@ -147,7 +147,13 @@
   /* 롤링 라인 마스크(overflow hidden) + 안쪽 아래→위 슬라이드 */
   .hero-rin { display:block; }
   /* ===== 인트로 오버레이: 솔리드 퍼플 화면 → AI.svg에만 흰색이 물 채우듯 차오름 → 다크 히어로로 전환 (그라데이션 미사용) ===== */
-  #hero-intro { position:fixed; inset:0; z-index:100; background:#6E1CF6; display:flex; align-items:center; justify-content:center; will-change:opacity; }
+  /* hero-marquee(스태킹 컨텍스트) 안의 퍼플 배경. 히어로 요소(z3)보다 위(z50)라 평소엔 요소를 가림 */
+  #hero-intro { position:fixed; inset:0; z-index:50; background:#6E1CF6; will-change:opacity; }
+  /* 인트로 동안 실제 히어로 요소(AI.svg·UX/UI Design)를 퍼플 위(z101)로 올려 그대로 사용 → 중앙에서 좌우로 이동 */
+  html.intro-run .hero-title-icon, html.intro-run .hero-title-lines { z-index:101; }
+  /* 퍼플이 헤더(root, 별도 레이어)까지 덮지 못하므로 인트로 동안 nav 숨김 → 종료 후 페이드인 */
+  #nav { transition:opacity .5s ease; }
+  html.intro-run #nav { opacity:0; pointer-events:none; }
   html.intro-lock, html.intro-lock body { overflow:hidden !important; height:100%; touch-action:none; overscroll-behavior:none; }
   .hi-glass { display:flex; flex-direction:column; align-items:center; text-align:center; gap:clamp(14px,2.2vh,34px); font-family:'Poppins','Poppins','Pretendard',sans-serif; transform:scale(.7); }   /* 인트로 내용 30% 축소 */
   /* 흰 svg가 아래→위로 차오르되, 채움 경계가 액체처럼 물결치며 늘어남(JS rAF가 clip-path 사인파로 갱신) */
@@ -489,14 +495,6 @@
 <!-- Cursor Follower: 단순 도트 · smoother 밖 고정 -->
 <div id="sphere-cursor" aria-hidden="true"></div>
 
-<!-- 인트로 프리로더: 전체화면 최상단(smoother 밖). 재생 후 페이드아웃되며 메인 노출 -->
-<div id="hero-intro">
-  <div class="hi-glass" id="hiGlass">
-    <div class="hi-svg-wrap"><img class="hi-svg hi-fill" id="hiFill" src="img/main/AI.svg" alt=""></div>
-    <span class="hi-txt">UX/UI&nbsp;Design</span>
-  </div>
-</div>
-
 <div id="smooth-wrapper">
 <div id="smooth-content">
 
@@ -505,6 +503,8 @@
   <!-- 정적 대형 타이틀: 좌측에 AI.svg · 우측 2줄(UX/UI Design + 롤링 단어) -->
   <div class="hero-marquee" aria-label="UX/UI Design — Define, Communicate, Validate">
     <div class="hero-aura" aria-hidden="true"></div>
+    <!-- 인트로 퍼플 배경 레이어: 히어로 요소와 같은 스태킹 컨텍스트(hero-marquee) 안에 두어야 요소를 위로 올릴 수 있음 -->
+    <div id="hero-intro"><!-- 퍼플 배경만 담당 · 실제 히어로 요소(AI.svg·UX/UI Design)가 그대로 이동 --></div>
     <!-- 최종 히어로 요소 (인트로 후 노출) -->
     <img src="img/main/AI.svg" class="hero-title-icon" alt="">
     <div class="hero-title-lines js-title">
@@ -580,7 +580,7 @@
 
     <h2 class="work-title work-title-other">Other<br>Projects</h2>
     <div class="flip-grid">
-      <div class="flip-card">
+      <a class="flip-card" style="display:block" href="https://www.figma.com/design/Xjrclf5kH63ZTBdTfmsHpi/Food-Eat-Note?node-id=0-1&t=kpn4Eh9sMzkg2BYg-1" target="_blank" rel="noopener">
         <div class="flip-card-inner">
           <div class="flip-card-front">
             <img class="flip-img" src="img/main/1_Food Eat Note.jpg" alt="" loading="lazy">
@@ -592,9 +592,9 @@
             <p class="flip-back-desc">스크롤, 모션, 전환을 활용한 인터랙션 설계. 콘텐츠의 리듬에 맞춰 자연스럽게 이어지는 경험을 만듭니다.</p>
           </div>
         </div>
-      </div>
+      </a>
 
-      <div class="flip-card">
+      <a class="flip-card" style="display:block" href="https://www.figma.com/design/JhebkZsnAbigUfLShVFjAu/%EC%96%B4%ED%97%88-%EC%86%90-%EB%96%BC?node-id=51178-269&t=1itzqeN2JSF1C9N8-1" target="_blank" rel="noopener">
         <div class="flip-card-inner">
           <div class="flip-card-front">
             <img class="flip-img" src="img/main/2_어허손떼.jpg" alt="" loading="lazy">
@@ -606,9 +606,9 @@
             <p class="flip-back-desc">프로토타입과 마이크로 인터랙션으로 아이디어를 빠르게 검증하고, 실제 사용감을 설계에 반영했습니다.</p>
           </div>
         </div>
-      </div>
+      </a>
 
-      <div class="flip-card">
+      <a class="flip-card" style="display:block" href="https://www.figma.com/design/FiqSzKc6dbBPZiwHDGTHpl/%EC%9D%B8%ED%84%B0%EB%B2%8C-%ED%83%80%EC%9D%B4%EB%A8%B8?node-id=0-1&t=k6gyZAi8KrLW5wvi-1" target="_blank" rel="noopener">
         <div class="flip-card-inner">
           <div class="flip-card-front">
             <img class="flip-img" src="img/main/3_인터벌 타이머.jpg" alt="" loading="lazy">
@@ -620,9 +620,9 @@
             <p class="flip-back-desc">팀의 디자인 프로세스와 핸드오프를 체계화해, 반복 작업을 줄이고 일관성을 높였습니다.</p>
           </div>
         </div>
-      </div>
+      </a>
 
-      <div class="flip-card">
+      <a class="flip-card" style="display:block" href="https://www.figma.com/design/0J9bHIusEPS6QhUMz8dAOY/%EB%83%89%EC%9E%A5%EA%B3%A0-%EC%9E%AC%EA%B3%A0-%EA%B4%80%EB%A6%AC?node-id=0-1&t=jFoF8xhkYzTx3yTe-1" target="_blank" rel="noopener">
         <div class="flip-card-inner">
           <div class="flip-card-front">
             <img class="flip-img" src="img/main/4_냉장고 재고 관리.jpg" alt="" loading="lazy">
@@ -634,7 +634,7 @@
             <p class="flip-back-desc">로고부터 제품 UI까지 일관된 비주얼 언어를 정립해 브랜드 경험을 하나로 이었습니다.</p>
           </div>
         </div>
-      </div>
+      </a>
     </div><!-- /flip-grid -->
   </div><!-- /work-inner -->
 </section><!-- /#work.closing (Work 자체가 검은 Curtain) -->
@@ -663,8 +663,8 @@
   <!-- 하단: 스킬 마퀴 (Contact 섹션을 마무리하는 띠 요소) -->
   <div class="marquee-wrap border-t border-line overflow-hidden py-6 sm:py-[1.875rem]">
     <div class="marquee text-ink">
-      <span class="font-display text-[clamp(22px,2.6vw,32px)] font-500 flex gap-12 whitespace-nowrap"><span>Figma</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Design Systems</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Prototyping</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>User Research</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Interaction Design</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Accessibility</span><img src="img/main/AI.svg" class="mq-sep" alt=""></span>
-      <span class="font-display text-[clamp(22px,2.6vw,32px)] font-500 flex gap-12 whitespace-nowrap" aria-hidden="true"><span>Figma</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Design Systems</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Prototyping</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>User Research</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Interaction Design</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Accessibility</span><img src="img/main/AI.svg" class="mq-sep" alt=""></span>
+      <span class="font-display text-[clamp(22px,2.6vw,32px)] font-500 flex gap-12 whitespace-nowrap"><span>Figma</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Design Systems</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Prototyping</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>User Research</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Interaction Design</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>AI Workflow</span><img src="img/main/AI.svg" class="mq-sep" alt=""></span>
+      <span class="font-display text-[clamp(22px,2.6vw,32px)] font-500 flex gap-12 whitespace-nowrap" aria-hidden="true"><span>Figma</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Design Systems</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Prototyping</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>User Research</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>Interaction Design</span><img src="img/main/AI.svg" class="mq-sep" alt=""><span>AI Workflow</span><img src="img/main/AI.svg" class="mq-sep" alt=""></span>
     </div>
   </div>
   </section><!-- /#contact -->
@@ -838,31 +838,20 @@
       // ===== 인트로: 퍼플 화면 → AI.svg(+UX/UI Design)에 흰색 물채움 → svg 우상단·텍스트 좌하단 이동 + 롤링 등장 =====
       (function initIntro(){
         const intro = document.getElementById('hero-intro');
-        const fill  = document.getElementById('hiFill');
-        const glass = document.getElementById('hiGlass');
-        const svg   = document.querySelector('.hero-title-icon');
+        const svg   = document.querySelector('.hero-title-icon');   // 실제 히어로 AI.svg (그대로 이동)
         const lines = document.querySelector('.hero-title-lines');
-        if (!intro || !fill || !glass || !svg || !lines) { if (intro) intro.remove(); return; }
-        // "UX/UI Design"을 글자 단위로 분리 (Mistral atom-text-hero-title 리빌용)
-        const line1 = lines.querySelector('.hero-line-1');
-        let chars = [];
-        if (line1) {
-          const txt = line1.textContent; line1.textContent = '';
-          for (const ch of txt) { const c = document.createElement('span'); c.className = 'hero-char'; c.textContent = ch; line1.appendChild(c); chars.push(c); }
-        }
-        gsap.set([svg, lines], { autoAlpha:0 });
-        // 인트로 동안 스크롤 잠금 (스무더 일시정지 + overflow 잠금)
+        const line1 = lines && lines.querySelector('.hero-line-1');  // 실제 "UX/UI Design" (그대로 이동)
+        const rollEl  = lines && lines.querySelector('.hero-roll--title');
+        const rollList = lines && lines.querySelector('.hero-roll-list');
+        if (!intro || !svg || !lines || !line1) { if (intro) intro.remove(); return; }
+
+        // 인트로 동안 스크롤 잠금
         document.documentElement.classList.add('intro-lock');
         window.scrollTo(0, 0);
         if (smoother) { smoother.scrollTo(0); smoother.paused(true); }
-        const rollList = lines.querySelector('.hero-roll-list');
-        if (rollList) rollList.style.animationPlayState = 'paused';   // 롤링은 나중에 시작
-        // 인트로 UX/UI Design 타이핑 준비: 전체 텍스트 저장 후 비움
-        const hiTxt = intro.querySelector('.hi-txt');
-        let hiFull = '';
-        if (hiTxt) { hiFull = hiTxt.textContent; hiTxt.textContent = ''; hiTxt.classList.add('typing'); }
-        const typeText = (el, text, perChar) => { let i = 0; (function step(){ if (i <= text.length) { el.textContent = text.slice(0, i); i++; setTimeout(step, perChar); } })(); };
-        // 액체 물채움: clip-path 윗변을 사인파로 출렁이며 아래→위로 차오름(찰랑)
+        if (rollList) rollList.style.animationPlayState = 'paused';   // 롤링은 이동 후 시작
+
+        // 액체 물채움: clip-path 윗변을 사인파로 출렁이며 아래→위로 차오름(찰랑) — 실제 AI.svg에 적용
         const waterFill = (el, dur) => {
           const start = performance.now(), segs = 16, amp0 = 6;
           const frame = (now) => {
@@ -883,44 +872,54 @@
           };
           requestAnimationFrame(frame);
         };
+
+        // === 실제 요소를 '자연 위치'에서 '화면 중앙 스택'으로 옮기는 초기 transform 계산 (transform만 사용) ===
+        // (transform이 없는 상태에서 자연 중심을 먼저 측정)
+        const sNat = svg.getBoundingClientRect();
+        const lNat = line1.getBoundingClientRect();
+        const linesRect = lines.getBoundingClientRect();     // lines 박스(transformOrigin 계산용)
+        const sNatC = { x: sNat.left + sNat.width/2,  y: sNat.top + sNat.height/2 };
+        const lNatC = { x: lNat.left + lNat.width/2,  y: lNat.top + lNat.height/2 };
+        // 이전 인트로 크기감으로 시작 → 이동하며 원래(최종) 크기로 커짐
+        const SVG_START = 0.558, TXT_START = 0.18;
+        const sH = sNat.height * SVG_START, lH = lNat.height * TXT_START;   // 축소된 시각 높이
+        const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+        const gap = Math.max(14, sH * 0.30);
+        const groupTop = cy - (sH + gap + lH) / 2;
+        const svgTgt  = { x: cx, y: groupTop + sH/2 };
+        const lineTgt = { x: cx, y: groupTop + sH + gap + lH/2 };
+
+        // 롤링은 이동 전까지 숨김(별도 요소).
+        if (rollEl) gsap.set(rollEl, { autoAlpha:0 });
+        // 중앙으로 이동 + 이전 크기로 축소 (scale). 중심 기준으로 축소되도록 transformOrigin 지정.
+        gsap.set(svg,   { x: svgTgt.x  - sNatC.x, y: svgTgt.y  - sNatC.y, scale:SVG_START, transformOrigin:'50% 50%' });
+        gsap.set(lines, { x: lineTgt.x - lNatC.x, y: lineTgt.y - lNatC.y, scale:TXT_START,
+                          transformOrigin:(lNatC.x - linesRect.left) + 'px ' + (lNatC.y - linesRect.top) + 'px' });  // line1 중심 기준 축소
+        svg.style.clipPath = 'inset(100% 0 0 0)';           // AI.svg 시작: 비어있음
+        document.documentElement.classList.add('intro-run'); // 실제 요소를 퍼플 위로 올림(중앙 배치 완료 후)
+
         const tl = gsap.timeline();
-        tl.set(fill, { clipPath:'inset(100% 0 0 0)' })
-          .to({}, { duration:0.4 })                                                   // 퍼플 잠깐 유지
-          .add(() => { if (hiTxt) typeText(hiTxt, hiFull, 95); waterFill(fill, 2500); })   // 타이핑 + 액체 물채움 시작
-          .to({}, { duration:2.5 })                                                   // 물채움 동안 유지(JS rAF가 시각 처리)
+        tl.to({}, { duration:0.4 })                                     // 퍼플 잠깐 유지
+          .add(() => { waterFill(svg, 2500); })                          // AI.svg 물채움 시작
+          .to({}, { duration:2.5 })                                     // 물채움 진행(JS rAF가 시각 처리)
           .to({}, { duration:0.28 })
-          .add(() => {                                                                // 요소 이동 + 퍼플 페이드아웃
-            const g = glass.getBoundingClientRect();
-            const s = svg.getBoundingClientRect();
-            const l = lines.getBoundingClientRect();
-            const gcx = g.left + g.width/2, gcy = g.top + g.height/2;
-            gsap.set([svg, lines], { autoAlpha:1 });
-            gsap.from(svg, { x:gcx-(s.left+s.width/2), y:gcy-(s.top+s.height/2), duration:1.0, ease:'power3.inOut' });
-            // 1) UX/UI Design: svg처럼 인트로 중앙에서 최종 위치로 이동하며 크기가 커짐(FLIP grow)
-            const line1El = lines.querySelector('.hero-line-1');
-            if (line1El) {
-              const l1r = line1El.getBoundingClientRect();
-              const introTxt = intro.querySelector('.hi-txt');
-              const introFS = introTxt ? parseFloat(getComputedStyle(introTxt).fontSize) : parseFloat(getComputedStyle(line1El).fontSize);
-              const finalFS = parseFloat(getComputedStyle(line1El).fontSize);
-              gsap.from(line1El, { x: gcx - (l1r.left + l1r.width/2), y: gcy - (l1r.top + l1r.height/2),
-                scale: introFS/finalFS, transformOrigin:'50% 50%', autoAlpha:0, duration:1.0, ease:'power3.inOut' });
-            }
-            // 2) 롤링 라인: 위 인터랙션 직후 grow-in → 롤링 (이전보다 1초 빠르게)
-            const rollDelay = 1.3;
-            const growDur = 0.72;
-            const rollEl = lines.querySelector('.hero-roll--title');
-            if (rollEl) {
-              gsap.from(rollEl, { autoAlpha:0, scale:0.3, yPercent:45, transformOrigin:'0% 100%',
-                duration:growDur, ease:'back.out(1.7)', delay:rollDelay });
-            }
-            gsap.delayedCall(rollDelay + growDur, () => { if (rollList) rollList.style.animationPlayState = 'running'; });
+          .add(() => {
+            // === 동일 요소가 이전 크기에서 원래 크기로 커지며 그 자리에서 좌우로 이동 (translate + scale) ===
+            gsap.to(svg,   { x:0, y:0, scale:1, duration:1.0, ease:'power3.inOut' });   // AI.svg → 우측 상단, 확대
+            gsap.to(lines, { x:0, y:0, scale:1, duration:1.0, ease:'power3.inOut' });   // UX/UI Design → 좌측 하단, 확대
+            // 퍼플 배경만 페이드아웃(요소는 z101로 위에 있어 영향 없음)
             gsap.to(intro, { autoAlpha:0, duration:0.7, delay:0.25, onComplete:() => {
               intro.remove();
-              document.documentElement.classList.remove('intro-lock');   // 스크롤 잠금 해제
+              document.documentElement.classList.remove('intro-run');
+              gsap.set([svg, lines], { clearProps:'transform' });   // 이동 종료 후 자연 위치로 확정(동일 DOM 유지)
+              document.documentElement.classList.remove('intro-lock');
               if (smoother) smoother.paused(false);
               if (window.ScrollTrigger) ScrollTrigger.refresh();
             } });
+            // 이동 완료 후 롤링 라인 등장 → 롤링 시작
+            const rollDelay = 1.15, growDur = 0.72;
+            if (rollEl) gsap.to(rollEl, { autoAlpha:1, duration:0.4, delay:rollDelay });
+            gsap.delayedCall(rollDelay + growDur, () => { if (rollList) rollList.style.animationPlayState = 'running'; });
           });
       })();
 
