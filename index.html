@@ -366,7 +366,7 @@
     align-items:center; margin-top:clamp(220px,34vh,480px); margin-bottom:70px; }  /* Hero 마퀴↔About 간격 · About 하단 +70px */
   .hero-below-text { display:flex; align-items:center; }
   .hero-about-desc { margin:0; text-align:left; font-family:'Poppins','Pretendard',sans-serif; font-weight:300; letter-spacing:-0.01em;
-    font-size:var(--fs-body-2); line-height:1.85; color:rgba(255,255,255,.8); max-width:669px; }
+    font-size:var(--fs-body-2); line-height:1.85; color:#ffffff; max-width:669px; }
   .hero-below-media { display:flex; align-items:center; justify-content:center; }
   .hero-below-media .about-3d { width:clamp(144px,16vw,240px); }  /* 기존 대비 약 20% 축소(비율 유지) */
   .about-media { position:relative; display:inline-block; width:clamp(180px,20vw,320px); }
@@ -518,7 +518,7 @@
       <div class="about-media"><img class="about-img" src="img/main/about-3d.gif" alt="" aria-hidden="true"></div>
     </div>
     <div class="hero-below-text" data-hero>
-      <p class="hero-about-desc">좋은 디자인은 단순히 보기 좋은 화면이 아니라, 문제를 해결하는 과정에서 시작된다고 믿습니다. 사용자의 문제를 정의하고, 팀과의 소통으로 방향을 맞추며, 끝까지 실행해 더 나은 경험을 만들어갑니다. 기획부터 설계, 구현까지 하나의 흐름으로 바라보며, 사용자와 비즈니스 모두에게 의미 있는 결과를 만드는 것을 목표로 합니다. 변화하는 환경 속에서도 끊임없이 배우고 개선하며, 더 나은 경험을 위한 디자인을 이어가고 있습니다.</p>
+      <p class="hero-about-desc">좋은 디자인은 문제를 해결하는 과정에서 시작된다고 믿으며,<br>사용자의 문제를 정의하고 기획부터 설계·구현까지 하나의 흐름으로 연결합니다.<br>사용자와 비즈니스 모두에게 의미 있는 경험을 만드는 <b style="font-weight:600">UX/UI 디자이너</b>입니다.</p>
     </div>
   </div>
 </section>
@@ -1034,7 +1034,7 @@
         let n = 0;
         const grow   = () => { n++; gsap.to(dot, { width:56, height:56, duration:0.45, ease:'expo.out', overwrite:'auto' }); };
         const shrink = () => { n = Math.max(0, n-1); if (!n) gsap.to(dot, { width:28, height:28, duration:0.4, ease:'power3.out', overwrite:'auto' }); };
-        document.querySelectorAll('.work-image').forEach((el) => { el.addEventListener('pointerenter', grow); el.addEventListener('pointerleave', shrink); });
+        document.querySelectorAll('.work-image, .flip-card').forEach((el) => { el.addEventListener('pointerenter', grow); el.addEventListener('pointerleave', shrink); });
       })();
 
       // Work 카드 스택 (pin 없음) — 섹션 스크롤 진행률에 연동(scrub). 처음엔 모든 카드가 1번 위로 포개져 겹쳐 있고,
