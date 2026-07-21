@@ -8,7 +8,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Poppins:wght@200;300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Noto+Serif+KR:wght@400;500;600;700&family=Poppins:wght@200;300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
 
@@ -87,6 +87,64 @@
   .mockup-float{ animation:mockFloat 3.5s ease-in-out infinite; will-change:transform; }
   @keyframes mockFloat { 0%,100%{ transform:translateY(-9.9px); } 50%{ transform:translateY(9.9px); } }
   @media (prefers-reduced-motion: reduce){ .mockup-float{ animation:none; } }
+
+  /* ===== 인터랙티브 히어로 씬: 글라스 텍스트 + 아트 카드 캐러셀 + 손/폰 목업 + 썸네일 ===== */
+  .hero-scene { position:relative; width:100%; height:100vh; overflow:hidden;
+    background:linear-gradient(180deg,#1A1A1A 0%,#2B2B2B 100%); }
+  /* 글라스 텍스트 (폰 뒤) — 글라스 질감이 구워진 PNG 사용 */
+  /* z-index 5 → 카드·폰 목업(stage z2)보다 위. 하단 여백에 가운데 오도록 배치 */
+  /* 카드 하단(74%)~씬 하단(100%) 구간의 정중앙(87%)에 배치 — 높이와 무관하게 정확히 가운데 */
+  .hs-text { position:absolute; left:0; right:0; top:87%; transform:translateY(-50%); z-index:5; margin:0;
+    display:flex; justify-content:space-between; align-items:flex-end;   /* 한 줄 · 좌측 끝 / 우측 끝 */
+    pointer-events:none; user-select:none; }   /* 패럴랙스 없이 자리 고정 */
+  /* 원본 폭 비율(1930 : 1965) 유지 · 합계 가로 79.2% */
+  .hs-text img { display:block; height:auto; }
+  .hs-text img:first-of-type { width:39.25%; }
+  .hs-text img:last-of-type  { width:39.95%; }
+  /* 카드+폰 공통 스테이지: 둘이 항상 같은 양만큼 움직여야 화면 아트와 뒤 카드 정렬이 유지됨 */
+  .hs-stage { position:absolute; inset:0; z-index:2; will-change:transform; }
+  .hs-stage-inner { position:absolute; inset:0; will-change:transform; }
+  /* 아트 카드 캐러셀 (폰 뒤) */
+  .hs-cards-outer { position:absolute; inset:0; z-index:2; pointer-events:none; }
+  .hs-cards { position:absolute; top:40vh; left:50%; display:flex; align-items:center; gap:5.3vh; will-change:transform; }
+  .hs-card { flex:0 0 auto; width:43vh; border-radius:1.6vh; overflow:hidden;
+    box-shadow:0 2vh 4vh rgba(0,0,0,.45); filter:brightness(.78); transition:filter .6s ease; }
+  .hs-card img { display:block; width:100%; height:auto; aspect-ratio:1030/814; }   /* 로드 전 높이 예약 */
+  /* 손 + 폰 목업 (맨 위) */
+  .hs-phone { position:absolute; left:50%; top:8vh; z-index:3; transform:translateX(-50%);
+    pointer-events:none; will-change:transform; }
+  html.gsap .hs-phone { transform:none; }   /* GSAP가 xPercent로 중앙정렬 (x 애니메이션과 충돌 방지) */
+  .hs-phone-inner { position:relative; }
+  .hs-phone-img { display:block; height:139vh; width:auto; aspect-ratio:2222/3934; }   /* 로드 전에도 폭 예약(레이아웃 튐 방지) */
+  /* 폰 화면 안 아트 (목업 화면 영역 위에 얹음) */
+  .hs-screen { position:absolute; left:18.3%; top:23.1%; width:54.6%; aspect-ratio:1030/814; border-radius:1.2vh; overflow:hidden; }
+  .hs-screen img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .55s ease; }
+  .hs-screen img.is-on { opacity:1; }
+  /* 대표 배지: 아트 우측 하단 (기존 full 이미지와 동일 위치) */
+  /* 우측 여백은 폭 기준, 하단은 높이 기준이라 퍼센트가 달라야 실제 픽셀이 같아짐(화면 비율 1030:814) */
+  .hs-screen .hs-badge { inset:auto 4.27% 5.4% auto; width:24.2%; height:auto; object-fit:contain; opacity:1; z-index:2; }
+  .hs-dots { position:absolute; left:18.3%; width:54.6%; top:49.5%; display:flex; justify-content:center; gap:1.1vh; }
+  .hs-dots span { width:.85vh; height:.85vh; border-radius:50%; background:rgba(255,255,255,.32); transition:background .35s ease, transform .35s ease; }
+  .hs-dots span.is-on { background:#fff; transform:scale(1.25); }
+  /* 썸네일 — 폰 화면 영역 안(.hs-screen과 동일한 left/width) · 한 번에 3개만 보이는 창 */
+  .hs-thumbs { position:absolute; left:18.3%; width:54.6%; top:53%; z-index:2; overflow:hidden; pointer-events:auto; }
+  .hs-thumbs-track { display:flex; gap:2.4%; will-change:transform; }
+  .hs-thumb { position:relative; flex:0 0 calc((100% - 4.8%) / 3); min-width:0; aspect-ratio:400/320;
+    padding:0; border:none; background:none;
+    cursor:pointer; border-radius:.6vh; overflow:hidden; transition:transform .4s cubic-bezier(.22,1,.36,1); }
+  .hs-thumb img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:opacity .4s ease; }
+  .hs-thumb .th-on { opacity:0; }
+  .hs-thumb.is-active .th-on { opacity:1; }
+  .hs-thumb.is-active { transform:translateY(-0.5vh); }
+  @media (max-width:900px){
+    .hs-cards { top:44vh; gap:3.4vh; }
+    .hs-card { width:34vh; }
+    .hs-phone-img { height:112vh; }
+    .hs-phone { top:12vh; }
+    .hs-text { top:85.5%; }   /* 모바일은 카드 하단이 70.9% → 그 구간 정중앙 */
+  }
+  @media (prefers-reduced-motion: reduce){ .hs-card, .hs-screen img, .hs-thumb, .hs-thumb img, .hs-dots span { transition:none; } }
+
   /* Full Image → TenderPlus 스타일 카드 */
   .tp-card { position:relative; width:100%; box-sizing:border-box; border-radius:clamp(20px,2vw,32px); overflow:hidden;
     min-height:clamp(240px,32vw,440px); padding:clamp(28px,4.2vw,68px);
@@ -741,10 +799,78 @@
   </div>
 </section>
 
-<!-- ============================ 6. FULL IMAGE (대표 이미지 자리) ============================ -->
+<!-- ============================ 6. 인터랙티브 씬 (대표 이미지 자리 · 전폭) ============================ -->
 <section class="pb-[13px] sm:pb-[24px]">
-  <div class="img-reveal w-full overflow-hidden bg-[#202024]">
-    <img class="w-full h-auto block" src="img/Moodle Diary/full-imag2.jpg" alt="Moodle Diary 대표 이미지">
+  <div class="hero-scene" aria-label="Moodle Diary 앱 화면">
+    <p class="hs-text" aria-hidden="true">
+      <img src="img/Moodle%20Diary/Write%20less.png" alt="" loading="lazy">
+      <img src="img/Moodle%20Diary/Feel%20more.png" alt="" loading="lazy">
+    </p>
+
+    <!-- 카드와 폰은 항상 같이 움직여야 정렬이 유지됨 → 하나의 스테이지로 묶어 패럴랙스 적용 -->
+    <!-- 바깥: 스크롤 패럴랙스 / 안쪽: 마우스 패럴랙스 (같은 y를 두 트윈이 다투지 않도록 분리) -->
+    <div class="hs-stage"><div class="hs-stage-inner">
+
+    <!-- 아트 카드 캐러셀 (폰 뒤로 지나감) -->
+    <div class="hs-cards-outer" aria-hidden="true">
+      <!-- 무한 흐름을 위해 5장을 3세트 반복 (가운데 세트를 기준으로 순환) -->
+      <div class="hs-cards">
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-1.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-2.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-3.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-4.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-5.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-1.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-2.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-3.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-4.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-5.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-1.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-2.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-3.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-4.png" alt="" loading="lazy"></div>
+        <div class="hs-card"><img src="img/Moodle%20Diary/art-5.png" alt="" loading="lazy"></div>
+      </div>
+    </div>
+
+    <!-- 손 + 폰 목업 (맨 위) -->
+    <div class="hs-phone">
+      <div class="hs-phone-inner mockup-float">
+        <img class="hs-phone-img" src="img/Moodle%20Diary/iphoneMockup.png" alt="Moodle Diary 앱을 든 손" loading="lazy">
+        <div class="hs-screen">
+          <img src="img/Moodle%20Diary/art-1.png" alt="">
+          <img src="img/Moodle%20Diary/art-2.png" alt="">
+          <img class="is-on" src="img/Moodle%20Diary/art-3.png" alt="">
+          <img src="img/Moodle%20Diary/art-4.png" alt="">
+          <img src="img/Moodle%20Diary/art-5.png" alt="">
+          <img class="hs-badge" src="img/Moodle%20Diary/button.png" alt="대표 이미지" loading="lazy">
+        </div>
+        <div class="hs-dots"><span></span><span></span><span class="is-on"></span><span></span><span></span></div>
+
+        <!-- 썸네일 (폰 화면 안 · 3개만 노출 · 카드와 동일하게 3세트 반복해 끊김 없이 흐름) -->
+        <div class="hs-thumbs">
+          <div class="hs-thumbs-track">
+            <button class="hs-thumb" type="button" aria-label="그림 1"><img class="th-off" src="img/Moodle%20Diary/thumb-1-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-1-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 2"><img class="th-off" src="img/Moodle%20Diary/thumb-2-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-2-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 3"><img class="th-off" src="img/Moodle%20Diary/thumb-3-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-3-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 4"><img class="th-off" src="img/Moodle%20Diary/thumb-4-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-4-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 5"><img class="th-off" src="img/Moodle%20Diary/thumb-5-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-5-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 1"><img class="th-off" src="img/Moodle%20Diary/thumb-1-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-1-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 2"><img class="th-off" src="img/Moodle%20Diary/thumb-2-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-2-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb is-active" type="button" aria-label="그림 3"><img class="th-off" src="img/Moodle%20Diary/thumb-3-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-3-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 4"><img class="th-off" src="img/Moodle%20Diary/thumb-4-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-4-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 5"><img class="th-off" src="img/Moodle%20Diary/thumb-5-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-5-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 1"><img class="th-off" src="img/Moodle%20Diary/thumb-1-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-1-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 2"><img class="th-off" src="img/Moodle%20Diary/thumb-2-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-2-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 3"><img class="th-off" src="img/Moodle%20Diary/thumb-3-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-3-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 4"><img class="th-off" src="img/Moodle%20Diary/thumb-4-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-4-on.png" alt="" loading="lazy"></button>
+            <button class="hs-thumb" type="button" aria-label="그림 5"><img class="th-off" src="img/Moodle%20Diary/thumb-5-off.png" alt="" loading="lazy"><img class="th-on" src="img/Moodle%20Diary/thumb-5-on.png" alt="" loading="lazy"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    </div></div><!-- /hs-stage-inner /hs-stage -->
   </div>
 </section>
 
@@ -803,6 +929,103 @@
     });
     // 푸터 3D 오브젝트 Floating (포트폴리오 메인과 동일)
     gsap.utils.toArray('.about-3d').forEach((el) => gsap.to(el, { y:'+=16', duration:3, ease:'sine.inOut', yoyo:true, repeat:-1 }));
+
+    // 인터랙티브 히어로 씬 — 아트 카드 캐러셀(썸네일 연동) + 스크롤/마우스 패럴랙스
+    (function initHeroScene(){
+      const scene = document.querySelector('.hero-scene');
+      if (!scene) return;
+      const stage   = scene.querySelector('.hs-stage');        // 스크롤 패럴랙스
+      const stageM  = scene.querySelector('.hs-stage-inner');  // 마우스 패럴랙스
+      const row     = scene.querySelector('.hs-cards');
+      const cards   = Array.from(scene.querySelectorAll('.hs-card'));
+      const screens = Array.from(scene.querySelectorAll('.hs-screen img:not(.hs-badge)'));   // 배지는 아트 목록에서 제외
+      const dots    = Array.from(scene.querySelectorAll('.hs-dots span'));
+      const thumbs  = Array.from(scene.querySelectorAll('.hs-thumb'));
+      const phone   = scene.querySelector('.hs-phone');
+      const track   = scene.querySelector('.hs-thumbs-track');
+      const N    = screens.length;                   // 원본 아트 수(5)
+      const MID  = (cards.length - 1) / 2;           // 행 중앙에 오는 카드 인덱스(15장 → 7)
+      const VIS  = 3;                                // 썸네일은 한 번에 3개만 노출
+      let cursor = MID, timer = null;                // 복제본 포함 인덱스(계속 증가/감소)
+
+      gsap.set(row, { xPercent:-50 });               // 행 자체를 화면 중앙 정렬
+      gsap.set(phone, { xPercent:-50 });             // 폰도 GSAP로 중앙정렬(마우스 x와 합성)
+      // 카드 1칸 이동 거리(카드폭 + gap)
+      const stepPx = () => (cards.length < 2) ? 0
+        : cards[1].getBoundingClientRect().left - cards[0].getBoundingClientRect().left;
+      const thumbStep = () => (thumbs.length < 2) ? 0 : thumbs[1].offsetLeft - thumbs[0].offsetLeft;
+
+      // 목업의 화면은 이미지 정중앙이 아니라 살짝 왼쪽 → 카드 행을 폰 '화면' 중심에 맞춤
+      const screenBox = scene.querySelector('.hs-screen');
+      const alignOffset = () => {
+        const p = scene.querySelector('.hs-phone-img').getBoundingClientRect();
+        const s = screenBox.getBoundingClientRect();
+        if (!p.width || !s.width) return 0;
+        return (s.left + s.width/2) - (p.left + p.width/2);
+      };
+      const xFor = (c) => (MID - c) * stepPx() + alignOffset();
+
+      // 커서가 가운데 세트를 벗어나면 한 세트(N)만큼 되돌리고, 현재 x도 같은 양만큼 즉시 보정.
+      // 카드가 N마다 반복되므로 화면상으로는 완전히 동일 → 끊김 없이 계속 흐르면서 범위는 유지됨.
+      const LO = MID - Math.floor(N / 2);            // 커서 허용 범위 [LO, LO+N)
+      const normalize = () => {
+        const st = stepPx(), tst = thumbStep(); let dx = 0, dt = 0;
+        while (cursor >= LO + N) { cursor -= N; dx += N * st; dt += N * tst; }
+        while (cursor <  LO)     { cursor += N; dx -= N * st; dt -= N * tst; }
+        // 카드·썸네일 모두 N마다 반복되므로 같은 양만큼 즉시 보정하면 화면상 완전히 동일
+        if (dx) gsap.set(row,   { x: (gsap.getProperty(row,   'x') || 0) + dx });
+        if (dt) gsap.set(track, { x: (gsap.getProperty(track, 'x') || 0) + dt });
+      };
+
+      const paint = () => {
+        const a = ((cursor % N) + N) % N;                       // 현재 아트 인덱스
+        screens.forEach((el,k) => el.classList.toggle('is-on', k === a));
+        dots.forEach((el,k)    => el.classList.toggle('is-on', k === a));
+        // 썸네일도 커서 기준(복제본 포함) → 끝에서 되돌아가지 않고 같은 방향으로 계속 흐름
+        thumbs.forEach((el,k)  => el.classList.toggle('is-active', k === cursor));
+        gsap.to(track, { x: -(cursor - Math.floor(VIS / 2)) * thumbStep(),   // 활성 썸네일을 가운데로
+          duration:0.5, ease:'power3.out', overwrite:'auto' });
+      };
+
+      const goTo = (c, animate) => {
+        cursor = c;
+        normalize();          // 이동 시작 전에 보정(연타로 트윈이 덮어써져도 범위 유지)
+        paint();
+        gsap.to(row, { x: xFor(cursor), duration: animate === false ? 0 : 0.9, ease:'power3.inOut', overwrite:'auto' });
+      };
+
+      // 자동 순환: 항상 같은 방향으로 계속 흐름(끝에서 되돌아오지 않음)
+      const start = () => { stop(); timer = setInterval(() => goTo(cursor + 1), 3500); };
+      const stop  = () => { if (timer) { clearInterval(timer); timer = null; } };
+      // 썸네일 클릭: 눌린 썸네일 자체의 위치로 이동(보이는 3개 중 하나이므로 자연스럽게 ±1칸)
+      thumbs.forEach((btn, k) => btn.addEventListener('click', () => { goTo(k); start(); }));
+      // 화면에 보일 때만 순환
+      ScrollTrigger.create({ trigger: scene, start:'top bottom', end:'bottom top',
+        onEnter:start, onEnterBack:start, onLeave:stop, onLeaveBack:stop });
+
+      // 스크롤 패럴랙스: 카드+폰(스테이지)만. 텍스트는 자리 고정(패럴랙스 없음)
+      gsap.to(stage, { y:-90, ease:'none', scrollTrigger:{ trigger:scene, start:'top top', end:'bottom top', scrub:true } });
+
+      // 마우스 패럴랙스: 스테이지(카드+폰)만 움직임. 텍스트는 고정
+      if (matchMedia('(pointer:fine)').matches) {
+        const sx = gsap.quickTo(stageM, 'x', { duration:0.7, ease:'power3' });
+        const sy = gsap.quickTo(stageM, 'y', { duration:0.7, ease:'power3' });
+        scene.addEventListener('mousemove', (e) => {
+          const r = scene.getBoundingClientRect();
+          const dx = (e.clientX - (r.left + r.width/2))  / (r.width/2);    // -1..1
+          const dy = (e.clientY - (r.top  + r.height/2)) / (r.height/2);
+          sx(dx * 18); sy(dy * 10);
+        }, { passive:true });
+        scene.addEventListener('mouseleave', () => { sx(0); sy(0); });
+      }
+
+      goTo(MID, false);
+      addEventListener('resize', () => goTo(cursor, false));
+      // 목업/아트 로드 후 정렬 재계산 (로드 전엔 폭을 알 수 없어 오프셋이 0)
+      scene.querySelectorAll('img').forEach((im) => {
+        if (!im.complete) im.addEventListener('load', () => goTo(cursor, false), { once:true });
+      });
+    })();
 
     // BI Design 로고 공식 — 스크롤 진입 시 사람 → + → AI붓 → + → 감정 → 화살표 → 로고 순차 등장 + 로고 살짝 팝
     (function initBiFormula(){
