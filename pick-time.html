@@ -109,7 +109,7 @@
     font-family:'Poppins','Poppins','Pretendard',sans-serif; }
   /* 글라스 라인(상단이 밝은 그라데이션 보더) */
   .tp-card::before { content:''; position:absolute; inset:0; z-index:3; border-radius:inherit; padding:1px; pointer-events:none;
-    background:linear-gradient(to bottom, rgba(255,255,255,.6) 0%, rgba(255,255,255,.28) 50%, rgba(255,255,255,.4) 100%);
+    background:linear-gradient(to bottom, rgba(144,58,255,.85) 0%, rgba(144,58,255,.45) 50%, rgba(183,127,255,.7) 100%);
     -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite:xor;
     mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); mask-composite:exclude; }
   /* 이미지만 채우는 카드(텍스트·아이콘 제외, 둥근 카드·글라스 보더 유지) · 높이는 이미지 비율에 맞춤 */
@@ -139,9 +139,9 @@
   @media (max-width:640px){ .tp-text{ max-width:70%; } .tp-object{ right:64px; } }
   @media (prefers-reduced-motion: reduce){ .scroll-arrow, .scroll-arrow-x{ animation:none; } }
   .concl-box{ position:relative; border-radius:16px;
-    background:linear-gradient(315deg, rgba(224,199,164,0.05) 0%, rgba(248,224,192,0.15) 100%); }
+    background:linear-gradient(315deg, rgba(0,102,255,0.12) 0%, rgba(0,102,255,0.32) 100%); }
   .concl-box::before{ content:''; position:absolute; inset:0; border-radius:inherit; padding:1px;
-    background:linear-gradient(135deg, rgba(228,196,156,0.6) 0%, rgba(251,222,184,0.6) 100%);
+    background:linear-gradient(135deg, rgba(0,102,255,0.95) 0%, rgba(60,150,255,0.8) 100%);
     -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
     -webkit-mask-composite:xor; mask-composite:exclude; pointer-events:none; }
   .em { font-family:'Instrument Serif', Georgia, serif; font-style: italic; font-weight: 300; letter-spacing:.01em; }
@@ -237,6 +237,39 @@
   .ft-menu a { font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:400; font-size:clamp(1.05rem,1.6vw,1.4rem); color:#fff; transition:color .2s ease; }
   .ft-menu a:hover { color:#6E1CF6; }
   @media (max-width:768px){ .ft-grid { grid-template-columns:1fr; gap:32px; align-items:start; } }
+  /* ===== 인터랙티브 씬(무들 이식): 아트 캐러셀 + 손/폰 목업 + 동기화 캡션 텍스트 ===== */
+  .hero-scene { position:relative; width:100%; height:100vh; overflow:hidden;
+    background:linear-gradient(180deg,#1A1A1A 0%,#2B2B2B 100%); }
+  .hs-stage { position:absolute; inset:0; z-index:2; will-change:transform; }
+  .hs-stage-inner { position:absolute; inset:0; will-change:transform; }
+  .hs-cards-outer { position:absolute; inset:0; z-index:2; pointer-events:none; }
+  .hs-cards { position:absolute; top:40vh; left:50%; display:flex; align-items:center; gap:5.3vh; will-change:transform; }
+  .hs-card { flex:0 0 auto; width:43vh; border-radius:1.6vh; overflow:hidden;
+    box-shadow:0 2vh 4vh rgba(0,0,0,.45); filter:brightness(.78); transition:filter .6s ease; }
+  .hs-card img { display:block; width:100%; height:auto; aspect-ratio:1/1; }
+  .hs-phone { position:absolute; left:50%; top:8vh; z-index:3; transform:translateX(-50%);
+    pointer-events:none; will-change:transform; }
+  html.gsap .hs-phone { transform:none; }
+  .hs-phone-inner { position:relative; }
+  .hs-phone-img { display:block; height:139vh; width:auto; aspect-ratio:2222/3934; }
+  /* 상품 이미지 슬롯(폰 화면 안 · 스크린샷 상품 이미지 위치) */
+  .hs-screen { position:absolute; left:27.4%; top:27.8%; width:35.2%; aspect-ratio:1/1; border-radius:1.4vh; overflow:hidden; z-index:4; }
+  .hs-screen img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; opacity:0; transition:opacity .55s ease; }
+  .hs-screen img.is-on { opacity:1; }
+  /* 상품 정보(색상 칩 + 상품명) · 이미지 아래 · 슬라이드마다 텍스트 변경 */
+  .pt-prod { position:absolute; left:22%; width:46%; top:49%; z-index:4; text-align:center; pointer-events:none; }   /* 화면 유리(15.7~74.4%) 안쪽에 좌우 여백 두고 배치 → 상품명이 끝에 닿지 않음 */
+  .pt-chip { display:inline-block; padding:.35em 1em; border-radius:999px; margin-bottom:1em;
+    font-family:'Pretendard',sans-serif; font-weight:500; font-size:1.15vh; line-height:1;
+    color:#7B3FE4; background:#EDE4FB; }
+  .pt-title { margin:0; font-family:'Pretendard',sans-serif; font-weight:400; font-size:var(--fs-body-3); line-height:1.45; color:#3a3a3a; word-break:keep-all; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+  @media (max-width:900px){
+    .hs-cards { top:44vh; gap:3.4vh; }
+    .hs-card { width:34vh; }
+    .hs-phone-img { height:112vh; }
+    .hs-phone { top:12vh; }
+    .pt-chip { font-size:.92vh; }
+  }
+  @media (prefers-reduced-motion: reduce){ .hs-card, .hs-screen img { transition:none; } }
 </style>
 </head>
 
@@ -309,7 +342,65 @@
 <!-- ============================ 3. FULL IMAGE → TenderPlus 스타일 카드 ============================ -->
 <section class="site-pad pb-[200px] sm:pb-[354px]">
   <div class="reveal tp-card tp-card--img" data-delay="1">
-    <img class="tp-full" src="img/Moodle Diary/full image.jpg" alt="TenderPlus">
+    <img class="tp-full" src="img/pick-time/full-image.jpg" alt="Pick Time">
+  </div>
+</section>
+
+<!-- ============================ 4-2. WHO (문제를 겪던 두 사람 · 페르소나) ============================ -->
+<section class="site-pad pb-[200px] sm:pb-[354px]">
+  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
+    <div class="reveal">
+      <p class="t-caption text-[#adadad] mb-6">WHO</p>
+      <h2 class="t-h2 text-ink">이 문제를 겪고 있던<br>두 사람이 있었어요.</h2>
+      <p class="t-body-2 text-[#adadad] mt-4">상황은 달랐지만, 선물 앞에서 망설인 이유는 닮아 있었어요.</p>
+    </div>
+    <div>
+  <div class="grid md:grid-cols-2 gap-4 sm:gap-6">
+    <article class="persona-card reveal rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center" style="background:linear-gradient(135deg,#34343b 0%,#1e1e23 100%)">
+      <div class="w-[222px] h-[222px] rounded-full overflow-hidden bg-[#25232d] mb-6 p-[6.3px] flex items-center justify-center">
+        <img src="img/pick-time/persona-1.gif" alt="김지안" class="w-full h-full object-contain" loading="lazy">
+      </div>
+      <p class="mb-1"><span class="text-ink t-h3" style="font-weight:700">김지안</span> <span class="text-[length:var(--fs-body-3)]" style="color:#c1c1c1">20대 / 학생</span></p>
+      <p class="font-600 text-ink text-[length:var(--fs-body-3)] mb-5">상대에게 만족스러운 선물을 주고 싶은데 고민이 되요.</p>
+      <div class="flex flex-wrap justify-center gap-2 mb-6">
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">주변 의견 수집</span>
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">상대방의 반응 관찰</span>
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">반복적인 검토</span>
+      </div>
+      <img src="img/pick-time/object.svg" alt="" class="mb-3" style="width:11.2px;height:11.2px">
+      <p class="t-body-3 text-white leading-relaxed" style="font-weight:400">상대의 취향을 파악하기 어려워 선물 선택에 시간이 걸리고,<br>보낸 후에도 만족할지 확신이 없어 불안해요.</p>
+    </article>
+
+    <article class="persona-card reveal rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center" style="background:linear-gradient(135deg,#34343b 0%,#1e1e23 100%)">
+      <div class="w-[222px] h-[222px] rounded-full overflow-hidden bg-[#25232d] mb-6 p-[6.3px] flex items-center justify-center">
+        <img src="img/pick-time/persona-2.gif" alt="장안백" class="w-full h-full object-contain" loading="lazy">
+      </div>
+      <p class="mb-1"><span class="text-ink t-h3" style="font-weight:700">장안백</span> <span class="text-[length:var(--fs-body-3)]" style="color:#c1c1c1">40대 / 회사원</span></p>
+      <p class="font-600 text-ink text-[length:var(--fs-body-3)] mb-5">가족이나 친구들과 리스트를 공유하고<br>의견을 나누며 선물을 고르고 싶어요.</p>
+      <div class="flex flex-wrap justify-center gap-2 mb-6">
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">유행 탐색</span>
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">관계 중심적</span>
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">계획적</span>
+        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">소통 지향</span>
+      </div>
+      <img src="img/pick-time/object.svg" alt="" class="mb-3" style="width:11.2px;height:11.2px">
+      <p class="t-body-3 text-white leading-relaxed" style="font-weight:400">가족 행사나 친구 모임에서 깜짝 선물을 고를 때 협업 기능이 없어 불편했고, 소통이 어려워 더 나은 선택에 고민이 많았습니다.</p>
+    </article>
+  </div>
+
+  <!-- 결론: Insight -->
+  <div class="reveal flex flex-col items-center mt-16 sm:mt-24">
+    <svg class="scroll-arrow block mx-auto mb-16 sm:mb-24" width="18" height="80" viewBox="0 0 18 80" fill="none" aria-hidden="true">
+      <defs><linearGradient id="arrGrad2" x1="9" y1="0" x2="9" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff" stop-opacity="0"/><stop offset="0.55" stop-color="#ffffff" stop-opacity="0.85"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs>
+      <path d="M9 2 V70" stroke="url(#arrGrad2)" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M3 62.5 L9 71 L15 62.5" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <div class="concl-box w-full px-8 py-8 sm:px-12 sm:py-10 flex flex-col items-center text-center gap-4 sm:gap-5">
+      <span class="text-[length:var(--fs-body-3)]" style="color:#4d9bff;text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(0,102,255,0.55)">Insight</span>
+      <p class="t-body-1 text-ink leading-snug">맞춤형 선물 추천 목록과 함께<br><b class="font-700">협력해서 선물을 고를 수 있는 서비스가 필요해요.</b></p>
+    </div>
+  </div>
+    </div>
   </div>
 </section>
 
@@ -344,94 +435,36 @@
   </div>
 </section>
 
-<!-- ============================ 4-2. WHO (문제를 겪던 두 사람 · 페르소나) ============================ -->
-<section class="site-pad pb-[200px] sm:pb-[354px]">
-  <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
-    <div class="reveal">
-      <p class="t-caption text-[#adadad] mb-6">WHO</p>
-      <h2 class="t-h2 text-ink">이 문제를 겪고 있던<br>두 사람이 있었어요.</h2>
-      <p class="t-body-2 text-[#adadad] mt-4">상황은 달랐지만, 선물 앞에서 망설인 이유는 닮아 있었어요.</p>
-    </div>
-    <div>
-  <div class="grid md:grid-cols-2 gap-4 sm:gap-6">
-    <article class="persona-card reveal rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center" style="background:linear-gradient(135deg,rgba(183,58,255,0.3) 0%,#CBB4E9 100%)">
-      <div class="w-[222px] h-[222px] rounded-full overflow-hidden bg-[#2b2932] mb-6 p-[6.3px] flex items-center justify-center">
-        <img src="img/pick-time/persona-1.png" alt="김지안" class="w-full h-full object-contain" loading="lazy">
-      </div>
-      <p class="mb-1"><span class="text-ink t-h3" style="font-weight:700">김지안</span> <span class="text-[length:var(--fs-body-3)]" style="color:#c1c1c1">20대 / 학생</span></p>
-      <p class="font-600 text-ink text-[length:var(--fs-body-3)] mb-5">상대에게 만족스러운 선물을 주고 싶은데 고민이 되요.</p>
-      <div class="flex flex-wrap justify-center gap-2 mb-6">
-        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">주변 의견 수집</span>
-        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">상대방의 반응 관찰</span>
-        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">반복적인 검토</span>
-      </div>
-      <img src="img/Moodle%20Diary/desk_object.svg" alt="" class="mb-3" style="width:11.2px;height:11.2px">
-      <p class="t-body-3 text-white leading-relaxed" style="font-weight:400">상대의 취향을 파악하기 어려워 선물 선택에 시간이 걸리고,<br>보낸 후에도 만족할지 확신이 없어 불안해요.</p>
-    </article>
-
-    <article class="persona-card reveal rounded-2xl p-8 sm:p-10 flex flex-col items-center text-center" style="background:linear-gradient(135deg,rgba(183,58,255,0.3) 0%,#CBB4E9 100%)">
-      <div class="w-[222px] h-[222px] rounded-full overflow-hidden bg-[#2b2932] mb-6 p-[6.3px] flex items-center justify-center">
-        <img src="img/pick-time/persona-2.png" alt="장안백" class="w-full h-full object-contain" loading="lazy">
-      </div>
-      <p class="mb-1"><span class="text-ink t-h3" style="font-weight:700">장안백</span> <span class="text-[length:var(--fs-body-3)]" style="color:#c1c1c1">40대 / 회사원</span></p>
-      <p class="font-600 text-ink text-[length:var(--fs-body-3)] mb-5">가족이나 친구들과 리스트를 공유하고 의견을 나누며 선물을 고르고 싶어요.</p>
-      <div class="flex flex-wrap justify-center gap-2 mb-6">
-        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">유행 탐색</span>
-        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">관계 중심적</span>
-        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">계획적</span>
-        <span class="rounded-full border px-3 py-1 text-[length:var(--fs-caption)]" style="color:#c1c1c1;border-color:#c1c1c1">소통 지향</span>
-      </div>
-      <img src="img/Moodle%20Diary/desk_object.svg" alt="" class="mb-3" style="width:11.2px;height:11.2px">
-      <p class="t-body-3 text-white leading-relaxed" style="font-weight:400">가족 행사나 친구 모임에서 깜짝 선물을 고를 때 협업 기능이 없어 불편했고,<br>소통이 어려워 더 나은 선택에 고민이 많았습니다.</p>
-    </article>
-  </div>
-
-  <!-- 결론: Insight -->
-  <div class="reveal flex flex-col items-center mt-16 sm:mt-24">
-    <svg class="scroll-arrow block mx-auto mb-16 sm:mb-24" width="18" height="80" viewBox="0 0 18 80" fill="none" aria-hidden="true">
-      <defs><linearGradient id="arrGrad2" x1="9" y1="0" x2="9" y2="80" gradientUnits="userSpaceOnUse"><stop stop-color="#ffffff" stop-opacity="0"/><stop offset="0.55" stop-color="#ffffff" stop-opacity="0.85"/><stop offset="1" stop-color="#ffffff"/></linearGradient></defs>
-      <path d="M9 2 V70" stroke="url(#arrGrad2)" stroke-width="1.4" stroke-linecap="round"/>
-      <path d="M3 62.5 L9 71 L15 62.5" stroke="#ffffff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
-    <div class="concl-box w-full px-8 py-8 sm:px-12 sm:py-10 flex flex-col items-center text-center gap-4 sm:gap-5">
-      <span class="text-[length:var(--fs-body-3)]" style="color:#e0c7a4;text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(224,199,164,0.4)">Insight</span>
-      <p class="t-body-1 text-ink leading-snug">맞춤형 선물 추천 목록과 함께<br><b class="font-700">협력해서 선물을 고를 수 있는 서비스가 필요해요.</b></p>
-    </div>
-  </div>
-    </div>
-  </div>
-</section>
-
 <!-- ============================ 4-3. KEY DECISIONS (세 가지 핵심 기능) ============================ -->
 <section class="site-pad pb-[200px] sm:pb-[354px]">
   <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-start">
     <div class="reveal">
       <p class="t-caption text-[#adadad] mb-6">Key Decisions</p>
-      <h2 class="t-h2 text-ink">세 가지<br>핵심 기능이에요.</h2>
-      <p class="t-body-2 text-[#adadad] mt-4">선물 고민을 줄이기 위해 이 <b class="font-700 text-ink">세 가지</b>를 설계했어요.</p>
+      <h2 class="t-h2 text-white">세 가지<br>핵심 기능이에요.</h2>
+      <p class="t-body-2 text-[#adadad] mt-4">선물 고민을 줄이기 위해 이 <b class="font-700 text-white">세 가지</b>를 설계했어요.</p>
     </div>
     <div>
   <div class="grid sm:grid-cols-3 gap-4 sm:gap-6 items-stretch">
-    <article class="reveal rounded-2xl p-7 sm:p-9 flex flex-col" style="background:linear-gradient(135deg,rgba(183,58,255,0.3) 0%,#CBB4E9 100%)">
-      <span class="text-[length:var(--fs-body-3)] text-subtle mb-4 self-start" style="text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(255,255,255,0.3)">01</span>
-      <h3 class="t-body-1 text-ink font-700 leading-snug mb-4">온보딩 취향 테스트</h3>
-      <p class="t-body-3 text-muted leading-relaxed">앱 시작 시 취향·관심사·선호 카테고리를 테스트 형식으로 수집해 분석 후 맞춤 선물을 추천해요.</p>
+    <article class="reveal rounded-2xl p-7 sm:p-9 flex flex-col" style="background:radial-gradient(120% 90% at 25% 0%, #b73aff45, rgba(26,29,20,0) 60%), #5c207e42;border:1px solid #c968ff63">
+      <span class="text-[length:var(--fs-body-3)] text-white mb-4 self-center" style="text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(255,255,255,0.3)">01</span>
+      <h3 class="t-body-1 text-white font-700 leading-snug mb-4 text-center">온보딩 취향 테스트</h3>
+      <p class="t-body-3 text-white leading-relaxed text-center">앱 시작 시 취향·관심사·선호 카테고리를 수집해 분석 후 맞춤 선물을 추천해요.</p>
       <div class="mt-auto pt-8 flex items-end justify-center">
         <img src="img/pick-time/key-decisions-1.png" alt="" class="h-[110px] sm:h-[125px] w-auto max-w-full" loading="lazy">
       </div>
     </article>
-    <article class="reveal rounded-2xl p-7 sm:p-9 flex flex-col" style="background:linear-gradient(135deg,rgba(183,58,255,0.3) 0%,#CBB4E9 100%)">
-      <span class="text-[length:var(--fs-body-3)] text-subtle mb-4 self-start" style="text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(255,255,255,0.3)">02</span>
-      <h3 class="t-body-1 text-ink font-700 leading-snug mb-4">채팅으로 여러 명이 함께 선물을 결정</h3>
-      <p class="t-body-3 text-muted leading-relaxed">추천 선물 링크를 채팅방에서 공유하며 의견을 맞춰가요. 혼자 고민하는 구조에서 함께 결정하는 구조로 전환해요.</p>
+    <article class="reveal rounded-2xl p-7 sm:p-9 flex flex-col" style="background:radial-gradient(120% 90% at 25% 0%, #b73aff45, rgba(26,29,20,0) 60%), #5c207e42;border:1px solid #c968ff63">
+      <span class="text-[length:var(--fs-body-3)] text-white mb-4 self-center" style="text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(255,255,255,0.3)">02</span>
+      <h3 class="t-body-1 text-white font-700 leading-snug mb-4 text-center">채팅으로 여러 명이<br>함께 선물을 결정</h3>
+      <p class="t-body-3 text-white leading-relaxed text-center">추천 선물 링크를 채팅방에서 공유하며 혼자가 아닌 함께 결정하는 구조로 전환해요.</p>
       <div class="mt-auto pt-8 flex items-end justify-center">
         <img src="img/pick-time/key-decisions-2.png" alt="" class="h-[110px] sm:h-[125px] w-auto max-w-full" loading="lazy">
       </div>
     </article>
-    <article class="reveal rounded-2xl p-7 sm:p-9 flex flex-col" style="background:linear-gradient(135deg,rgba(183,58,255,0.3) 0%,#CBB4E9 100%)">
-      <span class="text-[length:var(--fs-body-3)] text-subtle mb-4 self-start" style="text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(255,255,255,0.3)">03</span>
-      <h3 class="t-body-1 text-ink font-700 leading-snug mb-4">기념일 알림 + 선물 이력으로 완성되는 경험</h3>
-      <p class="t-body-3 text-muted leading-relaxed">D-30 / D-7 / D-1 단계별 알림으로 기념일을 미리 준비하고, 과거 선물 이력을 기록해 중복 선물도 방지해요.</p>
+    <article class="reveal rounded-2xl p-7 sm:p-9 flex flex-col" style="background:radial-gradient(120% 90% at 25% 0%, #b73aff45, rgba(26,29,20,0) 60%), #5c207e42;border:1px solid #c968ff63">
+      <span class="text-[length:var(--fs-body-3)] text-white mb-4 self-center" style="text-decoration:underline;text-underline-offset:5px;text-decoration-color:rgba(255,255,255,0.3)">03</span>
+      <h3 class="t-body-1 text-white font-700 leading-snug mb-4 text-center">기념일 알림 + 선물 이력으로 완성되는 경험</h3>
+      <p class="t-body-3 text-white leading-relaxed text-center">D-30 / D-7 / D-1 단계별 알림으로 기념일을 준비하고, 선물 이력을 기록해 중복 선물도 방지해요.</p>
       <div class="mt-auto pt-8 flex items-end justify-center">
         <img src="img/pick-time/key-decisions-3.png" alt="" class="h-[110px] sm:h-[125px] w-auto max-w-full" loading="lazy">
       </div>
@@ -446,29 +479,22 @@
   <div class="grid lg:grid-cols-[3fr_7fr] gap-y-10 gap-x-16 items-center">
     <div class="reveal">
       <p class="t-caption text-[#adadad] mb-6">BI Design</p>
-      <h2 class="t-h2 text-ink">사람의 감정을<br>담은 AI붓</h2>
-      <p class="t-body-2 text-[#adadad] mt-4">사람 + AI붓 + 감정</p>
+      <h2 class="t-h2 text-ink">특별한 사람을 위한<br>선물</h2>
+      <p class="t-body-2 text-[#adadad] mt-4">선물 + 별</p>
     </div>
-    <!-- 로고 조합 공식 (아이콘·최종 로고는 이미지 자리) -->
+    <!-- 로고 조합 공식 (별 + 선물 → 앱 아이콘) -->
     <div id="bi-formula" class="flex items-center justify-center flex-wrap gap-5 sm:gap-9">
-      <img src="img/Moodle%20Diary/person.png" alt="사람" class="w-[58px] h-[58px] rounded-xl object-contain" loading="lazy">
-      <span class="inline-flex items-center justify-center w-[26px] h-[26px] rounded-full bg-[#D9CBB6] ring-1 ring-line shrink-0" aria-hidden="true">
-        <svg width="15.4" height="15.4" viewBox="0 0 14 14" fill="none" stroke="#4a4238" stroke-width="1.6" stroke-linecap="round"><path d="M7 2.5v9M2.5 7h9"/></svg>
+      <img src="img/pick-time/gifts.svg" alt="선물" class="w-[58px] h-[58px] object-contain" loading="lazy">
+      <span class="inline-flex items-center justify-center w-[26px] h-[26px] rounded-full bg-[#903AFF] shrink-0" aria-hidden="true">
+        <svg width="15.4" height="15.4" viewBox="0 0 14 14" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-linecap="round"><path d="M7 2.5v9M2.5 7h9"/></svg>
       </span>
-      <img src="img/Moodle%20Diary/pen.png" alt="AI붓" class="w-[58px] h-[58px] rounded-xl object-contain" loading="lazy">
-      <span class="inline-flex items-center justify-center w-[26px] h-[26px] rounded-full bg-[#D9CBB6] ring-1 ring-line shrink-0" aria-hidden="true">
-        <svg width="15.4" height="15.4" viewBox="0 0 14 14" fill="none" stroke="#4a4238" stroke-width="1.6" stroke-linecap="round"><path d="M7 2.5v9M2.5 7h9"/></svg>
-      </span>
-      <img src="img/Moodle%20Diary/emotion.png" alt="감정" class="w-[58px] h-[58px] rounded-xl object-contain" loading="lazy">
+      <img src="img/pick-time/star.svg" alt="별" class="w-[58px] h-[58px] object-contain" loading="lazy">
       <span class="inline-flex items-center justify-center mx-1 shrink-0" aria-hidden="true">
         <svg width="40" height="14" viewBox="0 0 40 14" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-          <defs><linearGradient id="biArrowGrad" x1="0" y1="0" x2="40" y2="0" gradientUnits="userSpaceOnUse">
-            <stop offset="0" stop-color="#5fe3e3" stop-opacity="0"/><stop offset="1" stop-color="#5fe3e3" stop-opacity="1"/>
-          </linearGradient></defs>
           <path class="bi-arrow-path" d="M2 7h34M30 2l6 5-6 5" stroke="#ffffff"/>
         </svg>
       </span>
-      <img src="img/Moodle%20Diary/logo.png" alt="로고" class="w-[192px] h-[192px] rounded-2xl object-contain" loading="lazy" style="filter:drop-shadow(0 0 24px rgba(217,203,182,0.4))">
+      <img src="img/pick-time/app-icon.svg" alt="로고" class="w-[192px] h-[192px] object-contain" loading="lazy" style="filter:drop-shadow(0 0 24px rgba(144,58,255,0.4))">
     </div>
   </div>
 </section>
@@ -534,37 +560,54 @@
   <h3 class="reveal text-ink font-500 text-[length:var(--fs-body-2)] mt-16 mb-6">Icon</h3>
   <div class="reveal rounded-2xl p-8 sm:p-14" style="background:#202024">
     <div class="grid grid-cols-[repeat(auto-fill,52px)] gap-5 justify-center">
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_1.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_2.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_3.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_4.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_5.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_6.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_7.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_8.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_9.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_10.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_11.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_12.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_13.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_14.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_15.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_16.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_17.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_18.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_19.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_20.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_21.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_22.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_23.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_24.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_25.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_26.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_27.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_28.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_29.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_30.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
-      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon_31.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon01.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon02.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon03.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon04.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon05.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon06.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon07.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon08.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon09.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon10.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon11.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon12.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon13.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon14.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon15.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon16.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon17.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon18.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon19.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon20.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon21.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon22.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon23.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon24.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon25.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon26.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon27.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon28.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon29.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon30.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon31.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon32.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon33.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon34.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon35.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon36.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon37.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon38.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon39.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon40.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon41.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon42.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon43.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon44.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon45.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon46.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon47.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
+      <div class="w-[52px] h-[52px] rounded-lg bg-[#1a1a1a] flex items-center justify-center p-[7px]"><img src="img/pick-time/icon/icon48.png" alt="" class="max-w-full max-h-full object-contain" loading="lazy"></div>
     </div>
   </div>
     </div>
@@ -581,7 +624,7 @@
     <!-- 좌: sticky 대표 화면 (이미지 자리) -->
     <div class="lg:sticky lg:top-28 lg:self-start">
       <div class="relative h-[700px] rounded-2xl overflow-hidden bg-[#202024] ring-1 ring-line">
-        <img class="proc-layer" src="img/pick-time/screen-1.png" alt="Pick Time 대표 화면" style="opacity:1">
+        <img class="proc-layer" src="img/pick-time/Screens_01.jpg" alt="Pick Time 대표 화면" style="opacity:1">
         <img class="proc-layer" src="" alt="" style="opacity:0" aria-hidden="true">
       </div>
     </div>
@@ -589,22 +632,22 @@
     <!-- 우: 화면 리스트 (chip · 제목 · 설명) -->
     <div class="border-t border-line">
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
-        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">온보딩</span>
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#903AFF;color:#ffffff">온보딩</span>
         <h3 class="t-body-1 font-700 text-ink leading-snug">온보딩 취향 테스트</h3>
         <p class="t-body-3 text-muted leading-relaxed">나이·목적·선호 카테고리·기념일 유형을 단계별로 수집해 맞춤 추천의 기반을 만들어요.</p>
       </div>
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
-        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">홈</span>
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#903AFF;color:#ffffff">홈</span>
         <h3 class="t-body-1 font-700 text-ink leading-snug">홈 · 선물 추천</h3>
         <p class="t-body-3 text-muted leading-relaxed">취향 분석 결과를 바탕으로 맞춤 선물 목록을 보여줘요. 카테고리·브랜드·인기 선물 탐색도 가능해요.</p>
       </div>
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
-        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">채팅</span>
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#903AFF;color:#ffffff">채팅</span>
         <h3 class="t-body-1 font-700 text-ink leading-snug">협력 채팅</h3>
         <p class="t-body-3 text-muted leading-relaxed">친구·가족과 채팅방을 만들어 추천 선물 링크를 공유하며 함께 선물을 결정해요.</p>
       </div>
       <div class="proc-row reveal grid grid-cols-1 sm:grid-cols-[auto_1fr_1.2fr] items-center gap-x-6 gap-y-3 py-12 sm:py-14 border-b border-line cursor-default transition-opacity">
-        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#607D8B;color:#ffffff">기념일</span>
+        <span class="shrink-0 rounded px-2.5 py-1 text-[length:var(--fs-caption)] font-500 tracking-wide" style="background:#903AFF;color:#ffffff">기념일</span>
         <h3 class="t-body-1 font-700 text-ink leading-snug">기념일 관리</h3>
         <p class="t-body-3 text-muted leading-relaxed">D-day 알림으로 기념일을 미리 준비하고, 컬렉션으로 선물 이력을 관리해요.</p>
       </div>
@@ -641,10 +684,57 @@
   </div>
 </section>
 
-<!-- ============================ 6. FULL IMAGE (대표 이미지 자리) ============================ -->
+<!-- ============================ 6. 인터랙티브 씬 (아트 캐러셀 + 폰 목업 + 동기화 캡션) ============================ -->
 <section class="pb-[13px] sm:pb-[24px]">
-  <div class="img-reveal w-full overflow-hidden bg-[#202024]">
-    <img class="w-full h-auto block" src="img/Moodle Diary/full-imag2.jpg" alt="Moodle Diary 대표 이미지">
+  <div class="hero-scene" aria-label="Pick Time 앱 화면">
+    <!-- 카드+폰 공통 스테이지 (바깥: 스크롤 패럴랙스 / 안쪽: 마우스 패럴랙스) -->
+    <div class="hs-stage"><div class="hs-stage-inner">
+      <!-- 아트 카드 캐러셀 (폰 뒤 · 5장 3세트 반복해 무한 흐름) -->
+      <div class="hs-cards-outer" aria-hidden="true">
+                <div class="hs-cards">
+          <div class="hs-card"><img src="img/pick-time/gift-1.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-2.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-3.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-4.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-5.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-6.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-7.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-1.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-2.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-3.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-4.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-5.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-6.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-7.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-1.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-2.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-3.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-4.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-5.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-6.png" alt="" loading="lazy"></div>
+          <div class="hs-card"><img src="img/pick-time/gift-7.png" alt="" loading="lazy"></div>
+        </div>
+      </div>
+      <!-- 손 + 폰 목업 (맨 위) · 화면 안에 상품 이미지 + 색상 칩 + 상품명 (슬라이드마다 변경) -->
+      <div class="hs-phone">
+        <div class="hs-phone-inner">
+          <img class="hs-phone-img" src="img/pick-time/iphoneMockup.png" alt="Pick Time 앱을 든 손" loading="lazy">
+                    <div class="hs-screen">
+            <img src="img/pick-time/gift-1.png" alt="">
+            <img src="img/pick-time/gift-2.png" alt="">
+            <img src="img/pick-time/gift-3.png" alt="">
+            <img class="is-on" src="img/pick-time/gift-4.png" alt="">
+            <img src="img/pick-time/gift-5.png" alt="">
+            <img src="img/pick-time/gift-6.png" alt="">
+            <img src="img/pick-time/gift-7.png" alt="">
+          </div>
+          <div class="pt-prod" aria-live="polite">
+            <span class="pt-chip">연갈빛</span>
+            <p class="pt-title">캐주얼라인 소리잔 2P (술잔/막걸리잔/디저트볼/고블렛잔)</p>
+          </div>
+        </div>
+      </div>
+    </div></div><!-- /hs-stage-inner /hs-stage -->
   </div>
 </section>
 
@@ -703,6 +793,103 @@
     });
     // 푸터 3D 오브젝트 Floating (포트폴리오 메인과 동일)
     gsap.utils.toArray('.about-3d').forEach((el) => gsap.to(el, { y:'+=16', duration:3, ease:'sine.inOut', yoyo:true, repeat:-1 }));
+
+    // 인터랙티브 씬 — 아트 캐러셀 + 폰 목업 + 슬라이드 동기화 캡션(썸네일 대체) + 스크롤/마우스 패럴랙스
+    (function initPickScene(){
+      const scene = document.querySelector('.hero-scene');
+      if (!scene) return;
+      const stage   = scene.querySelector('.hs-stage');
+      const stageM  = scene.querySelector('.hs-stage-inner');
+      const row     = scene.querySelector('.hs-cards');
+      const cards   = Array.from(scene.querySelectorAll('.hs-card'));
+      const screens = Array.from(scene.querySelectorAll('.hs-screen img'));
+      const phone   = scene.querySelector('.hs-phone');
+      const prod    = scene.querySelector('.pt-prod');
+      const chipEl  = scene.querySelector('.pt-chip');
+      const titleEl = scene.querySelector('.pt-title');
+      // 슬라이드별 상품 정보(아트 5장에 매핑) — 칩/상품명 자유 교체 가능
+      const PRODUCTS = [
+        { chip:'연갈빛', title:'캐주얼라인 소리잔 2P (술잔/막걸리잔/디저트볼/고블렛잔)' },
+        { chip:'새우살 200g', title:'한우 보섭살 특수부위 200g 새우살 갈비살 채끝살 업진살 제비추리 육우 젖소 마장동' },
+        { chip:'', title:'[JAJU] 라인서커 차렵이불 SS 아이보리' },
+        { chip:'', title:'[감미로이 12구세트] 수제초콜릿 합격 선물세트' },
+        { chip:'05.피오니부케', title:'오즈네일 고발색 고광택 샤인무드 네일 매니큐어 패디큐어 컬렉션, 쉬크베이지' },
+        { chip:'X50V+R_스틸스탠드(메탈)', title:'케어팟 안전한 저온가열 자동살균 대용량 신생아 아기 스텐 큐브 가습기 X50V' },
+        { chip:'차콜그레이', title:'디아르 국내산 플래티넘 실리콘 방수 식탁 테이블 매트 집들이 선물' }
+      ];
+      const N = screens.length;                     // 원본 아트 수(5)
+      const MID = (cards.length - 1) / 2;           // 가운데 세트 중앙(15장 → 7)
+      let cursor = MID, timer = null;
+
+      gsap.set(row, { xPercent:-50 });
+      gsap.set(phone, { xPercent:-50 });
+      const stepPx = () => (cards.length < 2) ? 0
+        : cards[1].getBoundingClientRect().left - cards[0].getBoundingClientRect().left;
+      const screenBox = scene.querySelector('.hs-screen');
+      const alignOffset = () => {
+        const p = scene.querySelector('.hs-phone-img').getBoundingClientRect();
+        const s = screenBox.getBoundingClientRect();
+        if (!p.width || !s.width) return 0;
+        return (s.left + s.width/2) - (p.left + p.width/2);
+      };
+      const xFor = (c) => (MID - c) * stepPx() + alignOffset();
+      // 세로 정렬: 가운데 카드의 세로 중심을 폰 상품 슬롯 중심에 맞춤(뒤 카드가 폰 안 이미지와 같은 높이에 오도록)
+      const alignY = () => {
+        const s = screenBox.getBoundingClientRect();
+        const c = cards[Math.round(MID)].getBoundingClientRect();
+        if (!s.height || !c.height) return;
+        const cur = gsap.getProperty(row, 'y') || 0;
+        gsap.set(row, { y: cur + ((s.top + s.height/2) - (c.top + c.height/2)) });
+      };
+      const LO = MID - Math.floor(N / 2);
+      const normalize = () => {
+        const st = stepPx(); let dx = 0;
+        while (cursor >= LO + N) { cursor -= N; dx += N * st; }
+        while (cursor <  LO)     { cursor += N; dx -= N * st; }
+        if (dx) gsap.set(row, { x: (gsap.getProperty(row, 'x') || 0) + dx });
+      };
+      const paint = () => {
+        const a = ((cursor % N) + N) % N;
+        screens.forEach((el,k) => el.classList.toggle('is-on', k === a));
+        // 상품 이미지가 바뀔 때 칩·상품명도 함께 크로스페이드로 전환
+        if (prod && String(a) !== prod.dataset.i) {
+          prod.dataset.i = String(a);
+          const info = PRODUCTS[a] || { chip:'', title:'' };
+          gsap.to(prod, { autoAlpha:0, duration:0.22, ease:'power2.in', onComplete:() => {
+            if (chipEl)  { chipEl.textContent = info.chip || ' '; chipEl.style.visibility = info.chip ? 'visible' : 'hidden'; }   // 옵션 없어도 공간 유지(상품명 위치 고정)
+            if (titleEl) titleEl.textContent = info.title;
+            gsap.to(prod, { autoAlpha:1, duration:0.34, ease:'power2.out' });
+          } });
+        }
+      };
+      const goTo = (c, animate) => {
+        cursor = c; normalize(); paint();
+        gsap.to(row, { x: xFor(cursor), duration: animate === false ? 0 : 0.9, ease:'power3.inOut', overwrite:'auto' });
+      };
+      const start = () => { stop(); timer = setInterval(() => goTo(cursor + 1), 3500); };
+      const stop  = () => { if (timer) { clearInterval(timer); timer = null; } };
+      ScrollTrigger.create({ trigger: scene, start:'top bottom', end:'bottom top',
+        onEnter:start, onEnterBack:start, onLeave:stop, onLeaveBack:stop });
+      // 스크롤/마우스 패럴랙스 (스테이지만, 캡션은 고정)
+      gsap.to(stage, { y:-90, ease:'none', scrollTrigger:{ trigger:scene, start:'top top', end:'bottom top', scrub:true } });
+      if (matchMedia('(pointer:fine)').matches) {
+        const sx = gsap.quickTo(stageM, 'x', { duration:0.7, ease:'power3' });
+        const sy = gsap.quickTo(stageM, 'y', { duration:0.7, ease:'power3' });
+        scene.addEventListener('mousemove', (e) => {
+          const r = scene.getBoundingClientRect();
+          const dx = (e.clientX - (r.left + r.width/2)) / (r.width/2);
+          const dy = (e.clientY - (r.top  + r.height/2)) / (r.height/2);
+          sx(dx * 18); sy(dy * 10);
+        }, { passive:true });
+        scene.addEventListener('mouseleave', () => { sx(0); sy(0); });
+      }
+      if (prod) prod.dataset.i = '-1';   // 초기 강제 반영
+      goTo(MID, false); alignY();
+      addEventListener('resize', () => { goTo(cursor, false); alignY(); });
+      scene.querySelectorAll('img').forEach((im) => {
+        if (!im.complete) im.addEventListener('load', () => { goTo(cursor, false); alignY(); }, { once:true });
+      });
+    })();
 
     // BI Design 로고 공식 — 스크롤 진입 시 사람 → + → AI붓 → + → 감정 → 화살표 → 로고 순차 등장 + 로고 살짝 팝
     (function initBiFormula(){
@@ -825,10 +1012,10 @@
     const defaultSrc = layers[0].getAttribute('src');
     // Process 단계별 이미지(로컬) · 각 행 순서대로 매핑(없으면 기본 이미지)
     const IMGS = [
-      'img/pick-time/screen-1.png',
-      'img/pick-time/screen-2.png',
-      'img/pick-time/screen-3.png',
-      'img/pick-time/screen-4.png'
+      'img/pick-time/Screens_01.jpg',
+      'img/pick-time/Screens_02.jpg',
+      'img/pick-time/Screens_03.jpg',
+      'img/pick-time/Screens_04.jpg'
     ];
     let active = 0;            // 현재 보이는 레이어 index
     let currentSrc = defaultSrc;

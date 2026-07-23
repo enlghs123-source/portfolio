@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact · LEE JUNGMIN</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet" />
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --ink:#111111;
+    --paper:#ffffff;
+    --muted:#8a8a8a;
+    --line:#e6e6e6;
+    --ph:#d9d9d9;          /* placeholder gray */
+  }
+  html{ -webkit-font-smoothing:antialiased; }
+  body{ background:var(--paper); color:var(--ink); font-family:'Noto Serif KR', serif; }
+
+  .contact{ min-height:100vh; display:flex; align-items:center; justify-content:center; padding:clamp(48px,8vh,120px) 6vw; }
+  .wrap{ width:100%; max-width:900px; text-align:center; }
+
+  /* 뒤에 깔리는 대형 세리프 타이포 */
+  .contact-title{
+    position:relative; z-index:1;
+    font-family:'Noto Serif KR', serif; font-weight:600;
+    font-size:clamp(2.6rem, 8.2vw, 6.4rem);
+    line-height:1.04; letter-spacing:-0.02em; color:var(--ink);
+    word-break:keep-all;
+  }
+  .contact-title .lead{ display:block; }
+  /* 두 번째 줄은 이미지 뒤로 살짝 겹침 */
+  .contact-title .tail{ display:block; }
+
+  /* 타이틀 위로 겹치는 이미지 (회색 placeholder) */
+  .contact-photo{
+    position:relative; z-index:2;
+    width:min(72%, 560px);
+    aspect-ratio:4 / 3;
+    margin:clamp(-56px,-6vw,-30px) auto 0;   /* 타이틀 하단 줄에 겹치도록 위로 당김 */
+    background:
+      repeating-linear-gradient(45deg, rgba(0,0,0,.03) 0 14px, rgba(0,0,0,0) 14px 28px),
+      var(--ph);
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+    box-shadow:0 24px 60px rgba(0,0,0,.10);
+  }
+  .contact-photo::after{
+    content:'IMAGE'; letter-spacing:.35em; font-family:'Playfair Display', serif;
+    font-size:.8rem; color:#9a9a9a; padding-left:.35em;
+  }
+  /* 원형 Click 배지 (레퍼런스 스타일) */
+  .contact-photo .click{
+    position:absolute; right:12%; bottom:12%; z-index:3;
+    width:clamp(58px,7vw,84px); height:clamp(58px,7vw,84px);
+    border-radius:50%; background:#ffffff; color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Playfair Display', serif; font-size:.9rem;
+    box-shadow:0 8px 24px rgba(0,0,0,.18);
+    transition:transform .4s cubic-bezier(.22,1,.36,1);
+  }
+  .contact-photo:hover .click{ transform:scale(1.08); }
+
+  /* 하단: 기간형 메타 + 이름·직무 + 이메일 */
+  .contact-meta{
+    margin-top:clamp(28px,4vh,52px);
+    font-family:'Playfair Display', serif; font-weight:500;
+    font-size:clamp(.72rem,1.1vw,.85rem); letter-spacing:.28em; text-transform:uppercase; color:var(--muted);
+  }
+  .contact-name{
+    margin-top:clamp(14px,2.4vh,26px);
+    font-family:'Playfair Display', serif; font-weight:500;
+    font-size:clamp(1.5rem,3.4vw,2.6rem); line-height:1.22; letter-spacing:.01em; color:var(--ink);
+  }
+  .contact-name .role{ display:block; font-style:italic; }
+  .contact-email{
+    display:inline-block; margin-top:clamp(16px,2.4vh,28px);
+    font-family:'Playfair Display', serif; font-size:clamp(.95rem,1.5vw,1.15rem); letter-spacing:.02em;
+    color:var(--ink); text-decoration:none; border-bottom:1px solid var(--ink); padding-bottom:3px;
+    transition:opacity .25s ease;
+  }
+  .contact-email:hover{ opacity:.55; }
+</style>
+</head>
+<body>
+  <section class="contact" aria-label="Contact">
+    <div class="wrap">
+      <h2 class="contact-title">
+        <span class="lead">사람의 경험을</span>
+        <span class="tail">설계하는 디자이너</span>
+      </h2>
+
+      <div class="contact-photo" role="img" aria-label="프로필 이미지 자리">
+        <span class="click">Click</span>
+      </div>
+
+      <p class="contact-meta">Get in touch</p>
+      <h3 class="contact-name">
+        LEE JUNGMIN
+        <span class="role">UX/UI Designer</span>
+      </h3>
+      <a class="contact-email" href="mailto:enlghs123@gmail.com">enlghs123@gmail.com</a>
+    </div>
+  </section>
+</body>
+</html>
