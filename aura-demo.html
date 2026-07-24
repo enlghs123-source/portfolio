@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hero Aura — 형태 변화 방식 비교</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{ background:#111; color:#fff; font-family:'Poppins',sans-serif; font-weight:300; }
+
+  header{ padding:clamp(28px,5vh,56px) 5vw clamp(14px,2vh,22px); }
+  h1{ font-size:clamp(1.3rem,2.6vw,2rem); font-weight:600; letter-spacing:-.02em; }
+  header p{ margin-top:10px; font-size:.92rem; color:rgba(255,255,255,.55); line-height:1.6; max-width:70ch; }
+
+  .grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(420px,1fr)); gap:2px; padding:2px; }
+  .panel{ position:relative; min-height:62vh; background:#1a1a1a; overflow:hidden; }
+  .cap{ position:absolute; left:0; right:0; bottom:0; z-index:5; padding:18px 22px;
+    background:linear-gradient(to top, rgba(0,0,0,.72), rgba(0,0,0,0)); }
+  .cap b{ display:block; font-size:1rem; font-weight:600; letter-spacing:-.01em; }
+  .cap span{ display:block; margin-top:5px; font-size:.82rem; color:rgba(255,255,255,.6); line-height:1.55; }
+  .tag{ position:absolute; top:16px; left:18px; z-index:5; font-size:.72rem; letter-spacing:.14em;
+    text-transform:uppercase; color:rgba(255,255,255,.42); }
+
+  /* 공통 오라 레이어 (현재 사이트와 동일: blur + screen 블렌드) */
+  .aura{ position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .aura .b{ position:absolute; border-radius:50%; filter:blur(65px); mix-blend-mode:screen; will-change:transform; }
+  .b1{ left:50%; top:52%; width:66vmax; height:66vmax;
+    background:radial-gradient(circle, rgba(178,76,232,.5) 0%, rgba(110,28,246,.3) 38%, transparent 68%); }
+  .b2{ left:55%; top:58%; width:50vmax; height:50vmax;
+    background:radial-gradient(circle, rgba(42,86,245,.44) 0%, rgba(74,51,240,.26) 40%, transparent 70%); }
+
+  /* ── A. 현재 방식: 위치·크기만 변함 (형태 고정 = 항상 원) ── */
+  .A .b1{ animation:mvA 5.2s ease-in-out infinite; }
+  .A .b2{ animation:mvB 6.6s ease-in-out infinite; }
+  @keyframes mvA{
+    0%{ transform:translate(-62%,-42%) scale(.7); opacity:.7; }
+    25%{ transform:translate(-32%,-58%) scale(1); opacity:1; }
+    50%{ transform:translate(-58%,-28%) scale(.85); opacity:.85; }
+    75%{ transform:translate(-72%,-52%) scale(1.05); opacity:.95; }
+    100%{ transform:translate(-62%,-42%) scale(.7); opacity:.7; } }
+  @keyframes mvB{
+    0%{ transform:translate(-40%,-52%) scale(.75); opacity:.45; }
+    30%{ transform:translate(-64%,-38%) scale(1); opacity:.8; }
+    60%{ transform:translate(-34%,-30%) scale(.9); opacity:.7; }
+    100%{ transform:translate(-40%,-52%) scale(.75); opacity:.45; } }
+
+  /* ── B. border-radius 모핑: 실루엣이 물방울처럼 계속 변형 ── */
+  .B .b1{ animation:mvA 5.2s ease-in-out infinite, brA 3.6s ease-in-out infinite; }
+  .B .b2{ animation:mvB 6.6s ease-in-out infinite, brB 4.4s ease-in-out infinite; }
+  @keyframes brA{
+    0%  { border-radius:50% 50% 50% 50% / 50% 50% 50% 50%; }
+    25% { border-radius:62% 38% 55% 45% / 42% 58% 42% 58%; }
+    50% { border-radius:38% 62% 34% 66% / 60% 36% 64% 40%; }
+    75% { border-radius:55% 45% 68% 32% / 34% 62% 38% 66%; }
+    100%{ border-radius:50% 50% 50% 50% / 50% 50% 50% 50%; } }
+  @keyframes brB{
+    0%  { border-radius:50% 50% 50% 50% / 50% 50% 50% 50%; }
+    33% { border-radius:44% 56% 66% 34% / 58% 40% 60% 42%; }
+    66% { border-radius:66% 34% 42% 58% / 38% 64% 36% 62%; }
+    100%{ border-radius:50% 50% 50% 50% / 50% 50% 50% 50%; } }
+
+  /* ── C. 구이(Gooey) 필터: 덩어리들이 붙었다 갈라짐 ── */
+  .C .goo{ position:absolute; inset:0; filter:url(#goo) blur(38px); mix-blend-mode:screen; }
+  .C .g{ position:absolute; border-radius:50%; }
+  .C .g1{ width:26vmax; height:26vmax; left:34%; top:40%; background:rgba(178,76,232,.85); animation:gA 4s ease-in-out infinite; }
+  .C .g2{ width:20vmax; height:20vmax; left:56%; top:52%; background:rgba(110,28,246,.85); animation:gB 5s ease-in-out infinite; }
+  .C .g3{ width:16vmax; height:16vmax; left:46%; top:62%; background:rgba(42,86,245,.85); animation:gC 6s ease-in-out infinite; }
+  @keyframes gA{ 0%,100%{ transform:translate(-50%,-50%) } 33%{ transform:translate(-16%,-72%) } 66%{ transform:translate(-84%,-30%) } }
+  @keyframes gB{ 0%,100%{ transform:translate(-50%,-50%) } 40%{ transform:translate(-92%,-28%) } 70%{ transform:translate(-14%,-64%) } }
+  @keyframes gC{ 0%,100%{ transform:translate(-50%,-50%) } 45%{ transform:translate(-10%,-24%) } 75%{ transform:translate(-88%,-70%) } }
+
+  /* ── D. feTurbulence 왜곡: 액체처럼 일렁이며 변형 ── */
+  .D .liquid{ position:absolute; inset:0; filter:url(#liquid) blur(46px); mix-blend-mode:screen; }
+  .D .l1{ position:absolute; left:50%; top:50%; width:54vmax; height:54vmax; border-radius:50%;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(178,76,232,.75) 0%, rgba(110,28,246,.4) 42%, transparent 70%);
+    animation:mvA 5.2s ease-in-out infinite; }
+  .D .l2{ position:absolute; left:56%; top:56%; width:42vmax; height:42vmax; border-radius:50%;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(42,86,245,.7) 0%, rgba(74,51,240,.35) 44%, transparent 72%);
+    animation:mvB 6.6s ease-in-out infinite; }
+
+  /* ── E. Canvas 노이즈 블롭: 경로를 매 프레임 다시 그림 ── */
+  .E canvas{ position:absolute; inset:0; width:100%; height:100%; filter:blur(52px); mix-blend-mode:screen; }
+
+  /* ── F. 회전 + 비대칭 스트레치 (겉/속 레이어 분리로 transform 충돌 회피) ── */
+  .F .fw{ position:absolute; left:50%; top:52%; width:62vmax; height:62vmax; animation:driftA 5.4s ease-in-out infinite; }
+  .F .fw2{ left:56%; top:58%; width:46vmax; height:46vmax; animation:driftB 6.8s ease-in-out infinite; }
+  .F .fb{ position:absolute; inset:0; border-radius:50%; filter:blur(65px); mix-blend-mode:screen;
+    background:radial-gradient(circle, rgba(178,76,232,.5) 0%, rgba(110,28,246,.3) 38%, transparent 68%);
+    animation:stretchA 4s ease-in-out infinite; }
+  .F .fw2 .fb{ background:radial-gradient(circle, rgba(42,86,245,.44) 0%, rgba(74,51,240,.26) 40%, transparent 70%);
+    animation:stretchB 5s ease-in-out infinite; }
+  @keyframes driftA{ 0%,100%{ transform:translate(-62%,-44%) } 50%{ transform:translate(-38%,-56%) } }
+  @keyframes driftB{ 0%,100%{ transform:translate(-42%,-54%) } 50%{ transform:translate(-64%,-36%) } }
+  @keyframes stretchA{ 0%{ transform:rotate(0deg) scale(1,1) } 25%{ transform:rotate(90deg) scale(1.3,.78) }
+    50%{ transform:rotate(180deg) scale(.82,1.24) } 75%{ transform:rotate(270deg) scale(1.18,.88) } 100%{ transform:rotate(360deg) scale(1,1) } }
+  @keyframes stretchB{ 0%{ transform:rotate(0deg) scale(1,1) } 33%{ transform:rotate(-120deg) scale(.8,1.28) }
+    66%{ transform:rotate(-240deg) scale(1.26,.84) } 100%{ transform:rotate(-360deg) scale(1,1) } }
+
+  /* ── G. 궤도 운동: 중심을 도는 덩어리들 ── */
+  .G .orb{ position:absolute; left:50%; top:52%; width:0; height:0; }
+  .G .o1{ animation:spinCW 7.5s linear infinite; }
+  .G .o2{ animation:spinCCW 5.5s linear infinite; }
+  .G .ob{ position:absolute; border-radius:50%; filter:blur(65px); mix-blend-mode:screen; }
+  .G .o1 .ob{ width:50vmax; height:50vmax; transform:translate(-50%,-50%) translateX(13vmax);
+    background:radial-gradient(circle, rgba(178,76,232,.5) 0%, rgba(110,28,246,.3) 38%, transparent 68%); }
+  .G .o2 .ob{ width:40vmax; height:40vmax; transform:translate(-50%,-50%) translateX(-16vmax);
+    background:radial-gradient(circle, rgba(42,86,245,.46) 0%, rgba(74,51,240,.26) 40%, transparent 70%); }
+  @keyframes spinCW{ to{ transform:rotate(360deg) } }
+  @keyframes spinCCW{ to{ transform:rotate(-360deg) } }
+
+  /* ── H. 다중 레이어 드리프트: 5개가 제각기 흘러 조합이 계속 달라짐 ── */
+  .H .d{ position:absolute; border-radius:50%; filter:blur(60px); mix-blend-mode:screen; }
+  .H .d1{ width:40vmax; height:40vmax; left:30%; top:38%; background:radial-gradient(circle, rgba(178,76,232,.5), transparent 68%); animation:dr1 6s ease-in-out infinite; }
+  .H .d2{ width:34vmax; height:34vmax; left:62%; top:46%; background:radial-gradient(circle, rgba(110,28,246,.44), transparent 68%); animation:dr2 7.2s ease-in-out infinite; }
+  .H .d3{ width:30vmax; height:30vmax; left:44%; top:66%; background:radial-gradient(circle, rgba(42,86,245,.44), transparent 70%); animation:dr3 8.4s ease-in-out infinite; }
+  .H .d4{ width:26vmax; height:26vmax; left:72%; top:70%; background:radial-gradient(circle, rgba(74,51,240,.4), transparent 70%); animation:dr4 4.8s ease-in-out infinite; }
+  .H .d5{ width:22vmax; height:22vmax; left:20%; top:66%; background:radial-gradient(circle, rgba(200,120,255,.36), transparent 70%); animation:dr5 9.6s ease-in-out infinite; }
+  @keyframes dr1{ 0%,100%{ transform:translate(-50%,-50%) } 50%{ transform:translate(-14%,-74%) } }
+  @keyframes dr2{ 0%,100%{ transform:translate(-50%,-50%) } 50%{ transform:translate(-86%,-26%) } }
+  @keyframes dr3{ 0%,100%{ transform:translate(-50%,-50%) } 50%{ transform:translate(-24%,-18%) } }
+  @keyframes dr4{ 0%,100%{ transform:translate(-50%,-50%) } 50%{ transform:translate(-78%,-80%) } }
+  @keyframes dr5{ 0%,100%{ transform:translate(-50%,-50%) } 50%{ transform:translate(-10%,-34%) } }
+
+  /* ── I. SVG 경로 모핑: 실제 path 좌표 보간 ── */
+  .I .pm{ position:absolute; inset:0; width:100%; height:100%; filter:blur(58px); mix-blend-mode:screen; }
+
+  /* ── J. 메쉬 그라데이션 시프트 ── */
+  .J .mesh{ position:absolute; inset:-15%; filter:blur(70px); mix-blend-mode:screen;
+    background:
+      radial-gradient(closest-side, rgba(178,76,232,.62), transparent) 20% 30%/62% 62% no-repeat,
+      radial-gradient(closest-side, rgba(42,86,245,.56), transparent) 70% 62%/56% 56% no-repeat,
+      radial-gradient(closest-side, rgba(110,28,246,.5),  transparent) 45% 76%/52% 52% no-repeat;
+    animation:meshShift 7s ease-in-out infinite; }
+  @keyframes meshShift{
+    0%,100%{ background-position:20% 30%, 70% 62%, 45% 76%; }
+    33%    { background-position:62% 18%, 24% 70%, 72% 40%; }
+    66%    { background-position:34% 72%, 62% 24%, 18% 54%; } }
+
+  /* ── K. 형태 변형 + 색 순환(hue-rotate) ── */
+  .K .b1{ animation:mvA 5.2s ease-in-out infinite, hueA 4.5s linear infinite; }
+  .K .b2{ animation:mvB 6.6s ease-in-out infinite, hueB 5.8s linear infinite; }
+  @keyframes hueA{ from{ filter:blur(65px) hue-rotate(0deg) } to{ filter:blur(65px) hue-rotate(360deg) } }
+  @keyframes hueB{ from{ filter:blur(65px) hue-rotate(0deg) } to{ filter:blur(65px) hue-rotate(-360deg) } }
+
+  /* ── L. 곡선 경로 주행 (offset-path) ── */
+  .L .pb{ position:absolute; width:42vmax; height:42vmax; border-radius:50%;
+    filter:blur(65px); mix-blend-mode:screen;
+    offset-path:path('M 60 260 C 180 60, 420 60, 540 260 C 420 460, 180 460, 60 260');
+    offset-rotate:0deg; offset-distance:0%; }
+  .L .pb1{ background:radial-gradient(circle, rgba(178,76,232,.5), transparent 68%); animation:travel 6.5s linear infinite; }
+  .L .pb2{ width:32vmax; height:32vmax; background:radial-gradient(circle, rgba(42,86,245,.46), transparent 70%);
+    animation:travel 8.5s linear infinite reverse; }
+  @keyframes travel{ to{ offset-distance:100% } }
+
+  footer{ padding:clamp(26px,4vh,48px) 5vw clamp(50px,8vh,90px); color:rgba(255,255,255,.55); font-size:.9rem; line-height:1.75; }
+  footer b{ color:#fff; font-weight:600; }
+  footer ul{ margin:10px 0 0 18px; }
+</style>
+</head>
+<body>
+
+<!-- SVG 필터 정의 (화면에 안 보임) -->
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <filter id="goo">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="20" result="b" />
+    <feColorMatrix in="b" mode="matrix"
+      values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 26 -12" result="goo" />
+    <feBlend in="SourceGraphic" in2="goo" />
+  </filter>
+  <filter id="liquid">
+    <feTurbulence type="fractalNoise" baseFrequency="0.006" numOctaves="2" seed="5" result="t">
+      <animate attributeName="baseFrequency" dur="5s" values="0.006;0.013;0.006" repeatCount="indefinite" />
+    </feTurbulence>
+    <feDisplacementMap in="SourceGraphic" in2="t" scale="150" xChannelSelector="R" yChannelSelector="G" />
+  </filter>
+</svg>
+
+<header>
+  <h1>Hero Aura — 형태가 계속 변하는 방식 비교</h1>
+  <p>현재 사이트와 동일한 색·blur(65px)·screen 블렌드 조건에서 비교했습니다. blur가 강해 <b>큰 스케일의 실루엣 변화</b>만 눈에 띈다는 점을 감안해 보세요. 각 패널 아래 설명에 특징·비용이 적혀 있습니다.</p>
+</header>
+
+<div class="grid">
+
+  <section class="panel A">
+    <span class="tag">A</span>
+    <div class="aura"><div class="b b1"></div><div class="b b2"></div></div>
+    <div class="cap"><b>현재 방식 (기준)</b>
+      <span>위치(translate)와 크기(scale)만 변합니다. 실루엣은 항상 원 — “움직이지만 형태는 그대로”. 비용 거의 0.</span></div>
+  </section>
+
+  <section class="panel B">
+    <span class="tag">B</span>
+    <div class="aura"><div class="b b1"></div><div class="b b2"></div></div>
+    <div class="cap"><b>border-radius 모핑 &nbsp;— 추천</b>
+      <span>원 → 타원 → 물방울 → 콩 형태로 실루엣이 계속 변형. CSS 키프레임 한 줄 추가 수준이라 JS 0줄·성능 부담 거의 없음. 표현 범위는 “둥근 유기체”로 한정.</span></div>
+  </section>
+
+  <section class="panel C">
+    <span class="tag">C</span>
+    <div class="goo">
+      <div class="g g1"></div><div class="g g2"></div><div class="g g3"></div>
+    </div>
+    <div class="cap"><b>구이(Gooey) 필터</b>
+      <span>덩어리 3개가 서로 <b>붙었다 갈라지며</b> 형태가 바뀝니다(용암램프). 변화가 가장 극적. SVG 필터가 매 프레임 리페인트되어 모바일에서 비용이 큽니다.</span></div>
+  </section>
+
+  <section class="panel D">
+    <span class="tag">D</span>
+    <div class="liquid">
+      <div class="l1"></div><div class="l2"></div>
+    </div>
+    <div class="cap"><b>feTurbulence 왜곡</b>
+      <span>노이즈로 픽셀을 밀어내 <b>액체처럼 일렁이며</b> 형태가 무작위로 변합니다. 방금 넣은 그레인과 톤이 잘 맞음. 풀스크린 필터라 비용이 가장 큼(사파리 편차).</span></div>
+  </section>
+
+  <section class="panel E">
+    <span class="tag">E</span>
+    <canvas></canvas>
+    <div class="cap"><b>Canvas 노이즈 블롭</b>
+      <span>각도별 반지름을 노이즈로 흔들어 <b>매 프레임 경로를 다시 그림</b>. 표현력·제어 최고(원하는 어떤 형태든 가능). 코드량이 가장 많고 CSS 오라를 캔버스로 교체해야 함.</span></div>
+  </section>
+
+  <section class="panel F">
+    <span class="tag">F</span>
+    <div class="aura">
+      <div class="fw"><div class="fb"></div></div>
+      <div class="fw fw2"><div class="fb"></div></div>
+    </div>
+    <div class="cap"><b>회전 + 비대칭 스트레치</b>
+      <span>덩어리가 <b>돌면서 가로·세로로 늘었다 줄었다</b> 합니다. 타원이 회전하며 실루엣이 계속 달라져 보임. CSS만, 비용 거의 0.</span></div>
+  </section>
+
+  <section class="panel G">
+    <span class="tag">G</span>
+    <div class="aura">
+      <div class="orb o1"><div class="ob"></div></div>
+      <div class="orb o2"><div class="ob"></div></div>
+    </div>
+    <div class="cap"><b>궤도 운동 (Orbit)</b>
+      <span>두 덩어리가 중심을 <b>서로 반대 방향으로 공전</b>합니다. 가까워질 때 겹쳐 밝아지고 멀어지면 갈라져, 리듬이 규칙적이면서 계속 변함.</span></div>
+  </section>
+
+  <section class="panel H">
+    <span class="tag">H</span>
+    <div class="aura">
+      <div class="d d1"></div><div class="d d2"></div><div class="d d3"></div><div class="d d4"></div><div class="d d5"></div>
+    </div>
+    <div class="cap"><b>다중 레이어 드리프트</b>
+      <span>덩어리 <b>5개가 제각기 다른 속도(15~31초)</b>로 흘러 조합이 절대 반복되지 않습니다. 가장 자연스럽고 은은한 변화.</span></div>
+  </section>
+
+  <section class="panel I">
+    <span class="tag">I</span>
+    <svg class="pm" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <radialGradient id="pgA" cx="45%" cy="42%" r="62%">
+          <stop offset="0%"  stop-color="rgba(178,76,232,.85)"/>
+          <stop offset="45%" stop-color="rgba(110,28,246,.45)"/>
+          <stop offset="100%" stop-color="rgba(110,28,246,0)"/>
+        </radialGradient>
+        <radialGradient id="pgB" cx="58%" cy="58%" r="60%">
+          <stop offset="0%"  stop-color="rgba(42,86,245,.8)"/>
+          <stop offset="48%" stop-color="rgba(74,51,240,.4)"/>
+          <stop offset="100%" stop-color="rgba(74,51,240,0)"/>
+        </radialGradient>
+      </defs>
+      <path fill="url(#pgA)" d="M300,120 C420,120 480,200 480,300 C480,400 420,480 300,480 C180,480 120,400 120,300 C120,200 180,120 300,120 Z">
+        <animate attributeName="d" dur="5s" repeatCount="indefinite"
+          values="M300,120 C420,120 480,200 480,300 C480,400 420,480 300,480 C180,480 120,400 120,300 C120,200 180,120 300,120 Z;
+                  M300,100 C440,140 500,220 470,320 C440,420 380,500 280,470 C180,440 110,380 130,280 C150,180 200,90 300,100 Z;
+                  M300,140 C400,110 470,190 490,290 C510,390 400,470 300,490 C200,510 130,410 110,310 C90,210 190,160 300,140 Z;
+                  M300,120 C420,120 480,200 480,300 C480,400 420,480 300,480 C180,480 120,400 120,300 C120,200 180,120 300,120 Z" />
+      </path>
+      <path fill="url(#pgB)" d="M330,190 C410,180 450,250 445,320 C440,390 390,440 320,435 C250,430 205,380 210,310 C215,240 250,200 330,190 Z">
+        <animate attributeName="d" dur="6.4s" repeatCount="indefinite"
+          values="M330,190 C410,180 450,250 445,320 C440,390 390,440 320,435 C250,430 205,380 210,310 C215,240 250,200 330,190 Z;
+                  M310,210 C400,200 470,270 450,350 C430,430 350,460 285,440 C220,420 190,350 200,290 C210,230 240,220 310,210 Z;
+                  M340,175 C430,195 460,260 440,340 C420,420 360,455 295,430 C230,405 195,345 215,285 C235,225 270,165 340,175 Z;
+                  M330,190 C410,180 450,250 445,320 C440,390 390,440 320,435 C250,430 205,380 210,310 C215,240 250,200 330,190 Z" />
+      </path>
+    </svg>
+    <div class="cap"><b>SVG 경로 모핑</b>
+      <span>미리 정의한 <b>path 좌표를 실제로 보간</b>해 형태가 바뀝니다. 원하는 실루엣을 정확히 디자인해 지정할 수 있는 게 장점(별·물방울·불규칙 곡선 등).</span></div>
+  </section>
+
+  <section class="panel J">
+    <span class="tag">J</span>
+    <div class="aura"><div class="mesh"></div></div>
+    <div class="cap"><b>메쉬 그라데이션 시프트</b>
+      <span>색 덩어리 3개의 <b>위치를 동시에 옮겨</b> 전체 색면이 흐르듯 변합니다. 요소 수가 적어 가볍고, 화면 전체를 채우는 느낌.</span></div>
+  </section>
+
+  <section class="panel K">
+    <span class="tag">K</span>
+    <div class="aura"><div class="b b1"></div><div class="b b2"></div></div>
+    <div class="cap"><b>이동 + 색 순환 (hue-rotate)</b>
+      <span>움직임은 현재와 같지만 <b>색이 천천히 순환</b>합니다(퍼플→블루→핑크…). 형태보다 <b>색으로 변화</b>를 주는 방식.</span></div>
+  </section>
+
+  <section class="panel L">
+    <span class="tag">L</span>
+    <div class="aura">
+      <div class="pb pb1"></div>
+      <div class="pb pb2"></div>
+    </div>
+    <div class="cap"><b>곡선 경로 주행 (offset-path)</b>
+      <span>미리 그린 <b>곡선 경로를 따라 이동</b>합니다. 무작위가 아니라 <b>의도한 동선</b>을 정확히 지정할 수 있는 게 장점. 두 덩어리가 서로 반대로 주행.</span></div>
+  </section>
+
+</div>
+
+<footer>
+  <b>선택 가이드</b>
+  <ul>
+    <li><b>가볍고 안전 (CSS만, 비용 ≈ 0)</b> — B(형태 모핑) · F(회전+스트레치) · G(궤도) · H(다중 드리프트) · J(메쉬 시프트) · K(색 순환) · L(곡선 경로)</li>
+    <li><b>변화가 가장 큼</b> — C(붙었다 갈라짐) · D(액체 왜곡) · E(캔버스 블롭)</li>
+    <li><b>의도한 형태·동선을 정확히 지정</b> — I(경로 모핑) · L(offset-path)</li>
+    <li><b>가장 자연스럽고 은은함</b> — H(5개가 제각기 흘러 조합이 반복되지 않음)</li>
+    <li><b>조합도 가능</b> — 예: H(다중 드리프트) + B(형태 모핑), 또는 F(회전 스트레치) + K(색 순환)</li>
+  </ul>
+</footer>
+
+<script>
+// ── E. Canvas 노이즈 블롭 ──────────────────────────────────
+(function(){
+  var cv = document.querySelector('.E canvas');
+  if (!cv) return;
+  var ctx = cv.getContext('2d'), dpr = Math.min(window.devicePixelRatio || 1, 2), W = 0, H = 0;
+
+  function resize(){
+    var r = cv.getBoundingClientRect();
+    W = cv.width  = Math.max(1, Math.round(r.width  * dpr));
+    H = cv.height = Math.max(1, Math.round(r.height * dpr));
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  // 매끄러운 의사(擬似) 노이즈 — 사인 합성 (외부 라이브러리 없이)
+  function wobble(a, t, s){
+    return Math.sin(a * 3 + t * s) * 0.16
+         + Math.sin(a * 5 - t * s * 0.7) * 0.10
+         + Math.sin(a * 2 + t * s * 1.3) * 0.13;
+  }
+
+  // 블롭 하나를 노이즈로 일그러진 경로로 그림
+  function blob(cx, cy, R, t, s, c0, c1){
+    ctx.beginPath();
+    for (var i = 0; i <= 90; i++){
+      var a = (i / 90) * Math.PI * 2;
+      var r = R * (1 + wobble(a, t, s));
+      var x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+    var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, R * 1.15);
+    g.addColorStop(0, c0); g.addColorStop(0.45, c1); g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g; ctx.fill();
+  }
+
+  var start = performance.now();
+  function frame(now){
+    var t = (now - start) / 1000 * 3;   // 데모 확인용: 3배 빠르게
+    ctx.clearRect(0, 0, W, H);
+    ctx.globalCompositeOperation = 'lighter';
+    var R = Math.min(W, H) * 0.42;
+    blob(W * 0.44 + Math.sin(t * 0.25) * W * 0.10,
+         H * 0.48 + Math.cos(t * 0.21) * H * 0.10,
+         R, t, 0.55, 'rgba(178,76,232,.62)', 'rgba(110,28,246,.34)');
+    blob(W * 0.58 + Math.cos(t * 0.18) * W * 0.11,
+         H * 0.56 + Math.sin(t * 0.23) * H * 0.09,
+         R * 0.78, t + 40, 0.42, 'rgba(42,86,245,.55)', 'rgba(74,51,240,.3)');
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>

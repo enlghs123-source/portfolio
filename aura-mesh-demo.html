@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Hero Aura — 메쉬 그라데이션(흰 배경) 비교</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+  *{ margin:0; padding:0; box-sizing:border-box; }
+  body{ background:#f7f7f8; color:#111114; font-family:'Poppins',sans-serif; font-weight:300; }
+
+  header{ padding:clamp(28px,5vh,56px) 5vw clamp(12px,2vh,20px); }
+  h1{ font-size:clamp(1.3rem,2.6vw,2rem); font-weight:600; letter-spacing:-.02em; }
+  header p{ margin-top:10px; font-size:.92rem; color:#5b5b62; line-height:1.7; max-width:78ch; }
+  .warn{ margin:16px 5vw 0; padding:14px 18px; border-radius:12px; background:#fff4e5; border:1px solid #ffd9a8;
+    font-size:.88rem; color:#7a4a00; line-height:1.65; max-width:calc(100% - 10vw); }
+  .warn b{ font-weight:600; }
+
+  .stack{ display:flex; flex-direction:column; gap:2px; padding:18px 0 0; }
+  .panel{ position:relative; min-height:78vh; background:#ffffff; overflow:hidden; }
+  .tag{ position:absolute; top:18px; left:22px; z-index:6; font-size:.72rem; letter-spacing:.14em;
+    text-transform:uppercase; color:#9a9aa2; }
+  .cap{ position:absolute; left:0; right:0; bottom:0; z-index:6; padding:20px 24px;
+    background:linear-gradient(to top, rgba(255,255,255,.95) 40%, rgba(255,255,255,0)); }
+  .cap b{ display:block; font-size:1rem; font-weight:600; }
+  .cap span{ display:block; margin-top:5px; font-size:.84rem; color:#5b5b62; line-height:1.6; max-width:74ch; }
+
+  /* 히어로 텍스트 샘플 (실제 사이트와 유사한 배치) */
+  .copy{ position:relative; z-index:4; padding:clamp(70px,12vh,140px) 0 0 6vw; max-width:52%; }
+  .copy h2{ font-family:'Poppins',sans-serif; font-weight:700; font-size:clamp(1.6rem,3.6vw,3.2rem);
+    line-height:1.28; letter-spacing:-.03em; color:#111114; word-break:keep-all; }
+  .copy p{ margin-top:14px; font-size:.95rem; color:#6a6a72; }
+
+  /* 공통 메쉬 레이어 */
+  .mesh{ position:absolute; inset:0; z-index:1; pointer-events:none; overflow:hidden; }
+  .mesh i{ position:absolute; display:block; border-radius:50%; will-change:transform; }
+
+  /* 색 덩어리를 하나의 그룹으로 묶고, 축을 분리해 서로 다른 주기로 움직인다.
+     가로(.grp) · 세로(.gy) · 회전+크기(.gr) 주기가 서로 나눠떨어지지 않아 경로가 거의 반복되지 않음(자유로운 궤적). */
+  .grp{ position:absolute; left:50%; top:50%; width:68vmax; height:58vmax;
+    margin:-29vmax 0 0 -34vmax; will-change:transform; }
+  .gy, .gr{ position:absolute; inset:0; will-change:transform; }
+  .grp i{ position:absolute; }
+
+  /* 축별 왕복 — 주기가 다르면 합성 경로가 리사주 곡선처럼 자유롭게 그려짐 */
+  @keyframes xd{ 0%,100%{ transform:translateX(-15%) } 50%{ transform:translateX(15%) } }
+  @keyframes yd{ 0%,100%{ transform:translateY(-12%) } 50%{ transform:translateY(12%) } }
+  @keyframes rs{ 0%,100%{ transform:rotate(-6deg) scale(.95) } 50%{ transform:rotate(7deg) scale(1.09) } }
+
+  /* ── 1. 레퍼런스 재현: 웜(오렌지/레드) + 쿨(블루/퍼플) 멀티컬러 ── */
+  .m1 i{ filter:blur(70px); }
+  .m1 .grp{ animation:xd 6.5s  ease-in-out infinite; }
+  .m1 .gy { animation:yd 8.3s  ease-in-out infinite; }
+  .m1 .gr { animation:rs 11.1s ease-in-out infinite; }
+  .m1 .c1{ width:62%; height:70%; left:0%;  top:2%;  background:#4a63ff; opacity:.85; animation:inA 4.2s ease-in-out infinite, morphA 7.3s  ease-in-out infinite; }
+  .m1 .c2{ width:50%; height:54%; left:26%; top:-4%; background:#ff7a2f; opacity:.8;  animation:inB 5.1s ease-in-out infinite, morphB 9.1s  ease-in-out infinite; }
+  .m1 .c3{ width:38%; height:40%; left:46%; top:12%; background:#ff3b30; opacity:.55; animation:inC 5.8s ease-in-out infinite, morphC 6.7s  ease-in-out infinite; }
+  .m1 .c4{ width:56%; height:58%; left:34%; top:34%; background:#7b3cf0; opacity:.8;  animation:inD 4.6s ease-in-out infinite, morphD 8.3s  ease-in-out infinite; }
+  .m1 .c5{ width:44%; height:46%; left:14%; top:36%; background:#ffffff; opacity:.9;  animation:inA 4.4s ease-in-out infinite reverse, morphB 7.9s ease-in-out infinite reverse; }
+  .m1 .c6{ width:32%; height:34%; left:58%; top:54%; background:#22c3ff; opacity:.5;  animation:inB 6.2s ease-in-out infinite, morphA 10.1s ease-in-out infinite reverse; }
+
+  /* ── 2. 사이트 팔레트(퍼플·블루) 버전 ── */
+  .m2 i{ filter:blur(74px); }
+  .m2 .grp{ animation:xd 7.1s  ease-in-out infinite; }
+  .m2 .gy { animation:yd 9.7s  ease-in-out infinite; }
+  .m2 .gr { animation:rs 12.3s ease-in-out infinite; }
+  .m2 .c1{ width:64%; height:70%; left:0%;  top:2%;  background:#6E1CF6; opacity:.72; animation:inA 4.6s ease-in-out infinite, morphB 7.7s  ease-in-out infinite; }
+  .m2 .c2{ width:50%; height:54%; left:28%; top:-4%; background:#B24CE8; opacity:.66; animation:inB 5.4s ease-in-out infinite, morphC 9.3s  ease-in-out infinite; }
+  .m2 .c3{ width:40%; height:42%; left:48%; top:14%; background:#2A56F5; opacity:.52; animation:inC 6.1s ease-in-out infinite, morphA 6.9s  ease-in-out infinite; }
+  .m2 .c4{ width:56%; height:58%; left:32%; top:34%; background:#4A33F0; opacity:.62; animation:inD 4.9s ease-in-out infinite, morphD 8.7s  ease-in-out infinite; }
+  .m2 .c5{ width:44%; height:46%; left:12%; top:36%; background:#ffffff; opacity:.88; animation:inA 4.2s ease-in-out infinite reverse, morphA 7.1s ease-in-out infinite reverse; }
+  .m2 .c6{ width:32%; height:34%; left:58%; top:54%; background:#7B3CF0; opacity:.55; animation:inB 6.4s ease-in-out infinite, morphC 10.3s ease-in-out infinite reverse; }
+
+  /* ── 3. 유기적 실루엣: 그룹에 마스크를 씌워 하나의 덩어리로 잘라냄 + 형태 모핑 ── */
+  .m3 i{ filter:blur(62px); }
+  .m3 .grp{ animation:xd 6.7s  ease-in-out infinite;
+    -webkit-mask:radial-gradient(58% 62% at 50% 50%, #000 46%, transparent 82%);
+            mask:radial-gradient(58% 62% at 50% 50%, #000 46%, transparent 82%); }
+  .m3 .gy { animation:yd 9.1s  ease-in-out infinite; }
+  .m3 .gr { animation:rs 13.3s ease-in-out infinite; }
+  .m3 .c1{ width:62%; height:66%; left:2%;  top:4%;  background:#6E1CF6; opacity:.78; animation:inA 4.3s ease-in-out infinite, morphA 7.1s ease-in-out infinite; }
+  .m3 .c2{ width:46%; height:48%; left:30%; top:0%;  background:#ff7a2f; opacity:.55; animation:inB 5.2s ease-in-out infinite, morphB 8.9s ease-in-out infinite; }
+  .m3 .c3{ width:54%; height:56%; left:32%; top:34%; background:#2A56F5; opacity:.7;  animation:inD 4.8s ease-in-out infinite, morphC 6.3s ease-in-out infinite reverse; }
+  .m3 .c4{ width:40%; height:42%; left:16%; top:38%; background:#ffffff; opacity:.9;  animation:inC 4.1s ease-in-out infinite, morphD 7.7s ease-in-out infinite; }
+  .m3 .c5{ width:36%; height:38%; left:54%; top:18%; background:#B24CE8; opacity:.6;  animation:inB 5.9s ease-in-out infinite, morphA 9.7s ease-in-out infinite reverse; }
+
+  /* 그룹 안에서의 미세한 뒤섞임 — 색은 섞이되 덩어리에서 떨어져 나가지 않을 정도 */
+  @keyframes inA{ 0%,100%{ transform:translate(0,0) scale(1) } 50%{ transform:translate(7%,-6%)  scale(1.1) } }
+  @keyframes inB{ 0%,100%{ transform:translate(0,0) scale(1) } 50%{ transform:translate(-6%,7%)  scale(.9) } }
+  @keyframes inC{ 0%,100%{ transform:translate(0,0) scale(1) } 50%{ transform:translate(5%,6%)   scale(1.12) } }
+  @keyframes inD{ 0%,100%{ transform:translate(0,0) scale(1) } 50%{ transform:translate(-7%,-5%) scale(.92) } }
+
+  /* ── 4. clip-path 다각형 모핑: 각진 형태까지 (블러를 낮춰야 형태가 읽힘) ── */
+  .m4 i{ filter:blur(26px); }
+  .m4 i span{ display:block; width:100%; height:100%; }
+  .m4 .grp{ animation:xd 7.3s  ease-in-out infinite; }
+  .m4 .gy { animation:yd 9.9s  ease-in-out infinite; }
+  .m4 .gr { animation:rs 12.7s ease-in-out infinite; }
+  .m4 .c1{ width:58%; height:64%; left:2%;  top:4%;  animation:inA 4.4s ease-in-out infinite; }
+  .m4 .c2{ width:46%; height:50%; left:30%; top:-2%; animation:inB 5.3s ease-in-out infinite; }
+  .m4 .c3{ width:38%; height:40%; left:50%; top:16%; animation:inC 6.1s ease-in-out infinite; }
+  .m4 .c4{ width:52%; height:54%; left:32%; top:36%; animation:inD 4.7s ease-in-out infinite; }
+  .m4 .c5{ width:40%; height:42%; left:12%; top:38%; animation:inA 4.1s ease-in-out infinite reverse; }
+  .m4 .c1 span{ background:#4a63ff; opacity:.85; animation:polyA 7.9s  ease-in-out infinite; }
+  .m4 .c2 span{ background:#ff7a2f; opacity:.8;  animation:polyB 9.4s  ease-in-out infinite; }
+  .m4 .c3 span{ background:#ff3b30; opacity:.6;  animation:polyC 6.8s  ease-in-out infinite; }
+  .m4 .c4 span{ background:#7b3cf0; opacity:.8;  animation:polyA 8.6s  ease-in-out infinite reverse; }
+  .m4 .c5 span{ background:#ffffff; opacity:.92; animation:polyB 7.2s  ease-in-out infinite reverse; }
+
+  /* 다각형 모핑 — 점 개수를 6개로 통일해야 보간됨 */
+  @keyframes polyA{
+    0%,100%{ clip-path:polygon(50% 0%, 95% 25%, 92% 75%, 50% 100%, 8% 75%, 5% 25%) }
+    33%    { clip-path:polygon(62% 4%, 100% 42%, 78% 88%, 34% 96%, 2% 62%, 16% 14%) }
+    66%    { clip-path:polygon(38% 2%, 88% 12%, 100% 58%, 66% 98%, 14% 84%, 0% 34%) } }
+  @keyframes polyB{
+    0%,100%{ clip-path:polygon(30% 2%, 78% 8%, 100% 48%, 72% 94%, 22% 90%, 0% 44%) }
+    33%    { clip-path:polygon(52% 0%, 96% 30%, 88% 78%, 44% 100%, 6% 70%, 10% 22%) }
+    66%    { clip-path:polygon(44% 6%, 90% 20%, 96% 66%, 58% 96%, 10% 78%, 2% 28%) } }
+  @keyframes polyC{
+    0%,100%{ clip-path:polygon(50% 4%, 92% 34%, 82% 84%, 40% 98%, 6% 66%, 14% 20%) }
+    33%    { clip-path:polygon(36% 0%, 84% 16%, 100% 62%, 62% 100%, 16% 82%, 0% 32%) }
+    66%    { clip-path:polygon(58% 2%, 98% 38%, 86% 80%, 46% 96%, 4% 58%, 12% 18%) } }
+
+  /* ── 5. SVG path 모핑: 임의 실루엣(잎/별/물결 등)까지 자유롭게 ── */
+  .m5 .grp{ animation:xd 7.7s  ease-in-out infinite; }
+  .m5 .gy { animation:yd 10.3s ease-in-out infinite; }
+  .m5 .gr { animation:rs 13.1s ease-in-out infinite; }
+  .m5 svg{ position:absolute; inset:0; width:100%; height:100%; filter:blur(24px); }
+
+  /* 형태 모핑 — 3구간이라 왕복이 아니라 계속 다른 실루엣으로 흘러감 */
+  @keyframes morphA{ 0%,100%{ border-radius:50% 50% 50% 50%/50% 50% 50% 50% }
+    33%{ border-radius:70% 30% 42% 58%/36% 64% 36% 64% }
+    66%{ border-radius:34% 66% 64% 36%/64% 32% 68% 36% } }
+  @keyframes morphB{ 0%,100%{ border-radius:50% 50% 50% 50%/50% 50% 50% 50% }
+    33%{ border-radius:32% 68% 58% 42%/62% 34% 66% 38% }
+    66%{ border-radius:66% 34% 36% 64%/34% 68% 32% 66% } }
+  @keyframes morphC{ 0%,100%{ border-radius:50% 50% 50% 50%/50% 50% 50% 50% }
+    33%{ border-radius:58% 42% 68% 32%/44% 60% 40% 56% }
+    66%{ border-radius:40% 60% 30% 70%/66% 38% 62% 34% } }
+  @keyframes morphD{ 0%,100%{ border-radius:50% 50% 50% 50%/50% 50% 50% 50% }
+    33%{ border-radius:44% 56% 34% 66%/60% 40% 64% 36% }
+    66%{ border-radius:64% 36% 66% 34%/38% 62% 34% 66% } }
+
+  footer{ padding:clamp(26px,4vh,48px) 5vw clamp(50px,8vh,90px); color:#5b5b62; font-size:.9rem; line-height:1.8; }
+  footer b{ color:#111114; font-weight:600; }
+  footer ul{ margin:10px 0 0 18px; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Hero Aura — 첨부 레퍼런스 스타일(메쉬 그라데이션) 비교</h1>
+  <p>흰 배경 히어로 기준입니다. 레퍼런스처럼 <b>여러 색 덩어리를 겹쳐 하나의 큰 유기적 덩어리</b>로 만들고, 아주 강한 blur로 경계를 녹였습니다. 세 가지 방향을 준비했습니다.</p>
+</header>
+
+<div class="warn">
+  <b>먼저 확인할 점 —</b> 현재 사이트의 aura는 <code>mix-blend-mode: screen</code>입니다. screen은 <b>흰 배경 위에서 결과가 무조건 흰색</b>이 되어, hero를 흰색으로 바꾼 지금은 aura가 사실상 보이지 않는 상태입니다.
+  아래 데모는 모두 <b>blend를 쓰지 않고(normal)</b> 색과 불투명도로만 표현했습니다.
+</div>
+
+<div class="stack">
+
+  <section class="panel">
+    <span class="tag">1</span>
+    <div class="mesh m1">
+      <div class="grp"><div class="gy"><div class="gr"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i><i class="c5"></i><i class="c6"></i></div></div></div>
+    </div>
+    <div class="copy">
+      <h2>불편함을 발견하고<br>더 나은 경험을 만들어요</h2>
+      <p>Designing experiences that feel right</p>
+    </div>
+    <div class="cap"><b>1. 레퍼런스 재현 — 웜 + 쿨 멀티컬러</b>
+      <span>오렌지·레드(웜)와 블루·퍼플(쿨)을 섞고 중앙에 흰 하이라이트를 넣어 첨부 이미지와 가장 가까운 느낌. 색 대비가 커서 시선이 강하게 잡힙니다.</span></div>
+  </section>
+
+  <section class="panel">
+    <span class="tag">2</span>
+    <div class="mesh m2">
+      <div class="grp"><div class="gy"><div class="gr"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i><i class="c5"></i><i class="c6"></i></div></div></div>
+    </div>
+    <div class="copy">
+      <h2>불편함을 발견하고<br>더 나은 경험을 만들어요</h2>
+      <p>Designing experiences that feel right</p>
+    </div>
+    <div class="cap"><b>2. 사이트 팔레트 버전 — 퍼플 · 블루</b>
+      <span>레퍼런스의 구조는 그대로 두고 색만 기존 사이트 컬러(#6E1CF6 · #B24CE8 · #2A56F5)로 맞춘 버전. 브랜드 톤과 충돌 없이 안전합니다.</span></div>
+  </section>
+
+  <section class="panel">
+    <span class="tag">3</span>
+    <div class="mesh m3">
+      <div class="grp"><div class="gy"><div class="gr"><i class="c1"></i><i class="c2"></i><i class="c3"></i><i class="c4"></i><i class="c5"></i></div></div></div>
+    </div>
+    <div class="copy">
+      <h2>불편함을 발견하고<br>더 나은 경험을 만들어요</h2>
+      <p>Designing experiences that feel right</p>
+    </div>
+    <div class="cap"><b>3. 유기적 실루엣 + 형태 모핑</b>
+      <span>바깥 경계를 <b>마스크로 불규칙하게</b> 잘라 “덩어리” 느낌을 강조하고, 각 색이 물방울처럼 계속 변형됩니다. 화면 전체로 퍼지지 않아 텍스트 가독성이 가장 좋습니다.</span></div>
+  </section>
+
+  <section class="panel">
+    <span class="tag">4</span>
+    <div class="mesh m4">
+      <div class="grp"><div class="gy"><div class="gr">
+        <i class="c1"><span></span></i><i class="c2"><span></span></i><i class="c3"><span></span></i>
+        <i class="c4"><span></span></i><i class="c5"><span></span></i>
+      </div></div></div>
+    </div>
+    <div class="copy">
+      <h2>불편함을 발견하고<br>더 나은 경험을 만들어요</h2>
+      <p>Designing experiences that feel right</p>
+    </div>
+    <div class="cap"><b>4. clip-path 다각형 모핑 — 각진 형태</b>
+      <span>원이 아니라 <b>다각형(6점)이 서로 다른 형태로 변형</b>됩니다. 모서리·사선이 살아 있어 훨씬 다양한 실루엣이 나옵니다. 형태가 보이도록 <b>블러를 26px로 낮췄습니다</b>(블러가 강하면 각이 뭉개져 원처럼 보임).</span></div>
+  </section>
+
+  <section class="panel">
+    <span class="tag">5</span>
+    <div class="mesh m5">
+      <div class="grp"><div class="gy"><div class="gr">
+        <svg viewBox="0 0 600 600" preserveAspectRatio="none" aria-hidden="true">
+          <defs>
+            <radialGradient id="s1" cx="45%" cy="42%" r="62%">
+              <stop offset="0%" stop-color="#6E1CF6" stop-opacity=".9"/><stop offset="100%" stop-color="#6E1CF6" stop-opacity=".15"/>
+            </radialGradient>
+            <radialGradient id="s2" cx="55%" cy="55%" r="60%">
+              <stop offset="0%" stop-color="#ff7a2f" stop-opacity=".85"/><stop offset="100%" stop-color="#ff7a2f" stop-opacity=".1"/>
+            </radialGradient>
+            <radialGradient id="s3" cx="50%" cy="50%" r="60%">
+              <stop offset="0%" stop-color="#2A56F5" stop-opacity=".85"/><stop offset="100%" stop-color="#2A56F5" stop-opacity=".12"/>
+            </radialGradient>
+          </defs>
+          <!-- 잎 ↔ 별 ↔ 물결 : 명령 구조를 맞춰 보간 -->
+          <path fill="url(#s1)" d="M300,60 C460,120 540,260 480,400 C420,540 220,560 130,450 C40,340 80,160 300,60 Z">
+            <animate attributeName="d" dur="9s" repeatCount="indefinite"
+              values="M300,60 C460,120 540,260 480,400 C420,540 220,560 130,450 C40,340 80,160 300,60 Z;
+                      M300,40 C380,220 560,200 500,360 C440,520 300,460 200,520 C100,580 60,300 300,40 Z;
+                      M300,90 C520,80 480,300 520,420 C560,540 260,600 160,480 C60,360 140,140 300,90 Z;
+                      M300,60 C460,120 540,260 480,400 C420,540 220,560 130,450 C40,340 80,160 300,60 Z"/>
+          </path>
+          <path fill="url(#s2)" d="M330,150 C440,170 470,300 420,390 C370,480 240,470 190,390 C140,310 190,170 330,150 Z">
+            <animate attributeName="d" dur="11s" repeatCount="indefinite"
+              values="M330,150 C440,170 470,300 420,390 C370,480 240,470 190,390 C140,310 190,170 330,150 Z;
+                      M300,120 C480,200 400,300 440,420 C480,540 220,500 180,400 C140,300 160,180 300,120 Z;
+                      M350,170 C420,260 500,290 430,400 C360,510 250,430 200,420 C150,410 200,200 350,170 Z;
+                      M330,150 C440,170 470,300 420,390 C370,480 240,470 190,390 C140,310 190,170 330,150 Z"/>
+          </path>
+          <path fill="url(#s3)" d="M280,260 C380,250 430,340 390,420 C350,500 230,500 190,420 C150,340 200,270 280,260 Z">
+            <animate attributeName="d" dur="13s" repeatCount="indefinite"
+              values="M280,260 C380,250 430,340 390,420 C350,500 230,500 190,420 C150,340 200,270 280,260 Z;
+                      M300,220 C420,300 380,360 400,450 C420,540 200,520 180,440 C160,360 220,280 300,220 Z;
+                      M260,280 C400,230 450,380 380,440 C310,500 240,460 200,430 C160,400 180,320 260,280 Z;
+                      M280,260 C380,250 430,340 390,420 C350,500 230,500 190,420 C150,340 200,270 280,260 Z"/>
+          </path>
+        </svg>
+      </div></div></div>
+    </div>
+    <div class="copy">
+      <h2>불편함을 발견하고<br>더 나은 경험을 만들어요</h2>
+      <p>Designing experiences that feel right</p>
+    </div>
+    <div class="cap"><b>5. SVG path 모핑 — 임의 실루엣</b>
+      <span>좌표를 직접 그리므로 <b>어떤 형태든 가능</b>합니다(잎·물결·불규칙 곡선 등). 원하는 실루엣을 디자이너가 정확히 지정할 수 있는 게 최대 장점.</span></div>
+  </section>
+
+</div>
+
+<footer>
+  <b>정리</b>
+  <ul>
+    <li>레퍼런스 같은 형태는 <b>“원 하나를 변형”이 아니라 “여러 색 덩어리를 겹쳐 하나의 덩어리로 보이게”</b> 만드는 방식입니다. 지금 구조(원 2개)에서 덩어리 수와 색만 늘리면 됩니다.</li>
+    <li>흰 배경에서는 <b>screen 블렌드를 빼야</b> 색이 보입니다. (필요하면 <code>multiply</code>로 더 진하게도 가능)</li>
+    <li>전부 CSS만 사용 — JS 0줄, 성능 부담 거의 없습니다.</li>
+    <li>적용을 원하시면 번호만 알려주세요. 색·크기·위치·속도는 원하는 대로 조정 가능합니다.</li>
+  </ul>
+</footer>
+
+</body>
+</html>
