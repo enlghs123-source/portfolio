@@ -132,9 +132,11 @@
   .hero-col--ko { top:clamp(104px,16vh,190px); left:6vw; text-align:left; font-weight:700; font-size:clamp(1.94rem,5.08vw,4.84rem); line-height:1.28; }
   .hero-col--en { top:50%; right:6vw; transform:translateY(-50%); text-align:right; font-weight:700; font-size:clamp(1.94rem,5.08vw,4.84rem); line-height:1.28; color:rgba(17,17,20,.85); }
   @media (max-width:768px){
-    .hero-col--en { top:auto; bottom:clamp(64px,10vh,120px); right:auto; left:6vw; transform:none; text-align:left; } }
+    /* 한글 바로 아래에 영문 배치(세로 흐름) */
+    .hero-col--ko { top:clamp(88px,13vh,150px); }
+    .hero-col--en { top:calc(clamp(88px,13vh,150px) + 3.1em); bottom:auto; right:auto; left:6vw; transform:none; text-align:left; color:rgba(17,17,20,.7); } }
   /* Reel: smoother 밖 고정 이미지. hero에선 좌측하단 작게(27vw) → full 확장 → full 후 크로스페이드 → #work가 위로 덮음(이미지는 제자리) */
-  .reel-section { position:relative; height:200vh; background:transparent; }
+  .reel-section { position:relative; height:400vh; background:transparent; }
   .reel-fixed { position:fixed; left:6vw; bottom:6vh; z-index:40; width:27vw; height:15.19vw; overflow:hidden;
     border-radius:16px; will-change:width,height,left,bottom; }
   /* 노이즈(필름 그레인) 오버레이 — sui.io 스타일 (soft-light · 낮은 불투명도) */
@@ -143,9 +145,35 @@
     transition:opacity .35s ease; }
   .grain.is-off { opacity:0; }   /* Featured work · Contact 구간에서는 그레인 제거 */
   @media (prefers-reduced-motion:reduce){ .grain { opacity:.2; } }
-  .reel-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+  .reel-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:center top;
+    display:block; will-change:transform; backface-visibility:hidden; }
   .reel-img-2, .reel-img-3 { opacity:0; }
+  /* 릴 캡션: 우측 · 세로 가운데 정렬. 이미지가 커진 뒤(풀스크린)에 보이며, 이미지와 함께 크로스페이드 */
+  /* 이미지 톤 다운용 dim (전체 균일) */
+  .reel-dim { position:absolute; inset:0; z-index:3; pointer-events:none; background:#000; opacity:.3; }
+  .reel-scrim { position:absolute; inset:0; z-index:4; pointer-events:none; opacity:0;
+    background:linear-gradient(270deg, rgba(0,0,0,.62) 0%, rgba(0,0,0,.28) 34%, transparent 62%); }
+  /* 세로 중앙정렬은 flex로 처리(각 요소의 transform:y는 GSAP가 소유) · 블록은 우측 */
+  .reel-cap { position:absolute; inset:0; z-index:5; display:flex; align-items:center; justify-content:flex-end;
+    padding:0 7vw; margin:0; pointer-events:none; }   /* 세로 중앙 · 좌우 여백 = 섹션 공통(site-pad 7vw) */
+  .reel-cap-in { display:flex; flex-direction:column; align-items:flex-end; text-align:right; gap:clamp(12px,1.8vh,26px);
+    max-width:min(46vw,560px); color:#fff; text-shadow:0 2px 30px rgba(0,0,0,.45); }
+  .reel-cap-head { display:flex; flex-direction:column; align-items:flex-end; gap:clamp(6px,.9vh,12px); will-change:transform,opacity; }
+  .reel-cap-idx { font-family:'Poppins','Pretendard',sans-serif; font-weight:400; font-size:clamp(.8rem,1vw,1rem);
+    letter-spacing:.14em; color:rgba(255,255,255,.6); }
+  .reel-cap-t { font-family:'Poppins','Pretendard',sans-serif; font-weight:600; letter-spacing:-0.02em;
+    font-size:clamp(1.7rem,3.4vw,3rem); line-height:1.1; }
+  .reel-cap-t em { font-style:normal; font-weight:300; color:rgba(255,255,255,.72); }
+  .reel-cap-d { display:block; font-family:'Pretendard',sans-serif; font-weight:300; word-break:keep-all;
+    font-size:clamp(.95rem,1.25vw,1.3rem); line-height:1.62; color:rgba(255,255,255,.82); will-change:transform,opacity; }
+  @media (max-width:768px){
+    .reel-cap { justify-content:center; padding:0 24px; box-sizing:border-box; }
+    .reel-cap-in { align-items:center; text-align:center; max-width:100%; }
+    .reel-cap-head { align-items:center; }
+    .reel-cap-d { font-size:clamp(.85rem,3.6vw,1.05rem); } }
   @media (max-width:900px){ .reel-fixed { width:44vw; height:24.75vw; } }
+  /* 반응형: 릴 이미지를 하단 중앙에 70% 크기로 */
+  @media (max-width:768px){ .reel-fixed { width:70vw; height:39.38vw; left:15vw; bottom:6vh; } }
   .hero-line-1 { display:block; overflow:visible; font-size:1em; font-weight:600; color:#ffffff; }
   /* Mistral atom-text-hero-title(data-grow·data-randomness): 글자별 grow-in 리빌 */
   .hero-char { display:inline-block; transform-origin:50% 100%; will-change:transform,opacity; }
@@ -634,9 +662,23 @@
 
 <!-- Reel 이미지: smoother 밖 고정. hero에선 좌측하단 작게 → reel 섹션에서 full로 확장 → full 후 2장 크로스페이드(tinywins) → 이후 숨김 -->
 <div class="reel-fixed" aria-hidden="true">
-  <img class="reel-img reel-img-1" src="img/main/single-image6.jpg" alt="">
-  <img class="reel-img reel-img-2" src="img/main/single-image2.jpeg" alt="">
-  <img class="reel-img reel-img-3" src="img/main/single-image3.png" alt="">
+  <img class="reel-img reel-img-1" src="img/main/reel-img-1.jpg" alt="">
+  <img class="reel-img reel-img-2" src="img/main/reel-img-2.jpg" alt="">
+  <img class="reel-img reel-img-3" src="img/main/reel-img-3.jpg" alt="">
+  <div class="reel-dim"></div>
+  <div class="reel-scrim"></div>
+  <figure class="reel-cap reel-cap-1"><div class="reel-cap-in">
+    <span class="reel-cap-head"><span class="reel-cap-t">정의 <em>— Define</em></span></span>
+    <span class="reel-cap-d">사용자가 겪는 불편함을 그냥 지나치지 않아요. 왜 불편한지, 누가 불편한지, 어떤 상황에서 불편한지 문제의 본질을 먼저 정의하고 시작해요.</span>
+  </div></figure>
+  <figure class="reel-cap reel-cap-2"><div class="reel-cap-in">
+    <span class="reel-cap-head"><span class="reel-cap-t">소통 <em>— Communicate</em></span></span>
+    <span class="reel-cap-d">혼자 고민하는 디자인은 반쪽짜리예요. 팀원, 개발자, 사용자와 끊임없이 이야기하며 방향을 맞춰가요. 좋은 디자인은 좋은 대화에서 시작돼요.</span>
+  </div></figure>
+  <figure class="reel-cap reel-cap-3"><div class="reel-cap-in">
+    <span class="reel-cap-head"><span class="reel-cap-t">증명 <em>— Deliver</em></span></span>
+    <span class="reel-cap-d">아이디어는 실행될 때 비로소 의미가 생겨요. 기획부터 UI 설계까지 직접 손으로 만들며, 결과물로 증명하는 것을 가장 중요하게 생각해요.</span>
+  </div></figure>
 </div>
 
 <div id="smooth-wrapper">
@@ -1021,22 +1063,51 @@
         const section = document.querySelector('.reel-section');
         const img2 = document.querySelector('.reel-img-2');
         const img3 = document.querySelector('.reel-img-3');
+        const scrim = reel.querySelector('.reel-scrim');
+        // 각 캡션의 [머리말(번호+제목), 설명] 을 따로 잡아 stagger(제목 먼저 → 설명 나중)
+        const partsOf = (sel) => [
+          reel.querySelector(sel + ' .reel-cap-head'),
+          reel.querySelector(sel + ' .reel-cap-d')
+        ].filter(Boolean);
+        const cap1 = partsOf('.reel-cap-1');
+        const cap2 = partsOf('.reel-cap-2');
+        const cap3 = partsOf('.reel-cap-3');
+        const allCaps = [...cap1, ...cap2, ...cap3];
         const work = document.getElementById('work');
         if (!reel || !section || !window.ScrollTrigger) return;
         // ① 스크롤 시작(hero 최상단)부터 확장 → hero를 지나며 full(100vw×100vh)
-        gsap.fromTo(reel, { width:'27vw', height:'15.19vw', left:'6vw', bottom:'6vh', borderRadius:'16px' }, {
+        // 반응형(≤768px): 화면 중앙에 50vw 크기로 시작 / 그 외: 좌측하단 27vw
+        const isMob = () => window.matchMedia('(max-width:768px)').matches;
+        gsap.fromTo(reel, {
+          width:  () => isMob() ? '70vw' : '27vw',
+          height: () => isMob() ? (window.innerWidth * 0.7 * 9 / 16) + 'px' : '15.19vw',
+          left:   () => isMob() ? '15vw' : '6vw',
+          bottom: () => isMob() ? '6vh' : '6vh',
+          borderRadius:'16px'
+        }, {
           width:'100vw', height:'100vh', left:'0vw', bottom:'0vh', borderRadius:'0px', ease:'none',
           scrollTrigger:{ trigger:'#top', start:'top top', end:'bottom top', scrub:true, invalidateOnRefresh:true }
         });
-        // ② full이 된 뒤(reel 섹션 구간) 이미지 순차 크로스페이드 (tinywins sticky 전환) — img1 → img2(전반) → img3(후반)
-        if (img2) {
-          gsap.fromTo(img2, { autoAlpha:0 }, { autoAlpha:1, ease:'none',
-            scrollTrigger:{ trigger:section, start:'top top', end:'center center', scrub:true, invalidateOnRefresh:true } });
-        }
-        if (img3) {
-          gsap.fromTo(img3, { autoAlpha:0 }, { autoAlpha:1, ease:'none',
-            scrollTrigger:{ trigger:section, start:'center center', end:'bottom center', scrub:true, invalidateOnRefresh:true } });
-        }
+        // ② reel 섹션에 도달(full)한 뒤에만 캡션 등장 → 이미지 크로스페이드 + 텍스트는 fade-up → fade-out
+        //    하나의 스크럽 타임라인으로 통합(충돌 방지) → hero 구간에선 전부 숨김
+        gsap.set([img2, img3, scrim].filter(Boolean), { autoAlpha:0 });
+        gsap.set(allCaps, { autoAlpha:0, y:34 });                                     // 아래에서 대기
+        const IN  = { autoAlpha:1, y:0,   stagger:0.05 };                             // 제목 먼저 → 설명 나중(fade-up in)
+        const OUT = { autoAlpha:0, y:-34, stagger:0.04 };                             // 위로 빠지며 사라짐(fade-up out)
+        const reelTL = gsap.timeline({ defaults:{ ease:'power2.out' },
+          scrollTrigger:{ trigger:section, start:'top top', end:'bottom bottom', scrub:true, invalidateOnRefresh:true } });
+        reelTL
+          .to(scrim, { autoAlpha:1, duration:0.12, ease:'none' }, 0.02)
+          .to(cap1, { ...IN, duration:0.13 }, 0.02)                                   // 1. Define fade-up in
+          .to(cap1, { ...OUT, duration:0.12 }, 0.32)                                  // 1 fade-up out
+          .to(img2, { autoAlpha:1, duration:0.14, ease:'none' }, 0.34)               // 1 → 2 이미지 교차
+          .to(cap2, { ...IN, duration:0.14 }, 0.40)                                   // 2. Communicate fade-up in
+          .to(cap2, { ...OUT, duration:0.14 }, 0.60)                                  // 2 fade-up out
+          .to(img3, { autoAlpha:1, duration:0.18, ease:'none' }, 0.60)               // 2 → 3 이미지 교차
+          .to(cap3, { ...IN, duration:0.16 }, 0.66)                                   // 3. Deliver fade-up in
+          .to({}, { duration:0.14 });                                                 // 증명 구간 유지(연장)
+        // 이미지는 섹션 끝까지 100%(cover) 유지 — 축소/스케일 모션 없음
+        gsap.set('.reel-img', { scale:1, yPercent:0 });
         // ③ 이미지는 사라지지 않고 제자리에 남음. Featured work(#work)가 진입하면 reel을 뒤로 보내(z-index) work가 위로 덮으며 올라옴
         if (work) {
           ScrollTrigger.create({ trigger:work, start:'top bottom',
