@@ -245,7 +245,7 @@
   #menu-overlay .menu-close { position:absolute; top:20px; right:clamp(20px,5vw,40px); }
   .menu-list { display:flex; flex-direction:column; gap:clamp(6px,1.2vh,16px); }
   .menu-item { display:block; width:fit-content; overflow:hidden; }
-  .menu-item span { display:block; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; font-size:clamp(2.6rem,9vw,7rem);
+  .menu-item span { display:block; font-family:'Poppins','Poppins','Pretendard',sans-serif; font-weight:500; font-size:var(--fs-display-2);
     line-height:1.62; letter-spacing:-0.02em; color:#f5f5f4; transition:color .2s ease, opacity .2s ease; will-change:transform; }
   .menu-item:hover span { color:#6E1CF6; }
   /* 프로젝트 하위 리스트: 한 줄 배치 + 텍스트 절반 크기 */
@@ -288,7 +288,7 @@
 <!-- ============================ NAV ============================ -->
 <header id="nav" class="fixed top-0 inset-x-0 z-50">
   <div class="w-full flex items-center justify-between px-5 sm:px-10 py-5 text-[0.95rem]">
-    <a href="index-2.html" class="font-display text-[1.1rem] font-700 tracking-tight whitespace-nowrap">LEE JUNGMIN<span class="opacity-50">.</span></a>
+    <a href="index.html" class="font-display text-[1.1rem] font-700 tracking-tight whitespace-nowrap">LEE JUNGMIN<span class="opacity-50">.</span></a>
     <button id="menuBtn" class="nav-pill justify-self-end" aria-haspopup="true" aria-controls="menu-overlay" aria-expanded="false">MENU</button>
   </div>
 </header>
@@ -297,15 +297,10 @@
 <div id="menu-overlay" aria-hidden="true">
   <button id="menuClose" class="nav-pill menu-close">CLOSE</button>
   <nav class="menu-list">
-    <a href="index-2.html#top" class="menu-item"><span>Home</span></a>
-    <a href="moodle-diary.html" class="menu-item"><span>Moodle Diary</span></a>
-    <a href="pick-time.html" class="menu-item"><span>Pick Time</span></a>
-    <div class="menu-sub-row">
-      <a href="https://www.figma.com/design/Xjrclf5kH63ZTBdTfmsHpi/Food-Eat-Note?node-id=0-1&t=kpn4Eh9sMzkg2BYg-1" target="_blank" rel="noopener" class="menu-item menu-item--sub"><span>Food Eat Note</span></a>
-      <a href="https://www.figma.com/design/JhebkZsnAbigUfLShVFjAu/%EC%96%B4%ED%97%88-%EC%86%90-%EB%96%BC?node-id=51178-269&t=1itzqeN2JSF1C9N8-1" target="_blank" rel="noopener" class="menu-item menu-item--sub"><span>어허 손떼</span></a>
-      <a href="https://www.figma.com/design/FiqSzKc6dbBPZiwHDGTHpl/%EC%9D%B8%ED%84%B0%EB%B2%8C-%ED%83%80%EC%9D%B4%EB%A8%B8?node-id=0-1&t=k6gyZAi8KrLW5wvi-1" target="_blank" rel="noopener" class="menu-item menu-item--sub"><span>인터벌 타이머</span></a>
-      <a href="https://www.figma.com/design/0J9bHIusEPS6QhUMz8dAOY/%EB%83%89%EC%9E%A5%EA%B3%A0-%EC%9E%AC%EA%B3%A0-%EA%B4%80%EB%A6%AC?node-id=0-1&t=jFoF8xhkYzTx3yTe-1" target="_blank" rel="noopener" class="menu-item menu-item--sub"><span>냉장고 재고 관리</span></a>
-    </div>
+    <a href="index.html#top"     class="menu-item"><span>Home</span></a>
+    <a href="index.html#about"   class="menu-item"><span>About</span></a>
+    <a href="index.html#work"    class="menu-item"><span>Works</span></a>
+    <a href="index.html#contact" class="menu-item"><span>Contact</span></a>
   </nav>
 </div>
 
@@ -898,9 +893,9 @@
         <span class="ft-copy">Copyright © <span id="year">2026</span> LEE JUNGMIN. All Rights Reserved.</span>
       </div>
       <nav class="ft-menu">
-        <a href="index-2.html#about">About</a>
-        <a href="index-2.html#work">Projects</a>
-        <a href="index-2.html#contact">Contact</a>
+        <a href="index.html#about">About</a>
+        <a href="index.html#work">Projects</a>
+        <a href="index.html#contact">Contact</a>
       </nav>
     </div>
   </div>
